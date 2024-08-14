@@ -1,0 +1,6 @@
+@use './m3-theme.scss' as m3-theme;
+@use './app/partials/material-theme-imports' as material-imports;
+
+.light {
+  @include material-imports.material-theme-imports(m3-theme.$light-theme);
+}

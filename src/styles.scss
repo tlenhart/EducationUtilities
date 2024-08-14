@@ -1,4 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use './m3-theme.scss' as m3-theme;
+//@use './app/partials/material-theme-imports' as material-imports;
+
+@include mat.core();
+
+html {
+  // TODO: Decide what to do about this and consider loading it in the individual themes themselves.
+  @include mat.list-theme(m3-theme.$light-theme);
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mdc-list-item {
+
+}
+
+.active {
+  //@include mat.button-color(m3-theme.$dark-theme, $color-variant: tertiary);
+}

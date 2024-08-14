@@ -2,10 +2,14 @@
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
+const stylistic = require('@stylistic/eslint-plugin');
 
 module.exports = tseslint.config(
   {
     files: ["**/*.ts"],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
@@ -30,6 +34,15 @@ module.exports = tseslint.config(
           style: "kebab-case",
         },
       ],
+      "@typescript-eslint/array-type": [
+        "error",
+        {
+          "default": "generic",
+        },
+      ],
+      '@typescript-eslint/no-inferrable-types': ["off"],
+      '@stylistic/indent': ["error", 2],
+      '@stylistic/object-curly-spacing': ["error", "always"],
     },
   },
   {
