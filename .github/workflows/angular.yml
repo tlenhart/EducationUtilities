@@ -45,6 +45,8 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test --if-present
+      - name: Copy 3rdpartylicenses.txt to /browser folder.
+        run: cp dist/education-utilities/3rdpartylicenses.txt dist/education-utilities/browser/3rdpartylicenses.txt
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -52,10 +54,10 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist/education-utilities/browser/'
-      - name: Upload 3rdpartylicenses.txt
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'dist/education-utilities/3rdpartylicenses.txt'
+      # - name: Upload 3rdpartylicenses.txt
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: 'dist/education-utilities/3rdpartylicenses.txt'
 
   # Deployment job
   deploy:
