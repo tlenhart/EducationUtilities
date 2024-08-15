@@ -48,6 +48,9 @@ jobs:
       - name: Copy 3rdpartylicenses.txt to /browser folder.
         run: cp dist/education-utilities/3rdpartylicenses.txt dist/education-utilities/browser/3rdpartylicenses.txt
 
+      - name: Replace 404.html with index.html to allow angular routing to work correctly.
+        run: cp dist/education-utilities/browser/index.html dist/education-utilities/browser/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload primary site build artifacts
