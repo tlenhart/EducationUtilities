@@ -54,7 +54,10 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/EducationUtilities",
+              "extractLicenses": true,
+              "subresourceIntegrity": true
             },
             "development": {
               "optimization": false,
