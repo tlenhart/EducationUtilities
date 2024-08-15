@@ -6,6 +6,7 @@
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
+    id="sidenav"
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
@@ -24,8 +25,8 @@
       }
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar class="toolbar">
+  <mat-sidenav-content id="sidenav-content">
+    <mat-toolbar class="toolbar" id="primary-toolbar">
       @if (isHandset$ | async) {
         <button
           type="button"
@@ -46,7 +47,7 @@
       </mat-slide-toggle>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <main>
+    <main id="main">
       <router-outlet></router-outlet>
 </main>
   </mat-sidenav-content>

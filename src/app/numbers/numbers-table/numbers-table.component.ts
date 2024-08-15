@@ -87,10 +87,7 @@ export class NumbersTableComponent implements OnInit, OnDestroy {
       countBy: this.fb.control(1), // new FormControl(0, { nonNullable: true }),
       columns: this.fb.control(10, { validators: [Validators.min(1)] }), // TODO: Look into other Validators options to try and avoid the full import.
       colors: this.fb.array(
-        Array
-          // .from(fillArray('000000', 10))
-          .from(fillArrayFunction(() => `#${Math.floor(Math.random() * 100_000_0)}`, 10))
-          .map((value: string) => this.fb.control<string>(value))
+        this.buildColorsArray()
       ),
       // colors: this.fb.array(
       //   [this.fb.control('')],
@@ -137,6 +134,16 @@ export class NumbersTableComponent implements OnInit, OnDestroy {
   public getTileClass(idx: number): Array<string> {
     // TODO: Try to find another way.
     return ['column' + (idx % this.currentConfig().columns), 'row' + Math.floor(idx / this.currentConfig().columns)]
+  }
+
+  private buildColorsArray(): Array<FormControl<string>> {
+    const colors = Array
+      // .from(fillArray('000000', 10))
+      .from(fillArrayFunction(() => `#${Math.floor(Math.random() * 100_000_0)}`, 10));
+    colors.unshift(...['#FBE7C6', '#B4F8C8', '#A0E7E5', '#FFAEBC']); // Secondary.
+    colors.unshift(...['#FBDFA0', '#FFC2C7', '#5DD9FB', '#BBD5D2']);
+    colors.unshift(...['#D4BBDD', '#F6E6E8']);
+    return colors.slice(0, 10).map((value: string) => this.fb.control<string>(value));
   }
 
   private buildNumbersArray(config: NumberFormConfig): Array<number> {

@@ -3,43 +3,44 @@
 <!--    -->
 <!--  </tbody>-->
 <!--</table>-->
+<div class="ignore-print">
+  <form [formGroup]="numberTableConfigForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Start</mat-label>
+      <input id="number-start-input" matInput type="number" formControlName="start">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>End</mat-label>
+      <input id="number-end-input" matInput type="number" formControlName="end">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Count By</mat-label>
+      <input id="number-countBy-input" matInput type="number" formControlName="countBy">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Columns</mat-label>
+      <input id="number-columns-input" matInput type="number" formControlName="columns" min="1">
+    </mat-form-field>
 
-<form [formGroup]="numberTableConfigForm">
-  <mat-form-field appearance="outline">
-    <mat-label>Start</mat-label>
-    <input id="number-start-input" matInput type="number" formControlName="start">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>End</mat-label>
-    <input id="number-end-input" matInput type="number" formControlName="end">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Count By</mat-label>
-    <input id="number-countBy-input" matInput type="number" formControlName="countBy">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Columns</mat-label>
-    <input id="number-columns-input" matInput type="number" formControlName="columns" min="1">
-  </mat-form-field>
-
-  <mat-grid-list [cols]="currentConfig().columns" class="color-picker-row" formArrayName="colors">
-    @for(control of numberTableConfigForm.controls.colors.controls; track $index) {
-      <mat-grid-tile class="color-picker-box"
-                     [ngClass]=""
-                     [colspan]="1"
-                     [rowspan]="1">
-        <mat-form-field>
-          <mat-label>Color for row/column {{$index + 1}}</mat-label>
-<!--          <input type="color" matInput [formControlName]="$index">-->
-          <input type="color" matInput [formControl]="control">
-        </mat-form-field>
-<!--        <div [ngStyle]="{ 'background-color': control.getRawValue() }">-->
-<!--          {{$index}}-->
-<!--        </div>-->
-      </mat-grid-tile>
-    }
-  </mat-grid-list>
-</form>
+    <mat-grid-list [cols]="currentConfig().columns" class="color-picker-row" formArrayName="colors">
+      @for(control of numberTableConfigForm.controls.colors.controls; track $index) {
+        <mat-grid-tile class="color-picker-box"
+                       [ngClass]=""
+                       [colspan]="1"
+                       [rowspan]="1">
+          <mat-form-field>
+            <mat-label>Color for row/column {{$index + 1}}</mat-label>
+  <!--          <input type="color" matInput [formControlName]="$index">-->
+            <input type="color" matInput [formControl]="control">
+          </mat-form-field>
+  <!--        <div [ngStyle]="{ 'background-color': control.getRawValue() }">-->
+  <!--          {{$index}}-->
+  <!--        </div>-->
+        </mat-grid-tile>
+      }
+    </mat-grid-list>
+  </form>
+</div>
 
 <!--<div class="number-table-container">-->
 <!--  @for(num of numbers(); track $index) {-->
@@ -49,7 +50,7 @@
 <!--  }-->
 <!--</div>-->
 
-<table>
+<table class="ignore-print">
   <tbody>
     @for(row of groupedNumbers(); track rowIndex; let rowIndex = $index) {
       <tr>
@@ -66,9 +67,9 @@
 
 <!-- TODO: See if calling the signal this way is not performance optimal. -->
 <ng-container *ngIf="currentConfig() as config">
-  <div>Columns: {{config.columns}}</div>
+  <!-- <div>Columns: {{config.columns}}</div> -->
 <!--  @let config = currentConfig();-->
-  <mat-grid-list [cols]="config.columns" rowHeight="40px" class="number-table-container">
+  <mat-grid-list [cols]="config.columns" rowHeight="40px" class="number-table-container print-area">
     @for(num of numbers(); track idx; let idx = $index) {
 <!--        [ngStyle]="{ 'background-color': '#' + numberTableConfigForm.controls.colors.controls[idx % this.currentConfig().columns].getRawValue() }"-->
       <mat-grid-tile class="num-box"
