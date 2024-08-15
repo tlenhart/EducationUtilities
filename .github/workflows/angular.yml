@@ -55,7 +55,7 @@ jobs:
       - name: Upload 3rdpartylicenses.txt
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist/3rdpartylicenses.txt'
+          path: 'dist/education-utilities/3rdpartylicenses.txt'
 
   # Deployment job
   deploy:
