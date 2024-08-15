@@ -48,10 +48,14 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Upload build artifacts
+      - name: Upload primary site build artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/
+          path: 'dist/education-utilities/browser/'
+      - name: Upload 3rdpartylicenses.txt
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist/3rdpartylicenses.txt'
 
   # Deployment job
   deploy:
