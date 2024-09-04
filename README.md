@@ -1,6 +1,14 @@
-# SchedulingOne
+# Host a static version of this site:
+```ps1
+dotnet serve -o --path-base /EducationUtilities --fallback-file .\index.html
+```
+
+# EducationUtilities
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+
+## Global Settings
+
 
 ## Development server
 
