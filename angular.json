@@ -31,12 +31,27 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/clippy.modern/dist/agents",
+                "output": "agents"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/clippy.modern/dist/agents-no-sound",
+                "output": "agents-no-sound"
               }
             ],
             "styles": [
               "src/styles.scss",
               "src/dark-theme.scss",
-              "src/light-theme.scss"
+              "src/light-theme.scss",
+              {
+                "bundleName": "clippy",
+                "inject": true,
+                "input": "node_modules/clippy.modern/dist/clippy.css"
+              }
             ],
             "scripts": []
           },
@@ -95,12 +110,27 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/clippy.modern/dist/agents",
+                "output": "agents"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/clippy.modern/dist/agents-no-sound",
+                "output": "agents-no-sound"
               }
             ],
             "styles": [
               "src/styles.scss",
               "src/dark-theme.scss",
-              "src/light-theme.scss"
+              "src/light-theme.scss",
+              {
+                "bundleName": "clippy",
+                "inject": true,
+                "input": "node_modules/clippy.modern/dist/clippy.css"
+              }
             ],
             "scripts": []
           }
