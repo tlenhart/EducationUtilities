@@ -1,10 +1,11 @@
 // @ts-check
-const eslint = require("@eslint/js");
-const tseslint = require("typescript-eslint");
-const angular = require("angular-eslint");
-const stylistic = require('@stylistic/eslint-plugin');
+// const eslint = require('@eslint/js');
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import angular from 'angular-eslint';
+import stylistic from '@stylistic/eslint-plugin';
 
-module.exports = tseslint.config(
+export default tseslint.config(
   {
     files: ["**/*.ts"],
     plugins: {
@@ -43,6 +44,7 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-inferrable-types': ["off"],
       '@stylistic/indent': ["error", 2],
       '@stylistic/object-curly-spacing': ["error", "always"],
+      '@stylistic/quotes': ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
     },
   },
   {
