@@ -127,12 +127,16 @@ export class ClippyComponent implements OnDestroy {
   }
 
   private clearAnimationTimeout(): void {
-    window.clearTimeout(this.animationTimeout);
-    this.animationTimeout = undefined;
+    if (this.animationTimeout) {
+      window.clearTimeout(this.animationTimeout);
+      this.animationTimeout = undefined;
+    }
   }
 
   private clearCanDeleteTimeout(): void {
-    window.clearTimeout(this.canDeleteTimeout);
-    this.canDeleteTimeout = undefined;
+    if (this.canDeleteTimeout) {
+      window.clearTimeout(this.canDeleteTimeout);
+      this.canDeleteTimeout = undefined;
+    }
   }
 }
