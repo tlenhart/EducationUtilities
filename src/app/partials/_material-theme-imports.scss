@@ -9,4 +9,27 @@
   @include mat.slide-toggle-theme($theme);
   @include mat.button-theme($theme);
   @include mat.form-field-theme($theme);
+  @include mat.checkbox-theme($theme);
+
+  @include mat.tooltip-theme($theme);
+  @include mat.select-theme($theme);
+
+  @include additional-colors($theme);
+
+  //@include mat.all-component-themes($theme);
+}
+
+// TODO: This may not make sense to do it this way.
+@mixin additional-colors($theme) {
+  .tertiary {
+    &-button {
+      @include mat.button-color($theme, $color-variant: tertiary);
+    }
+  }
+
+  .error {
+    &-button {
+      @include mat.button-color($theme, $color-variant: error);
+    }
+}
 }

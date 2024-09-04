@@ -1,46 +1,29 @@
-import { NgClass, NgFor, NgIf, NgStyle } from "@angular/common";
 import {
   ChangeDetectionStrategy,
-  Component, computed,
-  ElementRef,
+  Component,
+  computed,
   inject,
   OnDestroy,
-  OnInit,
   signal,
-  Signal, WritableSignal
+  Signal,
+  WritableSignal
 } from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from "@angular/forms";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatInputModule } from "@angular/material/input";
-import { Subscription } from "rxjs";
-import { fillArray, fillArrayFunction, sequentialNumberGenerator } from "../../utils/number-utils";
-
-export interface NumberFormConfig {
-  start: number;
-  end: number;
-  // range: { start: number; end: number };
-  countBy: number;
-  columns: number;
-  colors: Array<string>;
-}
-
-export type NumberFormForm = {
-  [K in keyof NumberFormConfig as Exclude<K, 'colors'>]: FormControl<NumberFormConfig[K]>;
-} & {
-  colors: FormArray<FormControl<string>>;
-}
-
-// const x: <NumberFormConfig, 'colors'> = {
-//   colors
-// }
+import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { distinctUntilChanged, Subscription } from 'rxjs';
+import { SaveService } from '../../core/save/save.service';
+import { NUMBER_TABLE_DEFAULT_CONFIGS } from '../../defaults/number-table-default-configs';
+import { FormattedNumberTableConfig, FormattedNumberValue } from '../../models';
+import { NumberFormConfig, NumberFormForm } from '../../models/forms.types';
+import { FormattedNumberTableComponent } from '../../shared/formatted-number-table/formatted-number-table.component';
+import { arrayToArrayOfFormControls } from '../../utils/form-utils';
+import { formattedSequentialNumberGenerator, sequentialNumberGenerator } from '../../utils/number-utils';
+import { isNotValueValidator, numberTableConfigValidator, VALIDATION_ERROR_KEYS } from '../../validators';
 
 @Component({
   selector: 'app-numbers-table',
@@ -49,82 +32,58 @@ export type NumberFormForm = {
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
-    MatGridListModule,
-    NgClass,
-    NgStyle,
-    NgIf,
-    NgFor,
-    // TODO: Remove if unused.
+    MatGridList,
+    MatGridTile,
+    FormattedNumberTableComponent,
+    MatButton,
+    MatIcon,
+    MatSlideToggle,
   ],
   templateUrl: './numbers-table.component.html',
   styleUrl: './numbers-table.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumbersTableComponent implements OnInit, OnDestroy {
-  // public numbers: WritableSignal<Array<number>> = signal([]);
-  public numbers: Signal<Array<number>> = computed(() => {
+export class NumbersTableComponent implements OnDestroy {
+  public readonly numbers: Signal<Array<FormattedNumberValue>> = computed(() => {
     return this.buildNumbersArray(this.currentConfig());
   });
-  public groupedNumbers: Signal<Array<Array<number>>> = computed(() => {
-    return this.buildNumberTable(this.currentConfig());
-  })
-  public numberTableConfigForm: FormGroup<NumberFormForm>;
-  public currentConfig: WritableSignal<NumberFormConfig> = signal<NumberFormConfig>({ start: 1, end: 20, countBy: 1, columns: 10,
-    colors: [],
+  public readonly numberTableConfigForm: FormGroup<NumberFormForm>;
+  public readonly currentConfig: WritableSignal<NumberFormConfig> = signal<NumberFormConfig>(NUMBER_TABLE_DEFAULT_CONFIGS[0]);
+  public readonly tableConfig: Signal<FormattedNumberTableConfig> = computed(() => {
+    return FormattedNumberTableConfig.fromNumberFormConfig(
+      this.currentConfig(),
+      this.numbers(),
+    );
   });
+  public readonly errorKeys = VALIDATION_ERROR_KEYS;
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
-  private readonly elementRef: ElementRef = inject(ElementRef);
+  private readonly saveService: SaveService = inject(SaveService);
   private readonly subscriptions: Subscription = new Subscription();
-  // private readonly configChanged = computed(() => {
-  //   // this.nu
-  // });
 
   constructor() {
-    this.buildNumbersArray(this.currentConfig());
     this.numberTableConfigForm = this.fb.group<NumberFormForm>({
-      start: this.fb.control(1), // new FormControl(0, { nonNullable: true }),
-      end: this.fb.control(20), // new FormControl(0, { nonNullable: true }),
-      countBy: this.fb.control(1), // new FormControl(0, { nonNullable: true }),
-      columns: this.fb.control(10, { validators: [Validators.min(1)] }), // TODO: Look into other Validators options to try and avoid the full import.
+      start: this.fb.control(this.currentConfig().start), // new FormControl(0, { nonNullable: true }),
+      end: this.fb.control(this.currentConfig().end), // new FormControl(0, { nonNullable: true }),
+      countBy: this.fb.control(this.currentConfig().countBy, { validators: [Validators.required, isNotValueValidator(0)] }), // new FormControl(0, { nonNullable: true }),
+      columns: this.fb.control(this.currentConfig().columns, { validators: [Validators.min(1)] }), // TODO: Look into other Validators options to try and avoid the full import.
       colors: this.fb.array(
-        this.buildColorsArray()
+        arrayToArrayOfFormControls(this.currentConfig().colors, this.fb)
       ),
-      // colors: this.fb.array(
-      //   [this.fb.control('')],
-      // ),
-    });
+      showHiddenValues: this.fb.control(false),
+    }, { validators: [numberTableConfigValidator()] });
 
-    // const array = this.fb.array([
-    //   this.fb.control<string>('test'),
-    //   this.fb.control<string>('test2'),
-    // ]);
-    // console.log(array);
-
-    // console.log(Array.from(fillArray('000000', 10)).map((value: string) => this.fb.control<string>(value)));
-
-    this.subscriptions.add(this.numberTableConfigForm.valueChanges.subscribe((updatedValue: Partial<NumberFormConfig>) => {
+    this.subscriptions.add(this.numberTableConfigForm.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((updatedValue: Partial<NumberFormConfig>) => {
       if (this.currentConfig().colors.length < (updatedValue.colors?.length ?? this.currentConfig().colors.length)) {
         // TODO: We might need a column config object so we don't have to iterate over things like this as much.
         //  Just read the config value instead.
       }
-      this.currentConfig.set(updatedValue as NumberFormConfig);
 
-      const colors = this.numberTableConfigForm.controls.colors.controls.map((val) => val.getRawValue());
-      console.log(colors);
-
-
-      // TODO: Do this a different way so you don't have to get dom elements this way.
-      // TODO: Consider signal queries.
-      // ! Stop using setTimeout!
-      setTimeout(() => this.elementRef.nativeElement.querySelectorAll('.num-box')?.forEach((el: HTMLElement) => {
-        // el.style.flexBasis = `calc(100% / ${updatedValue.columns + 1}`;
-        // console.log(el);
-      }), 20);
+      if (this.numberTableConfigForm.valid) {
+        this.currentConfig.set(updatedValue as NumberFormConfig);
+      }
     }));
-  }
-
-  public ngOnInit(): void {
-    console.log('test');
   }
 
   public ngOnDestroy(): void {
@@ -136,21 +95,35 @@ export class NumbersTableComponent implements OnInit, OnDestroy {
     return ['column' + (idx % this.currentConfig().columns), 'row' + Math.floor(idx / this.currentConfig().columns)]
   }
 
-  private buildColorsArray(): Array<FormControl<string>> {
-    const colors = Array
-      // .from(fillArray('000000', 10))
-      .from(fillArrayFunction(() => `#${Math.floor(Math.random() * 100_000_0)}`, 10));
-    colors.unshift(...['#FBE7C6', '#B4F8C8', '#A0E7E5', '#FFAEBC']); // Secondary.
-    colors.unshift(...['#FBDFA0', '#FFC2C7', '#5DD9FB', '#BBD5D2']);
-    colors.unshift(...['#D4BBDD', '#F6E6E8']);
-    return colors.slice(0, 10).map((value: string) => this.fb.control<string>(value));
+  public updateNumberValue(value: { index: number, value: FormattedNumberValue }): void {
+    console.log('update number value', value);
+    // TODO: Fix this so numbers can actually be updated and contain a config here.
+    // this.numbers()[value.index] = value.value;
   }
 
-  private buildNumbersArray(config: NumberFormConfig): Array<number> {
+  public print(): void {
+    window.print();
+  }
+
+  public save(): void {
+    this.saveService.save({
+      name: '100s data',
+      value: {
+        values: this.numbers(),
+        config: this.currentConfig(),
+      },
+    });
+  }
+
+  public downloadPdf(): void {
+    // console.log(pdfmake); // TODO: May not need @types.
+  }
+
+  private buildNumbersArray(config: NumberFormConfig): Array<FormattedNumberValue> {
     // TODO: Error Checking.
     // TODO: start should be <= end. end not being even divisible by countBy. countBy !== 0
     // TODO: Just return if the config leads to an invalid table.
-    return Array.from(sequentialNumberGenerator(config.start, config.end, config.countBy));
+    return Array.from(formattedSequentialNumberGenerator(config.start, config.end, config.countBy));
   }
 
   private buildNumberTable(config: NumberFormConfig): Array<Array<number>> {

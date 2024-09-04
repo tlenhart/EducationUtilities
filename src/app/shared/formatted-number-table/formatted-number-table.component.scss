@@ -1,13 +1,6 @@
 @use '@angular/material' as mat;
 @use '../../../m3-theme' as m3-theme;
 
-.document-actions {
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 12px;
-}
-
 .number-table-container {
   display: flex;
   flex-direction: row;
