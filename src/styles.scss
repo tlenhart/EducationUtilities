@@ -1,3 +1,4 @@
+@use './styles/globals'; // Import global css variables.
 @use '@angular/material' as mat;
 @use './m3-theme.scss' as m3-theme;
 //@use './app/partials/material-theme-imports' as material-imports;
@@ -24,7 +25,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // ? Add the .print-area class to an element.
 // ? Add the .ignore-print class to an element to exclude it from printing.
 @media print {
-  #sidenav, #primary-toolbar, .ignore-print {
+  #sidenav, #primary-toolbar,
+  #clippy, .clippy-balloon,
+  .ignore-print {
     display: none !important;
   }
 

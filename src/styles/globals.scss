@@ -1,0 +1,7 @@
+// Global css variables for use throughout the application.
+// scss variables referencing these variables can be found in the _globals.scss file.
+
+:root {
+  --eu-sidebar-width: 200px;
+  --eu-content-width: calc(100vw - var(--eu-sidebar-width));
+}
