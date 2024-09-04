@@ -1,0 +1,20 @@
+<mat-toolbar class="toolbar" id="primary-toolbar">
+  @if (isHandset$ | async) {
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="drawer()?.toggle()"
+    >
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  }
+  <span>Education Utilities</span>
+  <mat-slide-toggle (change)="switchTheme($event)">
+    @if (theme === 'dark') {
+      Dark Theme
+    } @else {
+      Light Theme
+    }
+  </mat-slide-toggle>
+</mat-toolbar>

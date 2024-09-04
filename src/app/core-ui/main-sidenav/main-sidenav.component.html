@@ -1,0 +1,14 @@
+<mat-nav-list>
+  @for(route of routes(); track route.path) {
+    <a
+      mat-list-item
+      [routerLink]="route.path"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [activated]="rla.isActive"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page">
+      {{route.name}}
+    </a>
+  }
+</mat-nav-list>
