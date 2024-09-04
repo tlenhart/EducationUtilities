@@ -1,0 +1,36 @@
+<div class="settings-container">
+  @if (settings(); as settings) {
+    <form [formGroup]="settingsForm()">
+      @if (settings.clippy.settingGroupAvailable) {
+        <div class="form-section clippy-form" formGroupName="clippy"> <!-- [formGroup]="settingsForm.controls.clippy"> -->
+          <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-clippy-and-friends" class="enable-disable-toggle">
+            {{settings.clippy.userEnabledGroup.description}}
+          </mat-slide-toggle>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="select-dropdown">
+            <mat-label>{{settings.clippy.selectedAgent.description}}</mat-label>
+            <mat-select formControlName="selectedAgent" id="clippy-and-friends-selection">
+              @for (option of settings.clippy.selectedAgent.possibleValues; track option) {
+                <mat-option [value]="option">{{option}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="checkboxes">
+            <mat-checkbox formControlName="playRandomAnimations" id="play-random-animations-for-clippy-and-friends-checkbox">
+              {{settings.clippy.playRandomAnimations.description}}
+            </mat-checkbox>
+            <mat-checkbox formControlName="playSounds" id="play-sounds-for-clippy-and-friends-checkbox">
+              {{settings.clippy.playSounds.description}}
+            </mat-checkbox>
+          </div>
+        </div>
+      }
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" id="save-changes-btn" mat-flat-button (click)="save()" [disabled]="settingsForm().untouched">Save Changes</button>
+        <button type="button" id="reset-changes-button" class="error-button" mat-flat-button (click)="resetSettings()">Reset To Default Settings</button>
+      </div>
+    </form>
+  }
+</div>

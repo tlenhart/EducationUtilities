@@ -1,0 +1,21 @@
+.form-section {
+  display: flex;
+  flex-direction: column;
+  max-width: calc(var(--eu-content-width) * 0.5); // 50% content-width.
+  gap: 4px;
+}
+
+.enable-disable-toggle {
+  margin-bottom: 18px;
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
