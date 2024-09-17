@@ -34,9 +34,15 @@ export class SettingsService {
       this.currentSettings.set({ ...DEFAULT_SETTINGS });
     }
 
+    this.currentSettings.update((current: Versioned<GlobalSettings>) => {
+      // Set the version in the settings object as a Version type, rather than a simple object.
+      (current as { -readonly [K in keyof Versioned<GlobalSettings>]: Versioned<GlobalSettings>[K] }).version = new Version(current.version.major, current.version.minor, current.version.patch);
+      return current;
+    });
+
     // As a temporary measure, if a migration needs to be performed, reset all settings to their default instead of migrating.
-    if (loadedSettings.data?.version.toString() !== DEFAULT_SETTINGS.version.toString()) {
-      console.log('settings migration needed');
+    if (this.currentSettings().version.toString() !== DEFAULT_SETTINGS.version.toString()) {
+      console.log('settings migration needed', this.currentSettings().version.toString(), DEFAULT_SETTINGS.version.toString());
 
       const migratedSettings = this.saveWithVersion(DEFAULT_SETTINGS, DEFAULT_SETTINGS.version);
 
