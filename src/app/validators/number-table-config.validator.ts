@@ -14,13 +14,14 @@ export function numberTableConfigValidator(): ValidatorFn {
     if (!formControls.countBy) {
       return { [VALIDATION_ERROR_KEYS.countBy]: formControls.countBy === 0 ? 'Count By cannot be 0.' : `'Count By' is required.` };
     }
+
     // Check to see if countBy is negative, and if it is, start must be > end.
     if (formControls.countBy < 0 && formControls.start <= formControls.end) {
       return { [VALIDATION_ERROR_KEYS.countBy]: 'When Count By is negative, Start must be greater than End.' };
     }
 
     return null;
-  }
+  };
 }
 
 function isNumberFormGroup(control: AbstractControl): control is FormGroup<NumberFormForm> {

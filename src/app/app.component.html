@@ -1,29 +1,35 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="(isHandset$ | async) === false"
-    id="sidenav"
-  >
-    @defer (on idle) {
-      <app-main-sidenav [routes]="routes"></app-main-sidenav>
-    }
-  </mat-sidenav>
-  <mat-sidenav-content id="sidenav-content">
-    @defer(on idle) {
-      <app-main-toolbar [drawer]="drawer"></app-main-toolbar>
-    }
-    <!-- Add Content Here -->
-    <main id="main">
-      <router-outlet></router-outlet>
-</main>
-    @defer(on idle) {
-      <!--@if (settings().clippy.settingGroupAvailable && !settings().clippy.userEnabledGroup) {-->
-        <app-clippy class="ignore-print"></app-clippy>
-      <!--}-->
-    }
-  </mat-sidenav-content>
-</mat-sidenav-container>
+@defer (on immediate; prefetch on viewport) {
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false"
+      id="sidenav"
+    >
+      @defer (on idle) {
+        <app-main-sidenav [routes]="routes"></app-main-sidenav>
+      }
+    </mat-sidenav>
+    <mat-sidenav-content id="sidenav-content">
+      @defer(on idle) {
+        <app-main-toolbar [drawer]="drawer"></app-main-toolbar>
+      }
+      <!-- Add Content Here -->
+      <main id="main">
+        @defer (on immediate; prefetch on immediate) {
+          <router-outlet></router-outlet>
+        }
+      </main>
+      @if (settings().clippy | globalSettingEnabled) {
+        @defer(on idle) {
+          <app-clippy class="ignore-print"></app-clippy>
+        }
+      }
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+} @placeholder (minimum 1s) {
+  <app-loader></app-loader>
+}

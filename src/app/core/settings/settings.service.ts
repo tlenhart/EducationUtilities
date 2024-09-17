@@ -1,5 +1,12 @@
 import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { DEFAULT_SETTINGS, GlobalSettings, SavedData, Versioned } from '../../models';
+import {
+  DEFAULT_SETTINGS,
+  GlobalSettings,
+  GlobalSettingValue,
+  SavedData,
+  TooltipSettings,
+  Versioned
+} from '../../models';
 import { SaveService } from '../save/save.service';
 
 @Injectable({

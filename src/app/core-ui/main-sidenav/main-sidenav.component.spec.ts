@@ -1,3 +1,4 @@
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainSidenavComponent } from './main-sidenav.component';
@@ -8,7 +9,8 @@ describe('MainSidenavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MainSidenavComponent]
+      providers: [provideExperimentalZonelessChangeDetection()],
+      imports: [MainSidenavComponent],
     })
       .compileComponents();
 

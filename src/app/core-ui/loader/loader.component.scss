@@ -1,0 +1,81 @@
+//@use '@angular/material' as mat;
+//@use '../../../m3-theme' as m3-theme;
+//
+//.backdrop {
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//  right: 0;
+//  bottom: 0;
+//  width: 100vw;
+//  height: 100vh;
+//  background-color: var(--mat-app-background-color, #FFFFFF);
+//  display: flex;
+//}
+//
+//.loader {
+//  margin-left: auto;
+//  margin-right: auto;
+//  justify-content: center;
+//  align-content: center;
+//  stroke-dasharray: 1000;
+//  stroke-dashoffset: 1000;
+//}
+//
+//@keyframes drawStroke {
+//  0%, 20% {
+//    stroke-dashoffset: 1000;
+//  }
+//  20% {
+//  }
+//  40% {
+//  }
+//  60% {
+//    stroke: mat.get-theme-color(m3-theme.$light-theme, tertiary);
+//  }
+//  80% {
+//  }
+//  to {
+//    stroke-dashoffset: 0;
+//    //stroke: #285ea7;
+//    stroke: mat.get-theme-color(m3-theme.$light-theme, primary);
+//  }
+//}
+//
+//@keyframes increaseOpacity {
+//  0%, 20% {
+//    opacity: 70%;
+//  }
+//  20% {
+//    opacity: 70%;
+//  }
+//  40% {
+//    opacity: 80%;
+//  }
+//  60% {
+//    stroke: mat.get-theme-color(m3-theme.$light-theme, tertiary);
+//  }
+//  80% {
+//    opacity: 100%;
+//  }
+//  to {
+//    opacity: 100%;
+//    stroke: mat.get-theme-color(m3-theme.$light-theme, primary);
+//  }
+//}
+//
+//.loader-path {
+//  fill: none;
+//  stroke: #471b56;
+//  stroke-width: 6.25px;
+//  animation:
+//    drawStroke 1000ms infinite alternate ease-in-out,
+//    increaseOpacity 1000ms infinite alternate ease-in-out;
+//
+//  // TODO: Fix this animation.
+//  @media (prefers-reduced-motion) {
+//    stroke-dashoffset: 0;
+//    animation:
+//      increaseOpacity 2000ms infinite alternate ease-in-out;
+//  }
+//}

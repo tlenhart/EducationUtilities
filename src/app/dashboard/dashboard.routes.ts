@@ -21,4 +21,4 @@ export const fallbackRoute: Routes = [
     path: '**',
     redirectTo: mainPath,
   }
-]
+];

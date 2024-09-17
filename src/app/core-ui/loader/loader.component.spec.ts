@@ -1,20 +1,20 @@
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClippyComponent } from './clippy.component';
+import { LoaderComponent } from './loader.component';
 
-describe('ClippyComponent', () => {
-  let component: ClippyComponent;
-  let fixture: ComponentFixture<ClippyComponent>;
+describe('LoaderComponent', () => {
+  let component: LoaderComponent;
+  let fixture: ComponentFixture<LoaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideExperimentalZonelessChangeDetection()],
-      imports: [ClippyComponent],
+      imports: [LoaderComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(ClippyComponent);
+    fixture = TestBed.createComponent(LoaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

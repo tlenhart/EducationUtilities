@@ -5,9 +5,11 @@ import { Route, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { routes } from './app.routes';
 import { ClippyComponent } from './core-ui/clippy/clippy.component';
+import { LoaderComponent } from './core-ui/loader/loader.component';
 import { MainSidenavComponent } from './core-ui/main-sidenav/main-sidenav.component';
 import { MainToolbarComponent } from './core-ui/main-toolbar/main-toolbar.component';
 import { DeviceTypeService } from './core/device-type/device-type.service';
+import { GlobalSettingEnabledPipe } from './core/settings/setting-enabled/global-setting-enabled.pipe';
 import { SettingsService } from './core/settings/settings.service';
 import { AppRoute, GlobalSettings, Versioned } from './models';
 
@@ -18,7 +20,7 @@ import { AppRoute, GlobalSettings, Versioned } from './models';
     AsyncPipe,
     RouterOutlet,
     MatSidenav, MatSidenavContainer, MatSidenavContent,
-    MainToolbarComponent, MainSidenavComponent, ClippyComponent,
+    MainToolbarComponent, MainSidenavComponent, ClippyComponent, LoaderComponent, GlobalSettingEnabledPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

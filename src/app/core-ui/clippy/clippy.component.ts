@@ -4,6 +4,7 @@ import { Agent, load as loadAgent } from 'clippy.modern';
 import { Subscription } from 'rxjs';
 import { SettingsService } from '../../core/settings/settings.service';
 import { ClippySettings } from '../../models';
+import { sleep } from '../../utils/promise.utils';
 import { isGlobalSettingEnabled, isSettingEnabledAndTrue } from '../../utils/setting.utils';
 
 @Component({
@@ -23,7 +24,6 @@ export class ClippyComponent implements OnDestroy {
 
   constructor() {
     this.subscriptions.add(toObservable(this.settingsService.settings).subscribe(async (settings) => {
-      // console.log('settings changed');
       await this.loadAgent(settings.clippy);
     }));
   }
@@ -48,13 +48,21 @@ export class ClippyComponent implements OnDestroy {
     this.animationTimeout = window.setTimeout(async () => {
       // Pick a random animation so we can see what it is.
       const animation: string = this.agentAnimations[Math.floor(Math.random() * this.agentAnimations.length)];
-      // console.log('animation', animation);
+
       await this.agent?.speak(`Playing the ${animation} animation.`, true);
 
       // Play the animation.
       // You can also use `await this.agent?.animate();` if you want the library to handle the random animation.
       try {
-        await this.agent?.play(animation);
+        // Some animations can get stuck, like 'Writing' for clippy, so we put a limit of 10 seconds on how long a randomized animation can play.
+        // The animation itself may continue playing, but it allows another animation to go through.
+        await Promise.race([
+          this.agent?.play(animation),
+
+          // Resolve a promise after 10s to prevent one animation from blocking the use of other animations.
+          sleep(10_000),
+          // If needed in the future, before resolving, clear the animation queue (if possible).
+        ]);
       } catch (error: unknown) {
         console.warn(error);
       }
