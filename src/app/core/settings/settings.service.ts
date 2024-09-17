@@ -2,9 +2,8 @@ import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/cor
 import {
   DEFAULT_SETTINGS,
   GlobalSettings,
-  GlobalSettingValue,
   SavedData,
-  TooltipSettings,
+  Version,
   Versioned
 } from '../../models';
 import { SaveService } from '../save/save.service';
@@ -34,10 +33,31 @@ export class SettingsService {
       console.warn('Default settings were loaded!'); // TODO: Make sure to notify the user that default settings were loaded. (And try to always avoid this.)
       this.currentSettings.set({ ...DEFAULT_SETTINGS });
     }
+
+    // As a temporary measure, if a migration needs to be performed, reset all settings to their default instead of migrating.
+    if (loadedSettings.data?.version.toString() !== DEFAULT_SETTINGS.version.toString()) {
+      console.log('settings migration needed');
+
+      const migratedSettings = this.saveWithVersion(DEFAULT_SETTINGS, DEFAULT_SETTINGS.version);
+
+      if (!migratedSettings) {
+        console.warn('Unable to migrate settings. Please reset settings manually.');
+      }
+    }
   }
 
   public save(updatedSettings: GlobalSettings): boolean {
-    const versioned: Versioned<GlobalSettings> = { ...updatedSettings, version: this.currentSettings().version };
+    return this.saveWithVersion(updatedSettings, this.currentSettings().version);
+  }
+
+  public resetSettings(): void {
+    this.save({
+      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+    });
+  }
+
+  private saveWithVersion(updatedSettings: GlobalSettings, version: Version): boolean {
+    const versioned: Versioned<GlobalSettings> = { ...updatedSettings, version: version };
     const saveSuccess: boolean = this.saveService.save<Versioned<GlobalSettings>>({ value: versioned, name: this.saveName });
 
     if (saveSuccess) {
@@ -45,11 +65,5 @@ export class SettingsService {
     }
 
     return saveSuccess;
-  }
-
-  public resetSettings(): void {
-    this.save({
-      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
-    });
   }
 }

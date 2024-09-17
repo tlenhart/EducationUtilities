@@ -73,14 +73,14 @@ export interface GlobalSettings {
 }
 
 export const DEFAULT_SETTINGS: Versioned<GlobalSettings> = {
-  version: new Version(0, 0, 1),
+  version: new Version(0, 0, 2),
   tooltips: {
     description: 'Settings for all tooltips in the application.',
     settingGroupAvailable: true,
     userEnabledGroup: {
       description: 'Enable all tooltips in the application.',
-      value: false,
-      defaultValue: false,
+      value: true,
+      defaultValue: true,
       settingEnabled: true,
     },
     showHideTableCell: {
