@@ -26,6 +26,20 @@
         </div>
       }
 
+      @if (settings.tooltips.settingGroupAvailable) {
+        <div class="form-section tooltips-form" formGroupName="tooltips"> <!-- [formGroup]="settingsForm.controls.tooltips"> -->
+          <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-tooltips" class="enable-disable-toggle">
+            {{settings.tooltips.userEnabledGroup.description}}
+          </mat-slide-toggle>
+
+          <div class="checkboxes">
+            <mat-checkbox formControlName="showHideTableCell" id="tooltips-show-hide-table-cell-tooltip-checkbox">
+              {{settings.tooltips.showHideTableCell.description}}
+            </mat-checkbox>
+          </div>
+        </div>
+      }
+
       <!-- Form Actions -->
       <div class="form-actions">
         <button type="button" id="save-changes-btn" mat-flat-button (click)="save()" [disabled]="settingsForm().untouched">Save Changes</button>

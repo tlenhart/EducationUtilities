@@ -84,6 +84,10 @@ export class SettingsComponent {
       } as ClippySettings, // as GlobalSettingFormGroup<ClippySettings> as ClippySettings, // Exclude<GlobalSettingContainer<ClippySettings>, Exclude<GlobalSettingValue, 'userEnabledGroup'>>,
       tooltips: {
         ...this.settings().tooltips,
+        userEnabledGroup: {
+          ...this.settings().tooltips.userEnabledGroup,
+          value: tooltipsRawValue.userEnabledGroup,
+        },
         showHideTableCell: {
           ...this.settings().tooltips.showHideTableCell,
           value: tooltipsRawValue.showHideTableCell,
