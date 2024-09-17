@@ -51,6 +51,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "src/loader.scss",
               "src/light-theme.scss",
               "src/dark-theme.scss",
               {
@@ -130,6 +131,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "src/loader.scss",
               "src/light-theme.scss",
               "src/dark-theme.scss",
               {
