@@ -1,99 +1,74 @@
-<!--<table class="number-table">-->
-<!--  <tbody>-->
-<!--    -->
-<!--  </tbody>-->
-<!--</table>-->
 <div class="ignore-print">
-  <div class="document-actions">
-    <button mat-flat-button type="button" (click)="print()" id="print-button">
-      <mat-icon aria-hidden="false" aria-label="Click to print this chart." fontIcon="print"></mat-icon>
-      Print
-    </button>
-  </div>
+  @defer (on immediate) {
+    <app-document-actions (print)="print()" (downloadPdf)="downloadPdf()" (save)="save()" (reset)="resetConfig()"></app-document-actions>
+  }
 
-  <form [formGroup]="numberTableConfigForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Start</mat-label>
-      <input id="number-start-input" matInput type="number" formControlName="start">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>End</mat-label>
-      <input id="number-end-input" matInput type="number" formControlName="end">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Count By</mat-label>
-      <input id="number-countBy-input" matInput type="number" formControlName="countBy">
-      <mat-error>
-        @if (numberTableConfigForm.controls.countBy.errors; as errors) {
-          @if (errors['required']) {
-            'Count By' is required.
-          } @else if (errors[errorKeys.isNotValue]) {
-            {{errors[errorKeys.isNotValue]}}
+  <mat-accordion class="config-section">
+    <mat-expansion-panel [expanded]="true" [togglePosition]="'before'">
+
+      <!-- Panel Header. -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Table configuration
+        </mat-panel-title>
+        <!--<mat-panel-description></mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <!-- Expansion Panel Content. -->
+      <ng-template matExpansionPanelContent>
+        <form [formGroup]="numberTableConfigForm" class="config-form">
+          <div class="primary-config config-group">
+            <mat-form-field>
+              <mat-label>Start</mat-label>
+              <input id="number-start-input" matInput type="number" formControlName="start">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>End</mat-label>
+              <input id="number-end-input" matInput type="number" formControlName="end">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Count By</mat-label>
+              <input id="number-countBy-input" matInput type="number" formControlName="countBy">
+              <mat-error>
+                @if (numberTableConfigForm.controls.countBy.errors; as errors) {
+                  @if (errors['required']) {
+                    'Count By' is required.
+                  } @else if (errors[errorKeys.isNotValue]) {
+                    {{errors[errorKeys.isNotValue]}}
+                  }
+                }
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Columns</mat-label>
+              <input id="number-columns-input" matInput type="number" formControlName="columns" min="1">
+            </mat-form-field>
+            <mat-slide-toggle formControlName="showHiddenValues" id="number-table-show-hidden-values">Show hidden values</mat-slide-toggle>
+          </div>
+
+          <div class="color-config config-group">
+            @for(control of numberTableConfigForm.controls.colors.controls; track $index) {
+              <mat-form-field subscriptSizing="dynamic">
+                <mat-label>Column {{$index + 1}}</mat-label>
+                <input type="color" matInput [formControl]="control">
+              </mat-form-field>
+            }
+          </div>
+
+          @if (numberTableConfigForm.errors; as errors) {
+            <mat-error>
+              @if (errors['countBy']) {
+                {{errors['countBy']}}
+              }
+            </mat-error>
           }
-        }
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Columns</mat-label>
-      <input id="number-columns-input" matInput type="number" formControlName="columns" min="1">
-    </mat-form-field>
-    <mat-slide-toggle formControlName="showHiddenValues">Show hidden values</mat-slide-toggle>
+        </form>
+      </ng-template>
 
-    <mat-grid-list [cols]="currentConfig().columns" class="color-picker-row" formArrayName="colors">
-      @for(control of numberTableConfigForm.controls.colors.controls; track $index) {
-        <mat-grid-tile class="color-picker-box"
-                       [colspan]="1"
-                       [rowspan]="1">
-          <mat-form-field>
-            <mat-label>Color for row/column {{$index + 1}}</mat-label>
-            <input type="color" matInput [formControl]="control">
-          </mat-form-field>
-  <!--        <div [ngStyle]="{ 'background-color': control.getRawValue() }">-->
-  <!--          {{$index}}-->
-  <!--        </div>-->
-        </mat-grid-tile>
-      }
-    </mat-grid-list>
-
-    @if (numberTableConfigForm.errors; as errors) {
-      <mat-error>
-        @if (errors['countBy']) {
-          {{errors['countBy']}}
-        }
-      </mat-error>
-    }
-  </form>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
 
-<!--<div class="number-table-container">-->
-<!--  @for(num of numbers(); track $index) {-->
-<!--    <div class="num-box">-->
-<!--      {{num}}-->
-<!--    </div>-->
-<!--  }-->
-<!--</div>-->
-
 @defer (on idle) {
-  <app-formatted-number-table [tableConfig]="tableConfig()" (updateIndividualValue)="updateNumberValue($event)"></app-formatted-number-table>
+  <app-number-grid [gridConfig]="tableConfig()"></app-number-grid>
 }
-
-
-<!-- TODO: See if calling the signal this way is not performance optimal. -->
-<!--<ng-container *ngIf="currentConfig() as config">-->
-<!--  &lt;!&ndash; <div>Columns: {{config.columns}}</div> &ndash;&gt;-->
-<!--&lt;!&ndash;  @let config = currentConfig();&ndash;&gt;-->
-<!--  <mat-grid-list [cols]="config.columns" rowHeight="40px" class="number-table-container print-area">-->
-<!--    @for(num of numbersOld(); track idx; let idx = $index) {-->
-<!--&lt;!&ndash;        [ngStyle]="{ 'background-color': '#' + numberTableConfigForm.controls.colors.controls[idx % this.currentConfig().columns].getRawValue() }"&ndash;&gt;-->
-<!--      <mat-grid-tile class="num-box"-->
-<!--        [style.background-color]="numberTableConfigForm.controls.colors.at(idx % this.currentConfig().columns)?.getRawValue() ?? 'inherit'"-->
-<!--        [ngClass]="getTileClass(idx)"-->
-<!--        [colspan]="1"-->
-<!--        [rowspan]="1">-->
-<!--      &lt;!&ndash;<span>{{num}}</span>&ndash;&gt;-->
-<!--        <span [ngClass]="{ 'ignore-print': idcheckbox.checked }">{{num}} - {{idcheckbox.checked}}</span>-->
-<!--        <input type="checkbox" [id]="'show-hide-checkbox' + idx" class="show-hide-number ignore-print" #idcheckbox>-->
-<!--      </mat-grid-tile>-->
-<!--    }-->
-<!--  </mat-grid-list>-->
-<!--</ng-container>-->

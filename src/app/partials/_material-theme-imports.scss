@@ -5,6 +5,7 @@
 
   @include mat.sidenav-theme($theme);
   @include mat.toolbar-theme($theme);
+  @include mat.list-theme($theme);
 
   @include mat.slide-toggle-theme($theme);
   @include mat.button-theme($theme);
@@ -13,6 +14,8 @@
 
   @include mat.tooltip-theme($theme);
   @include mat.select-theme($theme);
+
+  @include mat.expansion-theme($theme);
 
   @include additional-colors($theme);
 
@@ -31,5 +34,5 @@
     &-button {
       @include mat.button-color($theme, $color-variant: error);
     }
-}
+  }
 }

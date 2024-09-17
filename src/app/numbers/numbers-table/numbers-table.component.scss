@@ -1,28 +1,36 @@
-@use '@angular/material' as mat;
-@use '../../../m3-theme' as m3-theme;
-
-.document-actions {
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 12px;
+.config-section, .config-group {
+  margin-bottom: var(--eu-content-section-gap);
+  display: block;
 }
 
-.number-table-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  // TODO: May want to use grid instead and dynamically updated the grid configuration.
-  .num-box {
-    flex-basis: calc(100% / 11);
-    width: 40px;
-    height: 40px;
-    border: 1px solid mat.get-theme-color(m3-theme.$light-theme, tertiary);
+.config-group {
+  &:last-of-type {
+    margin-bottom: 0;
   }
+}
 
-  input[type=checkbox].show-hide-number {
-    position: absolute;
-    top: 0;
-    right: 0;
+.primary-config {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-flow: row;
+  grid-gap:
+    calc(var(--eu-config-grid-item-gap) / 2)
+    var(--eu-config-grid-item-gap);
+  align-items: baseline;
+}
+
+.config-toggles {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-auto-flow: column;
+
+  > .form-input {
+    max-width: fit-content;
   }
+}
+
+.color-config {
+  display: grid;
+  gap: var(--eu-config-grid-item-gap);
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
 }

@@ -1,0 +1,65 @@
+<div class="ignore-print">
+  @defer (on immediate) {
+    <app-document-actions (print)="print()" (downloadPdf)="downloadPdf()" (save)="save()" (reset)="reset()"></app-document-actions>
+  }
+
+  <mat-accordion class="config-section">
+    <mat-expansion-panel [expanded]="true" [togglePosition]="'before'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Table configuration
+        </mat-panel-title>
+        <!--<mat-panel-description></mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <form [formGroup]="multiplicationTableConfigForm" class="config-form">
+          <div class="primary-config">
+            <mat-form-field class="form-input">
+              <mat-label>Start</mat-label>
+              <input id="multiplication-table-start-number" type="number" matInput formControlName="start" min="1">
+            </mat-form-field>
+            <mat-form-field class="form-input">
+              <mat-label>End</mat-label>
+              <input id="multiplication-table-end-number" type="number" matInput formControlName="end" min="1">
+            </mat-form-field>
+            <mat-slide-toggle
+              class="form-input"
+              formControlName="showHiddenValues" id="multiplication-table-show-hidden-values">
+              Show hidden values
+            </mat-slide-toggle>
+          </div>
+          <div class="config-toggles">
+            <mat-checkbox
+              class="form-input"
+              formControlName="showBackgroundColors" id="multiplication-table-show-background-colors">
+              Show background colors.
+            </mat-checkbox>
+            <mat-form-field subscriptSizing="dynamic" class="select-dropdown">
+              <mat-label>Align colors with</mat-label>
+              <mat-select formControlName="alignColorsBy" id="align-colors-by-selection">
+                @for (option of alignColorsByOptions; track option) {
+                  <mat-option [value]="option">{{option !== 'both' ? option : 'both row and column'}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-checkbox
+              class="form-input"
+              formControlName="showColumnHeaders" id="multiplication-table-show-column-headers">
+              Show column headers.
+            </mat-checkbox>
+            <mat-checkbox
+              class="form-input"
+              formControlName="showRowHeaders" id="multiplication-table-show-row-headers">
+              Show row headers.
+            </mat-checkbox>
+          </div>
+        </form>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+@defer (on idle) {
+  <app-number-grid [gridConfig]="tableConfig()"></app-number-grid>
+}

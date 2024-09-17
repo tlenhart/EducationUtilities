@@ -1,0 +1,45 @@
+@use '../../../styles/global-scss-vars' as scss-vars;
+
+.grid-element {
+  position: relative;
+  text-align: center;
+  padding: 12px;
+
+  border-bottom: scss-vars.$grid-border;
+  border-right: scss-vars.$grid-border;
+
+  background-color: var(--mat-app-background-color, #FFFFFF);
+
+  &.column0 {
+    border-left: scss-vars.$grid-border;
+  }
+
+  &.row0 {
+    border-top: scss-vars.$grid-border;
+  }
+
+  &.column-header {
+    border-top: scss-vars.$grid-border;
+    border-bottom: scss-vars.$grid-border;
+  }
+
+  &.row-header {
+    border-right: scss-vars.$grid-border;
+    border-left: scss-vars.$grid-border;
+  }
+
+  .grid-content {
+    display: inline-block;
+  }
+
+  // The show/hide number checkbox. Uses position: relative from .grid-element.
+  input[type=checkbox].show-hide-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

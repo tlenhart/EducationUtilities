@@ -1,0 +1,52 @@
+<!-- TODO: See if calling the signal this way is not performance optimal. -->
+@if (gridConfig(); as config) {
+  <div class="number-grid-container" #numberGridContainer
+    [ngStyle]="gridContainerStyles()">
+
+    @if (config.showColumnHeaders) {
+      @if (config.showRowHeaders) {
+        <!--<div class="grid-element header-column-element">X</div>-->
+      <app-number-grid-cell
+        class="header-column header-row"
+        [index]="0" [checked]="false" constValue="X"
+        [showHiddenValues]="config.showHiddenValues"
+        [showTooltips]="showHideTooltip()"
+        (updateIndividualValue)="showHideAllCells($event.value)"
+        [value]="$any({ value: 'X', header: true, classList: 'column-header row-header' })"></app-number-grid-cell>
+      }
+
+      <!-- Column Headers -->
+      @for (column of columnHeaders(); track idx; let idx = $index) {
+        <app-number-grid-cell
+          class="column-header"
+          [index]="idx" [value]="column"
+          [constValue]="column.value" [checked]="column.checked"
+          [showHiddenValues]="config.showHiddenValues"
+          [showTooltips]="showHideTooltip()"
+          (updateIndividualValue)="headerValueUpdated($event.index, $event.value, 'column')"></app-number-grid-cell>
+      }
+    }
+
+    @for(num of oneDimensionalValues(); track idx; let idx = $index) {
+      @if (config.showRowHeaders && idx % config.columns === 0) {
+        <!-- Row headers. -->
+        @let headerIndex = (idx / config.columns);
+        @let value = rowHeaders()[headerIndex];
+        <app-number-grid-cell
+          class="row-header"
+          [index]="headerIndex" [value]="value"
+          [constValue]="value.value" [checked]="value.checked"
+          [showHiddenValues]="config.showHiddenValues"
+          [showTooltips]="showHideTooltip()"
+          (updateIndividualValue)="headerValueUpdated($event.index, $event.value, 'row')"></app-number-grid-cell>
+      }
+
+      <app-number-grid-cell
+        [index]="idx"
+        [showHiddenValues]="config.showHiddenValues"
+        [showTooltips]="showHideTooltip()"
+        [constValue]="num.value" [checked]="num.checked"
+        [value]="num" (updateIndividualValue)="valueUpdated($event.index, $event.value)"></app-number-grid-cell>
+    }
+  </div>
+}

@@ -78,10 +78,10 @@ export const DEFAULT_SETTINGS: Versioned<GlobalSettings> = {
     description: 'Settings for all tooltips in the application.',
     settingGroupAvailable: true,
     userEnabledGroup: {
-      description: 'Disable all tooltips in the application.',
+      description: 'Enable all tooltips in the application.',
       value: false,
       defaultValue: false,
-      settingEnabled: false,
+      settingEnabled: true,
     },
     showHideTableCell: {
       description: 'Show the tooltip when hovering over the checkbox used to show/hide values in a numbers table.',

@@ -1,0 +1,27 @@
+@let num = value();
+@let idx = index();
+<div class="grid-element"
+     [ngClass]="num.classList"
+     [ngStyle]="num.ngStyles">
+
+  <!-- Element Value. -->
+  <span class="grid-content">
+    @if (showHiddenValues() || !num.checked || (num.checked && num.header)) {
+      <span [ngClass]="{ 'ignore-print': num.checked && !num.header }">
+        {{num.value}}
+      </span>
+    }
+  </span>
+
+  <!-- Show/Hide checkbox -->
+  <input
+    type="checkbox"
+    class="show-hide-number ignore-print"
+    [id]="'show-hide-checkbox' + idx"
+    [(ngModel)]="num.checked"
+    (ngModelChange)="valueUpdated(idx, { value: num.value, checked: $event })"
+    [matTooltip]="num | numberGridCellTooltipMessage:num.checked:showTooltips()"
+    matTooltipPosition="above"
+    aria-label="When checked, this cell value will be hidden when printing."
+  >
+</div>

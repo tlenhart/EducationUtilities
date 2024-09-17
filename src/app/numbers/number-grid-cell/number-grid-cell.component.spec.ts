@@ -1,20 +1,20 @@
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NumbersTableComponent } from './numbers-table.component';
+import { NumberGridCellComponent } from './number-grid-cell.component';
 
-describe('NumbersTableComponent', () => {
-  let component: NumbersTableComponent;
-  let fixture: ComponentFixture<NumbersTableComponent>;
+describe('NumberGridCellComponent', () => {
+  let component: NumberGridCellComponent;
+  let fixture: ComponentFixture<NumberGridCellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideExperimentalZonelessChangeDetection()],
-      imports: [NumbersTableComponent],
+      imports: [NumberGridCellComponent],
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(NumbersTableComponent);
+    fixture = TestBed.createComponent(NumberGridCellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
