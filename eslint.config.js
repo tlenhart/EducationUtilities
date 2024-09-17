@@ -45,6 +45,7 @@ export default tseslint.config(
       '@stylistic/indent': ["error", 2],
       '@stylistic/object-curly-spacing': ["error", "always"],
       '@stylistic/quotes': ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
+      '@stylistic/semi': ["error", "always"],
     },
   },
   {

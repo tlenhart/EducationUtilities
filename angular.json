@@ -10,6 +10,13 @@
           "style": "scss",
           "changeDetection": "OnPush",
           "standalone": true
+        },
+        "@schematics/angular:service": {
+          "flat": false
+        },
+        "@schematics/angular:pipe": {
+          "flat": false,
+          "standalone": true
         }
       },
       "root": "",
@@ -23,7 +30,6 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -45,15 +51,17 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/dark-theme.scss",
               "src/light-theme.scss",
+              "src/dark-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,
                 "input": "node_modules/clippy.modern/dist/clippy.css"
               }
             ],
-            "scripts": []
+            "scripts": [
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -101,8 +109,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
-              "zone.js",
-              "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
@@ -124,15 +130,16 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/dark-theme.scss",
               "src/light-theme.scss",
+              "src/dark-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,
                 "input": "node_modules/clippy.modern/dist/clippy.css"
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

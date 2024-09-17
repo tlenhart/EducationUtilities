@@ -1,5 +1,5 @@
-@use './styles/globals'; // Import global css variables.
 @use '@angular/material' as mat;
+@use './styles/globals'; // Import global css variables.
 @use './m3-theme.scss' as m3-theme;
 //@use './app/partials/material-theme-imports' as material-imports;
 
@@ -7,14 +7,13 @@
 
 html {
   // TODO: Decide what to do about this and consider loading it in the individual themes themselves.
-  @include mat.list-theme(m3-theme.$light-theme);
+  //@include mat.list-theme(m3-theme.$light-theme);
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mdc-list-item {
-
 }
 
 .active {
@@ -24,7 +23,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // Print Settings.
 // ? Add the .print-area class to an element.
 // ? Add the .ignore-print class to an element to exclude it from printing.
+//@media screen, print {
 @media print {
+  body, main, .sidenav-container {
+    // Override variables so the background is #FFFFFF.
+    --mat-sidenav-content-background-color: #FFFFFF;
+    --mat-app-background: #FFFFFF;
+    background-color: #FFFFFF;
+
+    /* Used to allow printing to multiple pages automatically. */
+
+    // TODO: This may need to be removed if we manually provide the page breaks.
+    position: static !important;
+    overflow: initial !important;
+    margin: 0 !important;
+
+    /* End printing page break settings. */
+  }
+
+  #main {
+    height: 100vh;
+  }
+
   #sidenav, #primary-toolbar,
   #clippy, .clippy-balloon,
   .ignore-print {
@@ -33,6 +53,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
   #sidenav-content {
     margin-left: 0 !important;
+    display: block !important;
+    padding: 0 !important;
+
+    /* Used to allow printing to multiple pages automatically. */
+
+    // TODO: This may need to be removed if we manually provide the page breaks.
+    //position: relative !important;
+    overflow: visible !important;
+    //break-after: region !important;
+
+    /* End printing page break settings. */
   }
 
   .print-area {

@@ -1,0 +1,8 @@
+// scss variables built off of values specified in globals.scss.
+// ! This file should *not* import globals.scss, nor should any other file.
+@use '@angular/material' as mat;
+@use '../m3-theme' as m3-theme;
+@use './global-colors' as _colors;
+@use './functions' as _functions;
+
+$grid-border: _functions.grid-border();
