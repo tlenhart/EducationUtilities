@@ -21,6 +21,10 @@ export class ClippyComponent implements OnDestroy {
   private agentAnimations: ReadonlyArray<string> = [];
   private animationTimeout: number | undefined = undefined;
   private canDeleteTimeout: number | undefined = undefined;
+  private readonly informativeMessages: ReadonlyArray<string> = [
+    `Did you know that you can get rid of me in the settings?\n I'll be really sad, but it can be done.`,
+    `Tooltips when hovering over grid show/hide checkboxes can be disabled in the settings if they are annoying.`,
+  ];
 
   constructor() {
     this.subscriptions.add(toObservable(this.settingsService.settings).subscribe(async (settings) => {
@@ -114,7 +118,8 @@ export class ClippyComponent implements OnDestroy {
         waveAnimation = this.agent?.play('Wave');
       }
 
-      await this.agent?.speak(`Did you know that you can get rid of me in the settings?\n I'll be really sad, but it can be done.`, true);
+      const message: string = this.informativeMessages[Math.floor(Math.random() * this.informativeMessages.length)];
+      await this.agent?.speak(message, true);
 
       await waveAnimation;
 
