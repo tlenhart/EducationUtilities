@@ -11,6 +11,8 @@ on:
     types:
       - opened
       - reopened
+      # - edited # https://docs.github.com/en/webhooks/webhook-events-and-payloads?actionType=edited#pull_request
+      - synchronize
       - ready_for_review
       - review_requested
       - closed
