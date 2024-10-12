@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ "main" ]
     types:
+      - opened
+      - reopened
+      - ready_for_review
+      - review_requested
       - closed
 
   # Allows you to run this workflow manually from the Actions tab
