@@ -1,19 +1,26 @@
 // @ts-check
-// const eslint = require('@eslint/js');
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import angular from 'angular-eslint';
-import stylistic from '@stylistic/eslint-plugin';
+// const eslint = require("@eslint/js");
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+import angular from "angular-eslint";
+import stylistic from "@stylistic/eslint-plugin";
 
 export default tseslint.config(
   {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      }
+    },
     files: ["**/*.ts"],
     plugins: {
-      '@stylistic': stylistic,
+      "@stylistic": stylistic,
     },
     extends: [
       eslint.configs.recommended,
-      ...tseslint.configs.recommended,
+      // ...tseslint.configs.recommended,
+      ...tseslint.configs.strictTypeChecked,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
     ],
@@ -23,7 +30,7 @@ export default tseslint.config(
         "error",
         {
           type: "attribute",
-          prefix: "app",
+          prefix: "eu",
           style: "camelCase",
         },
       ],
@@ -31,7 +38,7 @@ export default tseslint.config(
         "error",
         {
           type: "element",
-          prefix: "app",
+          prefix: ["eu", "app"],
           style: "kebab-case",
         },
       ],
@@ -41,11 +48,34 @@ export default tseslint.config(
           "default": "generic",
         },
       ],
-      '@typescript-eslint/no-inferrable-types': ["off"],
-      '@stylistic/indent': ["error", 2],
-      '@stylistic/object-curly-spacing': ["error", "always"],
-      '@stylistic/quotes': ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
-      '@stylistic/semi': ["error", "always"],
+      "@typescript-eslint/explicit-member-accessibility": [
+        "error",
+        {
+          overrides: {
+            constructors: 'no-public',
+          },
+        },
+      ],
+      "@typescript-eslint/no-extraneous-class": ["off"],
+      "@typescript-eslint/no-inferrable-types": ["off"],
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allowBoolean: true,
+          allowNumber: true,
+        },
+      ],
+      "@typescript-eslint/switch-exhaustiveness-check": [
+        "error",
+        {
+          allowDefaultCaseForExhaustiveSwitch: false,
+          requireDefaultForNonUnion: true
+        },
+      ],
+      "@stylistic/indent": ["error", 2],
+      "@stylistic/object-curly-spacing": ["error", "always"],
+      "@stylistic/quotes": ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
+      "@stylistic/semi": ["error", "always"],
     },
   },
   {
