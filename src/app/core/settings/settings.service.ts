@@ -58,7 +58,7 @@ export class SettingsService {
 
   public resetSettings(): void {
     this.save({
-      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+      ...(JSON.parse(JSON.stringify(DEFAULT_SETTINGS))) as Versioned<GlobalSettings>,
     });
   }
 

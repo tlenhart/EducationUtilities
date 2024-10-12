@@ -19,7 +19,7 @@ export class SaveService {
     const value: string | null = localStorage.getItem(name);
 
     return {
-      data: value ? JSON.parse(value) : null,
+      data: value ? JSON.parse(value) as T : null,
       success: !!value,
     };
   }

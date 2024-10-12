@@ -21,7 +21,7 @@ export class DocumentActionsComponent {
 
   public printDocument(): void {
     this.print.emit();
-    window.print();
+    self.print();
   }
 
   public saveData(): void {

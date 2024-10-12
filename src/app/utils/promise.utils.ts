@@ -5,6 +5,6 @@
  */
 export function sleep(ms: number): Promise<void> {
   return new Promise<void>((resolve: () => void) => {
-    window.setTimeout(resolve, ms);
+    self.setTimeout(resolve, ms);
   });
 }

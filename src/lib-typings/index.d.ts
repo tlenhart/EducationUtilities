@@ -1,6 +1,7 @@
 // Types copied from index.d.ts from clippy.modern, and re-exported here so that I could reference the types directly.
+// public accessibility has also been added in some cases.
 // See: https://stackoverflow.com/a/51298325
-// ! If clippy.modern is updated, new type definitions will need to be copied here.
+// ! If clippy.modern is updated, new type definitions will need to be copied here and public will need to be added to methods.
 
 declare module 'clippy.modern' {
   export type AgentType = 'Clippy' | 'Bonzi' | 'F1' | 'Genie' | 'Genius' | 'Links' | 'Merlin' | 'Peedy' | 'Rocky' | 'Rover';
@@ -35,38 +36,38 @@ declare module 'clippy.modern' {
     private animator;
     private balloon;
     private clickOffset;
-    get isVisible(): boolean;
+    public get isVisible(): boolean;
     constructor(path: string, data: AgentConfig, sounds: AgentSound);
     /**
      * Gesture at the specified coordinates
      * @param coord
      * @returns
      */
-    gestureAt(coord: Point): Promise<void>;
+    public gestureAt(coord: Point): Promise<void>;
     /**
      * Remove the agent, and remove the elements from the dom
      * @returns
      */
-    destroy(): Promise<void>;
+    public destroy(): Promise<void>;
     /**
      * Move the agent to the specified coordinates
      * @param coord
      * @param duration The amount of time that the agent is traveling, excluding start and stop animations
      * @returns
      */
-    moveTo(coord: Point, duration?: number): Promise<void>;
-    play(name: string): Promise<void>;
-    show(): Promise<void>;
-    speak(text: string, hold: boolean): Promise<void>;
-    hasAnimation(name: string): boolean;
+    public moveTo(coord: Point, duration?: number): Promise<void>;
+    public play(name: string): Promise<void>;
+    public show(): Promise<void>;
+    public speak(text: string, hold: boolean): Promise<void>;
+    public hasAnimation(name: string): boolean;
     /***
      * Gets a list of animation names
      */
-    animations(): Array<string>;
+    public animations(): Array<string>;
     /***
      * Play a random animation
      */
-    animate(): Promise<void>;
+    public animate(): Promise<void>;
     /**************************** Utils ************************************/
     /**
      * Get the direction
@@ -80,7 +81,7 @@ declare module 'clippy.modern' {
      * We need to transition the animation to an idle state
      * @private
      */
-    onQueueEmpty(): void;
+    public onQueueEmpty(): void;
     /**
      * Is the current animation Idle?
      * @returns
