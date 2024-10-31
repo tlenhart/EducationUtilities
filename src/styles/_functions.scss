@@ -1,8 +1,9 @@
 @use './global-colors' as colors;
+@use './themes/default/m3-theme' as m3-theme;
 
 @function grid-border(
   $width: var(--eu-grid-border-width, 1px),
   $style: var(--eu-grid-border-style, solid),
-  $color: var(--eu-grid-border-color, colors.$tertiary-light)) {
+  $color: var(--eu-grid-border-color, colors.get-theme-color(m3-theme.$light-theme, tertiary))) {
   @return $width $style $color;
 }

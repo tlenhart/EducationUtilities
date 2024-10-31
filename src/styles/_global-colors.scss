@@ -1,4 +1,7 @@
 @use '@angular/material' as mat;
-@use '../m3-theme' as m3-theme;
 
-$tertiary-light: mat.get-theme-color(m3-theme.$light-theme, tertiary);
+//$tertiary-light: mat.get-theme-color(m3-theme.$light-theme, tertiary);
+
+@function get-theme-color($theme, $palette) {
+  @return mat.get-theme-color($theme, $palette);
+}

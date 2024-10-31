@@ -1,8 +1,8 @@
 // Global css variables for use throughout the application.
 // scss variables referencing these variables can be found in the _globals.scss file.
 @use '@angular/material' as mat;
-@use '../m3-theme' as m3-theme;
 @use './global-colors' as colors;
+@use './themes/default/m3-theme' as m3-theme;
 
 // Instead of using :root, use .light and .dark selectors, so the .light and .dark --sys variables apply correctly.
 // If :root is used here, the following variables are set before the --sys variables are set, and any variable referencing a --sys variable will not be changed.
@@ -21,5 +21,16 @@
   // When displaying items in a grid, the border configuration for items in the grid.
   --eu-grid-border-width: 1px;
   --eu-grid-border-style: solid;
-  --eu-grid-border-color: #{colors.$tertiary-light};
+}
+
+// For theme-specific colors, add the variable to each of the rules below.
+
+.light {
+  &.default-theme {
+    --eu-grid-border-color: #{colors.get-theme-color(m3-theme.$light-theme, tertiary)};
+  }
+
+  &.wave-theme {
+    //--eu-grid-border-color: #{colors.get-theme-color(m3-theme.$light-theme, tertiary)};
+  }
 }
