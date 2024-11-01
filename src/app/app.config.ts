@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  EnvironmentProviders,
   isDevMode,
   provideExperimentalCheckNoChangesForDebug,
   provideExperimentalZonelessChangeDetection,
@@ -7,10 +8,11 @@ import {
 } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter } from '@angular/router';
+import { provideRouter, TitleStrategy, withViewTransitions } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 
 import { routes } from './app.routes';
+import { PageTitleStrategy } from './strategies/page-title.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,8 +23,31 @@ export const appConfig: ApplicationConfig = {
       exhaustive: true,
       // useNgZoneOnStable: true,
     }),
-    provideRouter(routes),
+    ...provideRouting(),
     provideAnimationsAsync(),
+    ...provideMaterialDefaults(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+  ],
+};
+
+function provideRouting(): ReadonlyArray<Provider | EnvironmentProviders> {
+  return [
+    provideRouter(
+      routes,
+      withViewTransitions(),
+    ),
+    {
+      provide: TitleStrategy,
+      useClass: PageTitleStrategy,
+    },
+  ];
+}
+
+function provideMaterialDefaults(): ReadonlyArray<Provider | EnvironmentProviders> {
+  return [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
@@ -33,9 +58,5 @@ export const appConfig: ApplicationConfig = {
       } as MatFormFieldDefaultOptions,
       multi: false,
     } as Provider,
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-  ],
-};
+  ];
+}
