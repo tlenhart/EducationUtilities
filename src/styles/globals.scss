@@ -3,6 +3,9 @@
 @use '@angular/material' as mat;
 @use './global-colors' as colors;
 @use './themes/default/m3-theme' as m3-theme;
+@use './themes/wave/m3-wave-theme' as m3-wave-theme;
+@use './themes/pink-wave/m3-pink-wave-theme' as m3-pink-wave-theme;
+@use './themes/synth.css';
 
 // Instead of using :root, use .light and .dark selectors, so the .light and .dark --sys variables apply correctly.
 // If :root is used here, the following variables are set before the --sys variables are set, and any variable referencing a --sys variable will not be changed.
@@ -31,6 +34,10 @@
   }
 
   &.wave-theme {
-    //--eu-grid-border-color: #{colors.get-theme-color(m3-theme.$light-theme, tertiary)};
+    --eu-grid-border-color: #{colors.get-theme-color(m3-wave-theme.$light-theme, tertiary)};
+  }
+
+  &.pink-wave-theme {
+    --eu-grid-border-color: #{colors.get-theme-color(m3-pink-wave-theme.$light-theme, tertiary)};
   }
 }

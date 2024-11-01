@@ -35,4 +35,12 @@
       @include mat.button-color($theme, $color-variant: error);
     }
   }
+
+  //.wave-theme {
+  //  .error {
+  //    &-button {
+  //      @include mat.button-color
+  //    }
+  //  }
+  //}
 }

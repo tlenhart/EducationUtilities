@@ -1,0 +1,11 @@
+@use './m3-wave-theme' as m3-theme;
+@use '../material-theme-imports' as material-imports;
+
+// Import --sys-* variables, exported from the material figma theme builder.
+// Variables have been manually modified to replace `--md-sys-color-` with `--sys-`
+//  which matches the variable structure used by @angular/material when use-system-variables is true in m3-theme.scss.
+@use './sys/light.css';
+
+.light.wave-theme {
+  @include material-imports.material-theme-imports(m3-theme.$light-theme);
+}

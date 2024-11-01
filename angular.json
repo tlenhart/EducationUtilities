@@ -57,7 +57,8 @@
               "src/styles.scss",
               "src/loader.scss",
               "src/styles/themes/default/light-theme.scss",
-              "src/styles/themes/default/dark-theme.scss",
+              "src/styles/themes/wave/light-theme.scss",
+              "src/styles/themes/pink-wave/light-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,
@@ -138,7 +139,8 @@
               "src/styles.scss",
               "src/loader.scss",
               "src/styles/themes/default/light-theme.scss",
-              "src/styles/themes/default/dark-theme.scss",
+              "src/styles/themes/wave/light-theme.scss",
+              "src/styles/themes/pink-wave/light-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,
