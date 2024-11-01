@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 
+/**
+ * Dynamically generates the page title by appending 'Education Utilities | ' to the title provided by the route or (modified) route path.
+ */
 @Injectable({
   providedIn: 'root',
 })
