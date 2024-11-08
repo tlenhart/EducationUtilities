@@ -84,7 +84,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/EducationUtilities/",
+              "baseHref": "/",
               "extractLicenses": true,
               "subresourceIntegrity": true,
               "serviceWorker": "ngsw-config.json"
