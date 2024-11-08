@@ -10,6 +10,9 @@ import { SettingsService } from '../core/settings/settings.service';
 import { ClippySettings, GlobalSettingFormGroup, GlobalSettings, TooltipSettings, Versioned } from '../models';
 import { buildFormControlDefaults, buildIndividualFormControlData } from '../utils/form-utils';
 
+type ClippySettingsFormValues = { [J in keyof GlobalSettingFormGroup<ClippySettings>]: ClippySettings[J]['value'] };
+type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSettings>]: TooltipSettings[J]['value'] };
+
 @Component({
   selector: 'app-settings',
   standalone: true,
@@ -57,8 +60,8 @@ export class SettingsComponent {
   }
 
   public save(): void {
-    const clippyRawValue: { [J in keyof GlobalSettingFormGroup<ClippySettings>]: ClippySettings[J]['value'] } = this.settingsForm().controls.clippy.getRawValue();
-    const tooltipsRawValue: { [J in keyof GlobalSettingFormGroup<TooltipSettings>]: TooltipSettings[J]['value'] } = this.settingsForm().controls.tooltips.getRawValue();
+    const clippyRawValue: ClippySettingsFormValues = this.settingsForm().controls.clippy.getRawValue() as ClippySettingsFormValues;
+    const tooltipsRawValue: TooltipSettingsFormValues = this.settingsForm().controls.tooltips.getRawValue() as TooltipSettingsFormValues;
 
     // TODO: Modify this so that only the changed settings are saved.
     //  You don't want to save all settings as if they aren't migrated at all, new settings will be lost.

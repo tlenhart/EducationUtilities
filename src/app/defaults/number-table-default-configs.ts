@@ -35,6 +35,7 @@ function buildMultiplicationFormConfig(start: number, end: number, alignColorsBy
     showColumnHeaders: showHeaders,
     showRowHeaders: showHeaders,
     showHiddenValues: false,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     name: `${start} - ${end} | ${alignColorsBy ? `Align Colors by ${alignColorsBy}` : ''}`,
   };
 }

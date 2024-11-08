@@ -6,7 +6,6 @@ import {
   inject,
   input,
   InputSignal,
-  OnDestroy,
   output,
   OutputEmitterRef,
   Signal
@@ -39,7 +38,7 @@ import { NumberGridCellComponent } from '../number-grid-cell/number-grid-cell.co
   styleUrl: './number-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumberGridComponent implements OnDestroy {
+export class NumberGridComponent {
   /* Injected Dependencies */
   private readonly settingsService: SettingsService = inject(SettingsService);
 
@@ -90,12 +89,6 @@ export class NumberGridComponent implements OnDestroy {
     };
   });
 
-  constructor() {
-  }
-
-  public ngOnDestroy(): void {
-  }
-
   public showHideAllCells(value: FormattedNumberValue): void {
     this.setCheckedForAllItems(this.oneDimensionalValues(), value.checked ?? false);
   }
@@ -107,21 +100,28 @@ export class NumberGridComponent implements OnDestroy {
   public headerValueUpdated(index: number, value: FormattedNumberValue, headerType: 'row' | 'column'): void {
     // Find the elements in the row/column and set their checked status.
     const items: Array<FormattedNumberValue> = this.oneDimensionalValues();
-    if (headerType === 'row') {
-      const start = index * this.gridConfig().columns;
-      const end = start + this.gridConfig().columns;
+    switch (headerType) {
+      case 'row': {
+        const start = index * this.gridConfig().columns;
+        const end = start + this.gridConfig().columns;
 
-      // Update the checked element for each of the properties in the row.
-      for (let i = start; i < end; i++) {
-        this.setCheckedStatusForElement(i, items, value.checked);
+        // Update the checked element for each of the properties in the row.
+        for (let i = start; i < end; i++) {
+          this.setCheckedStatusForElement(i, items, value.checked);
+        }
+
+        break;
       }
-    } else if (headerType === 'column') {
-      const length: number = this.rowHeaders().length;
+      case 'column': {
+        const length: number = this.rowHeaders().length;
 
-      // Update the checked element for each of the properties in the column.
-      for (let i = 0; i < length; i++) {
-        const elementIndex: number = index + (i * length);
-        this.setCheckedStatusForElement(elementIndex, items, value.checked);
+        // Update the checked element for each of the properties in the column.
+        for (let i = 0; i < length; i++) {
+          const elementIndex: number = index + (i * length);
+          this.setCheckedStatusForElement(elementIndex, items, value.checked);
+        }
+
+        break;
       }
     }
   }

@@ -103,10 +103,15 @@ export function setItemClassesAndColorsForHeader(config: FormattedNumberTableCon
 
   // item.classList = [`row${row}`, `column${column}`];
   // item.classList = [`column${row}`, `row${column}`];
-  if (type === 'row') {
-    item.classList = `row${headerIndex} row-header on-row-header-column`;
-  } else if (type === 'column') {
-    item.classList = `column${headerIndex} column-header on-column-header-row`;
+  switch (type) {
+    case 'row': {
+      item.classList = `row${headerIndex} row-header on-row-header-column`;
+      break;
+    }
+    case 'column': {
+      item.classList = `column${headerIndex} column-header on-column-header-row`;
+      break;
+    }
   }
 
   if (Array.isArray(config.colors) && config.showBackgroundColors) {
