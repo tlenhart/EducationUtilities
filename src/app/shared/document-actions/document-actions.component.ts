@@ -14,14 +14,16 @@ import { MatIcon } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentActionsComponent {
+  /* eslint-disable @typescript-eslint/no-invalid-void-type */
   public readonly print: OutputEmitterRef<void> = output<void>();
   public readonly save: OutputEmitterRef<void> = output<void>();
   public readonly reset: OutputEmitterRef<void> = output<void>();
   public readonly downloadPdf: OutputEmitterRef<void> = output<void>();
+  /* eslint-enable @typescript-eslint/no-invalid-void-type */
 
   public printDocument(): void {
     this.print.emit();
-    window.print();
+    self.print();
   }
 
   public saveData(): void {

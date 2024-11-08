@@ -80,6 +80,7 @@ export class NumbersTableComponent implements OnDestroy {
     this.numberTableConfigForm = this.fb.group<NumberFormForm>({
       start: this.fb.control(this.currentConfig().start), // new FormControl(0, { nonNullable: true }),
       end: this.fb.control(this.currentConfig().end), // new FormControl(0, { nonNullable: true }),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       countBy: this.fb.control(this.currentConfig().countBy, { validators: [Validators.required, isNotValueValidator(0)] }), // new FormControl(0, { nonNullable: true }),
       columns: this.fb.control(this.currentConfig().columns, { validators: [Validators.min(1)] }), // TODO: Look into other Validators options to try and avoid the full import.
       colors: this.fb.array(
@@ -110,11 +111,7 @@ export class NumbersTableComponent implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  public updateNumberValue(value: { index: number, value: FormattedNumberValue }): void {
-    // TODO: Fix this so numbers can actually be updated and contain a config here.
-    // this.numbers()[value.index] = value.value;
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public print(): void {
   }
 

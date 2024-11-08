@@ -1,4 +1,4 @@
-.light {
+.light.default-theme {
   --sys-primary: rgb(3 107 93);
   --sys-surface-tint: rgb(3 107 93);
   --sys-on-primary: rgb(255 255 255);

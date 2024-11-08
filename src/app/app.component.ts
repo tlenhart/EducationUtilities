@@ -46,7 +46,6 @@ export class AppComponent {
         // }
         switch (route.path) {
           case undefined:
-          case null:
           case ('**'):
           case (''): {
             return null;
@@ -54,7 +53,7 @@ export class AppComponent {
           default: {
             return {
               path: `/${route.path}`,
-              name: `${route.path[0].toLocaleUpperCase()}${route.path?.slice(1).replace('-', ' ')}`,
+              name: `${route.path[0].toLocaleUpperCase()}${route.path.slice(1).replace('-', ' ')}`,
             };
           }
         }

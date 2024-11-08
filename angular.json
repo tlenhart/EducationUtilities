@@ -11,6 +11,10 @@
           "changeDetection": "OnPush",
           "standalone": true
         },
+        "@schematics/angular:directive": {
+          "flat": false,
+          "standalone": true
+        },
         "@schematics/angular:service": {
           "flat": false
         },
@@ -21,7 +25,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "eu",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -52,8 +56,9 @@
             "styles": [
               "src/styles.scss",
               "src/loader.scss",
-              "src/light-theme.scss",
-              "src/dark-theme.scss",
+              "src/styles/themes/default/light-theme.scss",
+              "src/styles/themes/wave/light-theme.scss",
+              "src/styles/themes/pink-wave/light-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,
@@ -133,8 +138,9 @@
             "styles": [
               "src/styles.scss",
               "src/loader.scss",
-              "src/light-theme.scss",
-              "src/dark-theme.scss",
+              "src/styles/themes/default/light-theme.scss",
+              "src/styles/themes/wave/light-theme.scss",
+              "src/styles/themes/pink-wave/light-theme.scss",
               {
                 "bundleName": "clippy",
                 "inject": true,

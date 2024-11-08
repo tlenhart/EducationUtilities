@@ -32,7 +32,8 @@ export class ClippyComponent implements OnDestroy {
     }));
   }
 
-  public async ngOnDestroy(): Promise<void>{
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  public async ngOnDestroy(): Promise<void> {
     this.subscriptions.unsubscribe();
     await this.destroyAgent();
   }
@@ -49,33 +50,35 @@ export class ClippyComponent implements OnDestroy {
       timeout = 10_000;
     }
 
-    this.animationTimeout = window.setTimeout(async () => {
-      // Pick a random animation so we can see what it is.
-      const animation: string = this.agentAnimations[Math.floor(Math.random() * this.agentAnimations.length)];
+    this.animationTimeout = self.setTimeout(() => {
+      void (async () => {
+        // Pick a random animation so we can see what it is.
+        const animation: string = this.agentAnimations[Math.floor(Math.random() * this.agentAnimations.length)];
 
-      await this.agent?.speak(`Playing the ${animation} animation.`, true);
+        await this.agent?.speak(`Playing the ${animation} animation.`, true);
 
-      // Play the animation.
-      // You can also use `await this.agent?.animate();` if you want the library to handle the random animation.
-      try {
-        // Some animations can get stuck, like 'Writing' for clippy, so we put a limit of 10 seconds on how long a randomized animation can play.
-        // The animation itself may continue playing, but it allows another animation to go through.
-        await Promise.race([
-          this.agent?.play(animation),
+        // Play the animation.
+        // You can also use `await this.agent?.animate();` if you want the library to handle the random animation.
+        try {
+          // Some animations can get stuck, like 'Writing' for clippy, so we put a limit of 10 seconds on how long a randomized animation can play.
+          // The animation itself may continue playing, but it allows another animation to go through.
+          await Promise.race([
+            this.agent?.play(animation),
 
-          // Resolve a promise after 10s to prevent one animation from blocking the use of other animations.
-          sleep(10_000),
-          // If needed in the future, before resolving, clear the animation queue (if possible).
-        ]);
-      } catch (error: unknown) {
-        console.warn(error);
-      }
+            // Resolve a promise after 10s to prevent one animation from blocking the use of other animations.
+            sleep(10_000),
+            // If needed in the future, before resolving, clear the animation queue (if possible).
+          ]);
+        } catch (error: unknown) {
+          console.warn(error);
+        }
 
-      // Clear the timeout value so it can be set again.
-      this.clearAnimationTimeout();
+        // Clear the timeout value so it can be set again.
+        this.clearAnimationTimeout();
 
-      // Set the timeout for the next randomization instance.
-      this.randomize();
+        // Set the timeout for the next randomization instance.
+        this.randomize();
+      })();
     }, timeout);
   }
 
@@ -96,7 +99,10 @@ export class ClippyComponent implements OnDestroy {
 
     const agentDirectory: string = isSettingEnabledAndTrue(settings.playSounds) ? 'agents' : 'agents-no-sound';
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.agent = await loadAgent(settings.selectedAgent.value || settings.selectedAgent.defaultValue, agentDirectory);
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.agentAnimations = this.agent.animations() ?? [];
 
     const showAgentPromise = this.agent.show();
@@ -112,22 +118,24 @@ export class ClippyComponent implements OnDestroy {
 
     await this.agent.speak(`Guten morgen. Ich bin deine friendly neighborhood ${settings.selectedAgent.value}. How can I help you today?`, true);
 
-    this.canDeleteTimeout = window.setTimeout(async () => {
-      let waveAnimation: Promise<void> | undefined = undefined;
-      if (this.agent?.hasAnimation('Wave')) {
-        waveAnimation = this.agent?.play('Wave');
-      }
+    this.canDeleteTimeout = self.setTimeout(() => {
+      void (async () => {
+        let waveAnimation: Promise<void> | undefined = undefined;
+        if (this.agent?.hasAnimation('Wave')) {
+          waveAnimation = this.agent.play('Wave');
+        }
 
-      const message: string = this.informativeMessages[Math.floor(Math.random() * this.informativeMessages.length)];
-      await this.agent?.speak(message, true);
+        const message: string = this.informativeMessages[Math.floor(Math.random() * this.informativeMessages.length)];
+        await this.agent?.speak(message, true);
 
-      await waveAnimation;
+        await waveAnimation;
 
-      if (isSettingEnabledAndTrue(settings.playRandomAnimations)) {
-        this.randomize();
-      }
+        if (isSettingEnabledAndTrue(settings.playRandomAnimations)) {
+          this.randomize();
+        }
 
-      this.clearCanDeleteTimeout();
+        this.clearCanDeleteTimeout();
+      })();
     }, 8500);
   }
 
@@ -141,14 +149,14 @@ export class ClippyComponent implements OnDestroy {
 
   private clearAnimationTimeout(): void {
     if (this.animationTimeout) {
-      window.clearTimeout(this.animationTimeout);
+      self.clearTimeout(this.animationTimeout);
       this.animationTimeout = undefined;
     }
   }
 
   private clearCanDeleteTimeout(): void {
     if (this.canDeleteTimeout) {
-      window.clearTimeout(this.canDeleteTimeout);
+      self.clearTimeout(this.canDeleteTimeout);
       this.canDeleteTimeout = undefined;
     }
   }

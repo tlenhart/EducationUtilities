@@ -5,7 +5,7 @@ export function isNotValueValidator<T extends number | string | boolean | bigint
   const invalidValueIsArray: boolean = Array.isArray(value);
 
   return (control: AbstractControl): ValidationErrors | null => {
-    const rawValue: T = control.getRawValue();
+    const rawValue: T = control.getRawValue() as T;
     if (rawValue === value) {
       return { [VALIDATION_ERROR_KEYS.isNotValue]: errorMessage ? errorMessage : 'Invalid value.' };
     }

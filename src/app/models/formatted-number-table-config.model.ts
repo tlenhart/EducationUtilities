@@ -3,36 +3,36 @@ import { FormattedNumberValue } from './formatted-number-value.model';
 import { ColorAlignmentOptions, MultiplicationFormConfig, NumberTableConfig } from './forms.types';
 
 /**
- * Configuration for {@link FormattedNumberTableComponent}.
+ * Configuration for {@link NumberGridComponent}.
  */
 export class FormattedNumberTableConfig {
   /**
    * The values to display in the table.
    */
-  values: Array<FormattedNumberValue>;
+  public values: Array<FormattedNumberValue>;
 
   /**
    * The number of columns to display in the table.
    */
-  columns: number; // TODO: Config like this might best make sense stored in the component itself, rather than passed in.
+  public columns: number; // TODO: Config like this might best make sense stored in the component itself, rather than passed in.
   // TODO: Although, that has the downside of separating the config into multiple places...
 
   /**
    * The colors to display for each of the columns.
    * Length should be the same as the number of {@link columns}.
    */
-  colors: Array<string>; // TODO: Should be one per column.
+  public colors: Array<string>; // TODO: Should be one per column.
 
   /**
    * Whether the background colors should be displayed in the UI.
    * @type {boolean}
    */
-  showBackgroundColors: boolean;
+  public showBackgroundColors: boolean;
 
   /**
    * Whether or not hidden values should be shown in the editor before printing.
    */
-  showHiddenValues: boolean;
+  public showHiddenValues: boolean;
 
   /**
    * Whether numbers should be colored by rows/columns/both.
@@ -40,19 +40,19 @@ export class FormattedNumberTableConfig {
    * This should align with any header color.
    * @type {ColorAlignmentOptions}
    */
-  alignColorsBy: ColorAlignmentOptions;
+  public alignColorsBy: ColorAlignmentOptions;
 
   /**
    * Show the headers for the columns, stating the associated number.
    * @type {boolean}
    */
-  showColumnHeaders: boolean;
+  public showColumnHeaders: boolean;
 
   /**
    * Show the headers for the rows, stating the associated number.
    * @type {boolean}
    */
-  showRowHeaders: boolean;
+  public showRowHeaders: boolean;
 
   constructor(initialConfig?: Partial<FormattedNumberTableConfig>) {
     this.values = Array.isArray(initialConfig?.values) ? initialConfig.values : [];

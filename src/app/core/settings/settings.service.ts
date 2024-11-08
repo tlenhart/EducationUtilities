@@ -28,6 +28,7 @@ export class SettingsService {
     const loadedSettings: SavedData<Versioned<GlobalSettings>> = this.saveService.load<Versioned<GlobalSettings>>(this.saveName);
 
     if (loadedSettings.success) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.currentSettings.set(loadedSettings.data!);
     } else {
       console.warn('Default settings were loaded!'); // TODO: Make sure to notify the user that default settings were loaded. (And try to always avoid this.)
@@ -58,7 +59,7 @@ export class SettingsService {
 
   public resetSettings(): void {
     this.save({
-      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+      ...(JSON.parse(JSON.stringify(DEFAULT_SETTINGS))) as Versioned<GlobalSettings>,
     });
   }
 
