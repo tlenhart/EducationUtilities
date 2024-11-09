@@ -58,6 +58,13 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-extraneous-class": ["off"],
       "@typescript-eslint/no-inferrable-types": ["off"],
+      "@typescript-eslint/no-invalid-void-type": [
+        "error",
+        {
+          allowInGenericTypeArguments: true,
+        }
+      ],
+      "@typescript-eslint/no-unnecessary-type-arguments": ["off"],
       "@typescript-eslint/restrict-template-expressions": [
         "error",
         {

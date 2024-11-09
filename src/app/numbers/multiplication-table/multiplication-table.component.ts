@@ -90,7 +90,9 @@ export class MultiplicationTableComponent implements OnDestroy {
   constructor() {
     // TODO: Don't forget to add any validators from the other numbers table component.
     this.multiplicationTableConfigForm = this.fb.group<MultiplicationTableConfigForm>({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       start: this.fb.control({ value: this.currentConfig().start, disabled: true }, { validators: [Validators.required, Validators.min(1)] }),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       end: this.fb.control(this.currentConfig().end, { validators: [Validators.required, Validators.min(1)] }),
       alignColorsBy: this.fb.control(this.currentConfig().alignColorsBy),
       // columns: this.fb.control(this.currentConfig().columns), // TODO: Disable? But only if it doesn't interfere with retrieving values...
@@ -143,12 +145,15 @@ export class MultiplicationTableComponent implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public print(): void {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public downloadPdf(): void {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public save(): void {
   }
 
