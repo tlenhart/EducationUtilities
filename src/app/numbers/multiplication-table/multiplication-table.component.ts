@@ -1,11 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  effect,
   inject,
   OnDestroy,
   Signal,
   signal,
+  viewChild,
   WritableSignal
 } from '@angular/core';
 import {
@@ -42,6 +43,9 @@ import { buildColorsArray } from '../../utils/color.utils';
 import { arrayToArrayOfFormControls } from '../../utils/form-utils';
 import { multiplicationTableNumberGenerator } from '../../utils/number-utils';
 import { NumberGridComponent } from '../number-grid/number-grid.component';
+import {
+  RandomizeHiddenElementsComponent
+} from '../shared/randomize-hidden-elements/randomize-hidden-elements.component';
 
 @Component({
   selector: 'app-multiplication-table',
@@ -62,6 +66,7 @@ import { NumberGridComponent } from '../number-grid/number-grid.component';
     MatExpansionPanelContent,
     MatOption,
     MatSelect,
+    RandomizeHiddenElementsComponent,
   ],
   templateUrl: './multiplication-table.component.html',
   styleUrl: './multiplication-table.component.scss',
@@ -72,25 +77,35 @@ export class MultiplicationTableComponent implements OnDestroy {
   public readonly multiplicationTableConfigForm: FormGroup<MultiplicationTableConfigForm>;
   public readonly currentConfig: WritableSignal<MultiplicationFormConfig> = signal<MultiplicationFormConfig>(MULTIPLICATION_TABLE_DEFAULT_CONFIGS[0]);
 
+  public readonly randomizeHiddenItems: Signal<RandomizeHiddenElementsComponent | undefined> = viewChild(RandomizeHiddenElementsComponent);
+
   /**
    * The configuration passed to app-number-grid to display the table.
    * @type {Signal<FormattedNumberTableConfig>}
    */
-  public readonly tableConfig: Signal<FormattedNumberTableConfig> = computed(() => {
-    return FormattedNumberTableConfig.fromMultiplicationFormConfig(
+  public readonly tableConfig: WritableSignal<FormattedNumberTableConfig> = signal<FormattedNumberTableConfig>(
+    FormattedNumberTableConfig.fromMultiplicationFormConfig(
       this.currentConfig(),
       this.buildNumbersArray(this.currentConfig()),
-    );
-  });
+    ));
 
   private readonly subscriptions: Subscription = new Subscription();
 
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
 
   constructor() {
+    effect(() => {
+      this.tableConfig.set(FormattedNumberTableConfig.fromMultiplicationFormConfig(
+        this.currentConfig(),
+        this.buildNumbersArray(this.currentConfig()),
+      ));
+    }, { allowSignalWrites: true });
+
     // TODO: Don't forget to add any validators from the other numbers table component.
     this.multiplicationTableConfigForm = this.fb.group<MultiplicationTableConfigForm>({
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       start: this.fb.control({ value: this.currentConfig().start, disabled: true }, { validators: [Validators.required, Validators.min(1)] }),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       end: this.fb.control(this.currentConfig().end, { validators: [Validators.required, Validators.min(1)] }),
       alignColorsBy: this.fb.control(this.currentConfig().alignColorsBy),
       // columns: this.fb.control(this.currentConfig().columns), // TODO: Disable? But only if it doesn't interfere with retrieving values...
@@ -143,34 +158,33 @@ export class MultiplicationTableComponent implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public print(): void {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public downloadPdf(): void {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public save(): void {
   }
 
   public reset(): void {
     this.currentConfig.set(MULTIPLICATION_TABLE_DEFAULT_CONFIGS[0]);
 
-    // this.setTableValue();
-    this.multiplicationTableConfigForm.reset(); // Instead?
+    this.multiplicationTableConfigForm.reset();
+    this.randomizeHiddenItems()?.reset();
+  }
+
+  public updateHiddenRandomValues(values: Array<FormattedNumberValue>): void {
+    this.tableConfig.update((current: FormattedNumberTableConfig): FormattedNumberTableConfig => {
+      return { ...current, values: values };
+    });
   }
 
   private buildNumbersArray(config: MultiplicationFormConfig): Array<FormattedNumberValue> {
     return Array.from(multiplicationTableNumberGenerator(config.start, config.end));
-  }
-
-  private setTableValue(): void {
-    const formConfig = {
-      ...this.currentConfig(),
-    } as Partial<MultiplicationFormConfig>;
-    delete formConfig.name; // Remove since it is not currently settable in the UI.
-    delete formConfig.columns; // Remove since it is not currently settable in the UI.
-
-    this.multiplicationTableConfigForm.setValue(formConfig as MultiplicationFormConfig);
   }
 
   private updateColors(updatedColumnCount: number): void {

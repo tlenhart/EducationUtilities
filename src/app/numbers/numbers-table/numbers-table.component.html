@@ -44,6 +44,12 @@
               <input id="number-columns-input" matInput type="number" formControlName="columns" min="1">
             </mat-form-field>
             <mat-slide-toggle formControlName="showHiddenValues" id="number-table-show-hidden-values">Show hidden values</mat-slide-toggle>
+            <div class="grid-column-spacer"></div>
+            <eu-randomize-hidden-elements
+              class="two-column-width"
+              [tableConfig]="tableConfig()"
+              (updateTableValues)="updateHiddenRandomValues($event)">
+            </eu-randomize-hidden-elements>
           </div>
 
           <div class="color-config config-group">

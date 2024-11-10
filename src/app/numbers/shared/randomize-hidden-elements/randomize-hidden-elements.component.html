@@ -1,0 +1,33 @@
+<div class="multi-element-grid-cell-wrapper">
+  <div class="multi-element-grid-cell-input-container">
+    <mat-form-field subscriptSizing="dynamic" class="form-input full-width">
+      <mat-label>Number of random items to hide</mat-label>
+      <input
+        id="multiplication-table-number-of-random-hidden-elements"
+        type="number"
+        matInput
+        min="0"
+        [max]="tableConfig()?.values?.length ?? 0"
+        placeholder="1, 2, 3, etc."
+        [formControl]="randomElementsFormControl">
+      <mat-hint>Items are not hidden until clicking Randomize.</mat-hint>
+      @if (randomElementsFormControl.errors?.['max']) {
+        <mat-error>Too many items to randomize. Max: {{tableConfig()?.values?.length ?? 0}}.</mat-error>
+      }
+    </mat-form-field>
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Helper information for randomizing the items in the multiplication table that should be hidden."
+      class="helper-icon random-items-helper-icon"
+      matTooltip="The number of items to randomly hide. Leave blank to pick a random number of items to hide. Set to 0 to reset and randomize no values. This is ignored until clicking Randomize."
+      matTooltipClass="helper-tooltip">
+      help
+    </mat-icon>
+  </div>
+  <button
+    mat-flat-button
+    type="button"
+    (click)="showHideRandomValues(randomElementsFormControl.value)">
+    Randomize
+  </button>
+</div>

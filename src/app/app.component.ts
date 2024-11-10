@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { Route, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -37,6 +38,11 @@ export class AppComponent {
   });
 
   constructor() {
+    // Use the css2 material icons, instead of the defaults.
+    // This also corresponds to using a different import in index.html.
+    const matIconRegistry: MatIconRegistry = inject(MatIconRegistry);
+    matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
+
     // Just look at the root routes to determine primary routing.
     this.routes = [
       ...routes.map((route: Route): AppRoute | null => {

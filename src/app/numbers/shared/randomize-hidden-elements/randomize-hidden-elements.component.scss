@@ -1,0 +1,21 @@
+.multi-element-grid-cell-wrapper {
+  display: grid;
+  grid-template-columns: 75% auto;
+  align-items: baseline;
+  gap: var(--eu-config-grid-item-gap, 1em);
+
+  .multi-element-grid-cell-input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+
+    mat-form-field {
+      min-width: 80%;
+    }
+
+    .random-items-helper-icon {
+      margin-top: 16px;
+    }
+  }
+}

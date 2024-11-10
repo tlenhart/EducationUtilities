@@ -27,8 +27,12 @@ export class ClippyComponent implements OnDestroy {
   ];
 
   constructor() {
-    this.subscriptions.add(toObservable(this.settingsService.settings).subscribe(async (settings) => {
-      await this.loadAgent(settings.clippy);
+    this.subscriptions.add(toObservable(this.settingsService.settings).subscribe({
+      next: (settings) => {
+        void (async () => {
+          await this.loadAgent(settings.clippy);
+        })();
+      },
     }));
   }
 

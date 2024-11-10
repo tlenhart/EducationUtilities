@@ -28,6 +28,10 @@
               formControlName="showHiddenValues" id="multiplication-table-show-hidden-values">
               Show hidden values
             </mat-slide-toggle>
+            <eu-randomize-hidden-elements
+              [tableConfig]="tableConfig()"
+              (updateTableValues)="updateHiddenRandomValues($event)">
+            </eu-randomize-hidden-elements>
           </div>
           <div class="config-toggles">
             <mat-checkbox
