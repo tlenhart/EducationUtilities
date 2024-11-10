@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   OnDestroy,
   signal,
   Signal,
+  viewChild,
   WritableSignal
 } from '@angular/core';
 import {
@@ -37,6 +39,9 @@ import { arrayToArrayOfFormControls } from '../../utils/form-utils';
 import { formattedSequentialNumberGenerator } from '../../utils/number-utils';
 import { isNotValueValidator, numberTableConfigValidator, VALIDATION_ERROR_KEYS } from '../../validators';
 import { NumberGridComponent } from '../number-grid/number-grid.component';
+import {
+  RandomizeHiddenElementsComponent
+} from '../shared/randomize-hidden-elements/randomize-hidden-elements.component';
 
 @Component({
   selector: 'app-numbers-table',
@@ -53,6 +58,7 @@ import { NumberGridComponent } from '../number-grid/number-grid.component';
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     MatExpansionPanelContent,
+    RandomizeHiddenElementsComponent,
   ],
   templateUrl: './numbers-table.component.html',
   styleUrl: './numbers-table.component.scss',
@@ -64,12 +70,15 @@ export class NumbersTableComponent implements OnDestroy {
   });
 
   public readonly currentConfig: WritableSignal<NumberFormConfig> = signal<NumberFormConfig>(NUMBER_TABLE_DEFAULT_CONFIGS[0]);
-  public readonly tableConfig: Signal<FormattedNumberTableConfig> = computed(() => {
-    return FormattedNumberTableConfig.fromNumberFormConfig(
+
+  public readonly tableConfig: WritableSignal<FormattedNumberTableConfig> = signal<FormattedNumberTableConfig>(
+    FormattedNumberTableConfig.fromNumberFormConfig(
       this.currentConfig(),
       this.numbers(),
-    );
-  });
+    ));
+
+  public readonly randomizeHiddenItems: Signal<RandomizeHiddenElementsComponent | undefined> = viewChild(RandomizeHiddenElementsComponent);
+
   public readonly errorKeys = VALIDATION_ERROR_KEYS;
   public readonly numberTableConfigForm: FormGroup<NumberFormForm>;
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
@@ -77,6 +86,13 @@ export class NumbersTableComponent implements OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
+    effect(() => {
+      this.tableConfig.set(FormattedNumberTableConfig.fromNumberFormConfig(
+        this.currentConfig(),
+        this.buildNumbersArray(this.currentConfig()),
+      ));
+    }, { allowSignalWrites: true });
+
     this.numberTableConfigForm = this.fb.group<NumberFormForm>({
       start: this.fb.control(this.currentConfig().start), // new FormControl(0, { nonNullable: true }),
       end: this.fb.control(this.currentConfig().end), // new FormControl(0, { nonNullable: true }),
@@ -132,8 +148,14 @@ export class NumbersTableComponent implements OnDestroy {
   public resetConfig(): void {
     this.currentConfig.set(NUMBER_TABLE_DEFAULT_CONFIGS[0]);
 
-    this.setTableValue();
-    // this.numberTableConfigForm.reset(); // Instead?
+    this.numberTableConfigForm.reset();
+    this.randomizeHiddenItems()?.reset();
+  }
+
+  public updateHiddenRandomValues(values: Array<FormattedNumberValue>): void {
+    this.tableConfig.update((current: FormattedNumberTableConfig): FormattedNumberTableConfig => {
+      return { ...current, values: values };
+    });
   }
 
   private buildNumbersArray(config: NumberFormConfig): Array<FormattedNumberValue> {
@@ -141,15 +163,6 @@ export class NumbersTableComponent implements OnDestroy {
     // TODO: start should be <= end. end not being even divisible by countBy. countBy !== 0
     // TODO: Just return if the config leads to an invalid table.
     return Array.from(formattedSequentialNumberGenerator(config.start, config.end, config.countBy));
-  }
-
-  private setTableValue(): void {
-    const formConfig = {
-      ...this.currentConfig(),
-    };
-    delete formConfig.name; // Remove value from form config since it is not currently settable in the UI.
-
-    this.numberTableConfigForm.setValue(formConfig);
   }
 
   private updateColors(updatedColumnCount: number): void {
