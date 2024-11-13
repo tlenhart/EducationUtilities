@@ -17,7 +17,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -31,6 +31,7 @@ import { FormattedNumberTableConfig, FormattedNumberValue } from '../../../model
     MatFormField,
     MatHint,
     MatIcon,
+    MatSuffix,
     MatInput,
     MatError,
     MatLabel,

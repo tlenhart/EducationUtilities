@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const numbersRoutes: Routes = [
+export const resourcesRoutes: Routes = [
   {
     path: 'privacy',
     title: 'Privacy',
