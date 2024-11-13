@@ -10,19 +10,19 @@
         [max]="tableConfig()?.values?.length ?? 0"
         placeholder="1, 2, 3, etc."
         [formControl]="randomElementsFormControl">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="Helper information for randomizing the items in the multiplication table that should be hidden."
+        matTooltip="The number of items to randomly hide. Leave blank to pick a random number of items to hide. Set to 0 to reset and randomize no values. This is ignored until clicking Randomize."
+        matTooltipClass="helper-tooltip"
+        matSuffix>
+        help
+      </mat-icon>
       <mat-hint>Items are not hidden until clicking Randomize.</mat-hint>
       @if (randomElementsFormControl.errors?.['max']) {
         <mat-error>Too many items to randomize. Max: {{tableConfig()?.values?.length ?? 0}}.</mat-error>
       }
     </mat-form-field>
-    <mat-icon
-      aria-hidden="false"
-      aria-label="Helper information for randomizing the items in the multiplication table that should be hidden."
-      class="helper-icon random-items-helper-icon"
-      matTooltip="The number of items to randomly hide. Leave blank to pick a random number of items to hide. Set to 0 to reset and randomize no values. This is ignored until clicking Randomize."
-      matTooltipClass="helper-tooltip">
-      help
-    </mat-icon>
   </div>
   <button
     mat-flat-button
