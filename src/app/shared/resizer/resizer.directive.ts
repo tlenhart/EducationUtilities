@@ -134,7 +134,7 @@ export class ResizerDirective implements OnDestroy {
 
   constructor(private readonly elementRef: ElementRef<HTMLElement>, private readonly renderer: Renderer2) {
     this.elementRef.nativeElement.style.userSelect = 'none';
-    this.elementRef.nativeElement.style.backgroundColor = 'var(--synth-light-blue)';
+    // this.elementRef.nativeElement.style.backgroundColor = 'var(--synth-light-blue)';
 
     // Set the default styles for the panels so they can work properly.
     effect(() => {

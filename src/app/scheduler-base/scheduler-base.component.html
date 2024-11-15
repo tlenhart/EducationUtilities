@@ -16,40 +16,51 @@
         Schedule Configuration
       </button>
     </mat-menu>
+    <button mat-button (click)="resizeHandle.classList.toggle('slim-resize-handle')">Slim Resizer</button>
   </mat-toolbar>
   <div class="panels-container">
     <section id="scheduler-left-panel" class="panel position-left" #leftPanel>
       <router-outlet></router-outlet>
     </section>
-    <div id="scheduler-split-resize-handle" class="resize-handle small-icon-button"
+    <div id="scheduler-split-resize-handle" #resizeHandle class="resize-handle small-icon-button"
          euResizer
          [panelOne]="leftPanel" [panelTwo]="rightPanel"
          [(panelOneState)]="panelOneState" [(panelTwoState)]="panelTwoState"
     >
-      @if (panelOneState === 'open') {
-        <button mat-icon-button aria-label="Hide the left editors pane." (click)="panelOneState = 'closed'"
-          disableRipple="true">
-          <mat-icon>left_panel_close</mat-icon>
-        </button>
-      } @else {
-        <button mat-icon-button aria-label="Show the left editors pane." (click)="panelOneState = 'open'"
-          disableRipple="true">
-          <mat-icon>left_panel_open</mat-icon>
-        </button>
-      }
-      <mat-icon aria-hidden="false" aria-label="Click and drag to resize the two panels." class="handle-icon">
-        drag_handle
-      </mat-icon>
-      @if (panelTwoState === 'open') {
-        <button mat-icon-button aria-label="Hide the right configuration pane." (click)="panelTwoState = 'closed'"
-          disableRipple="true">
-          <mat-icon>left_panel_open</mat-icon>
-        </button>
-      } @else {
-        <button mat-icon-button aria-label="Show the right configuration pane." (click)="panelTwoState = 'open'"
-          disableRipple="true">
-          <mat-icon>left_panel_close</mat-icon>
-        </button>
+      @if (!resizeHandle.classList.contains('slim-resize-handle')) {
+        @if (panelOneState === 'open') {
+          <button mat-icon-button aria-label="Hide the left editors pane."
+            class="offset-handle-left"
+            (click)="panelOneState = 'closed'"
+            disableRipple="true">
+            <mat-icon>left_panel_close</mat-icon>
+          </button>
+        } @else {
+          <button mat-icon-button aria-label="Show the left editors pane."
+            class="offset-handle-left"
+            (click)="panelOneState = 'open'"
+            disableRipple="true">
+            <mat-icon>left_panel_open</mat-icon>
+          </button>
+        }
+        <mat-icon aria-hidden="false" aria-label="Click and drag to resize the two panels." class="handle-icon">
+          drag_handle
+        </mat-icon>
+        @if (panelTwoState === 'open') {
+          <button mat-icon-button aria-label="Hide the right configuration pane."
+            class="offset-handle-right"
+            (click)="panelTwoState = 'closed'"
+            disableRipple="true">
+            <mat-icon>left_panel_open</mat-icon>
+          </button>
+        } @else {
+          <button mat-icon-button aria-label="Show the right configuration pane."
+            class="offset-handle-right"
+            (click)="panelTwoState = 'open'"
+            disableRipple="true">
+            <mat-icon>left_panel_close</mat-icon>
+          </button>
+        }
       }
     </div>
     <section id="scheduler-right-panel" class="panel position-right" #rightPanel>

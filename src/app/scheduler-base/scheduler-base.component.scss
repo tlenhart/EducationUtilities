@@ -3,9 +3,9 @@
 :host {
   $margin-spacing: 2px;
 
-  height: calc(100vh - var(--mat-toolbar-standard-height));
+  height: calc(100vh - var(--mat-toolbar-standard-height) - #{$margin-spacing * 2});
   display: flex;
-  @include mixins.main-content-margin-spacing($margin-spacing - 2px, $margin-spacing);
+  @include mixins.main-content-margin-spacing(0, $margin-spacing);
 }
 
 #splitter-container {
@@ -39,25 +39,52 @@
 }
 
 #scheduler-left-panel {
-  background-color: var(--synth-purple);
+  //background-color: var(--synth-purple);
   scrollbar-color: var(--synth-pink) var(--synth-violet);
 
   @include mixins.half-rounded-border(right);
 }
 
 #scheduler-right-panel {
-  background-color: var(--synth-violet);
+  //background-color: var(--synth-violet);
 
   @include mixins.half-rounded-border(left);
 }
 
 #scheduler-split-resize-handle {
-  width: 1em;
-  background-color: var(--sys-background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--sys-outline-variant);
+
+  width: 0.75em;
+  //background-color: var(--sys-background);
+
+  @include mixins.scheduler-border();
+  border-radius: 2px;
 
   .handle-icon {
-    margin-top: 50%;
-    margin-bottom: 50%;
     rotate: 90deg;
+    position: relative;
+    left: -0.24em;
+  }
+
+  .offset-handle-right {
+    //left: 12px;
+    left: -8px;
+    transform: scale(0.75);
+  }
+
+  .offset-handle-left {
+    right: 24px;
+  }
+
+  &.slim-resize-handle {
+    $background: var(--synth-purple);
+    width: 4px;
+    border: none;
+    background-color: $background;
+
+    box-shadow: 0 0 2px 0 $background;
   }
 }

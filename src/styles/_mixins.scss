@@ -1,5 +1,9 @@
+@mixin scheduler-border() {
+  border: 2px solid var(--synth-purple);
+}
+
 @mixin half-rounded-border($flatSide: right) {
-  border: 0 solid transparent;
+  @include scheduler-border();
 
   // Remove the $flatSide border.
   border-#{$flatSide}: none;
