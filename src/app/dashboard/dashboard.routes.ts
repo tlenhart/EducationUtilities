@@ -10,6 +10,10 @@ export const mainDashboardRoutes: Routes = [
   },
   {
     path: mainPath,
+    title: 'Dashboard',
+    data: {
+      icon: 'space_dashboard',
+    },
     loadComponent: () => import('./dashboard.component').then(m =>
       m.DashboardComponent),
   },

@@ -10,7 +10,12 @@
 // Instead of using :root, use .light and .dark selectors, so the .light and .dark --sys variables apply correctly.
 // If :root is used here, the following variables are set before the --sys variables are set, and any variable referencing a --sys variable will not be changed.
 .light, .dark {
-  --eu-sidebar-width: 200px;
+  /* Sizing for primary UI elements/containers. */
+  // Default sidebar width.
+  --eu-sidebar-width: 225px;
+
+  // Sidebar width when showing only icons. (For example on the scheduler page.)
+  --eu-sidebar-slim-width: 56px;
 
   // Main content-grid width.
   --eu-content-width: calc(100vw - var(--eu-sidebar-width));
