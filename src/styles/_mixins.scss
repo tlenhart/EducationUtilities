@@ -1,0 +1,4 @@
+@mixin main-content-margin-spacing($bottom-margin: 8px, $right-margin: $bottom-margin) {
+  margin-bottom: $bottom-margin;
+  margin-right: $right-margin;
+}

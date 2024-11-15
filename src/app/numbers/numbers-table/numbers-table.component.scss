@@ -1,3 +1,11 @@
+@use '../../../styles/mixins' as mixins;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  @include mixins.main-content-margin-spacing(8px);
+}
+
 .config-section, .config-group {
   margin-bottom: calc(var(--eu-content-section-gap) + 0.65em);
   display: block;
