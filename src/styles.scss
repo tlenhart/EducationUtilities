@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use './styles/globals'; // Import global css variables.
+@use './styles/densities'; // Custom densities for specific components in specific cases.
 
 @include mat.core();
 
