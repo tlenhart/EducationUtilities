@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { ScheduleStore } from './stores/schedule.store';
-import { TeacherStore } from './stores/teacher.store';
 
 export const schedulerRoutes: Routes = [
   {
