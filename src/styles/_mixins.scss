@@ -1,3 +1,18 @@
+@mixin half-rounded-border($flatSide: right) {
+  border: 0 solid transparent;
+
+  // Remove the $flatSide border.
+  border-#{$flatSide}: none;
+
+  @if ($flatSide == right) {
+    border-radius: 1% 0 0 1%;
+  }
+
+  @if ($flatSide == left) {
+    border-radius: 0 1% 1% 0;
+  }
+}
+
 @mixin main-content-margin-spacing($bottom-margin: 8px, $right-margin: $bottom-margin) {
   margin-bottom: $bottom-margin;
   margin-right: $right-margin;
