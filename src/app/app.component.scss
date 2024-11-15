@@ -3,7 +3,12 @@
 }
 
 .sidenav {
+  &.slim {
+    --eu-sidebar-width: var(--eu-sidebar-slim-width);
+  }
+
   width: var(--eu-sidebar-width, 200px);
+  background-color: var(--sys-inverse-on-surface);
 }
 
 .sidenav .mat-toolbar {
@@ -17,5 +22,5 @@
 }
 
 #main {
-  margin: 0 16px 16px;
+  margin: 0 0 0 8px;
 }

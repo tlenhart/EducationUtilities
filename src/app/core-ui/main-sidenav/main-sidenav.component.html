@@ -6,9 +6,17 @@
       routerLinkActive
       #rla="routerLinkActive"
       [activated]="rla.isActive"
-      [routerLinkActiveOptions]="{ exact: true }"
-      ariaCurrentWhenActive="page">
-      {{route.name}}
+      ariaCurrentWhenActive="page"
+      class="navigation-link">
+      <!--[routerLinkActiveOptions]="{ exact: true }"-->
+      <span class="navigation-link-contents">
+        <mat-icon aria-hidden="false" [attr.aria-label]="route.name">
+          {{route.icon}}
+        </mat-icon>
+        @if (sidenavService.style() !== 'slim') {
+          {{route.name}}
+        }
+      </span>
     </a>
   }
 </mat-nav-list>

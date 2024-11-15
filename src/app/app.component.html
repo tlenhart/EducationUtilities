@@ -1,5 +1,9 @@
 @defer (on immediate; prefetch on viewport) {
-  <mat-sidenav-container class="sidenav-container">
+  <!-- https://stackblitz.com/run?file=src%2Fexample%2Fsidenav-responsive-example.html&file=src%2Fexample%2Fsidenav-responsive-example.css -->
+
+  <!-- TODO: autosize has potential performance implications. Maybe replace with just slim. -->
+  <!-- TODO: https://material.angular.io/components/sidenav/overview#resizing-an-open-sidenav -->
+  <mat-sidenav-container class="sidenav-container" [autosize]="shouldAutosize()">
     <mat-sidenav
       #drawer
       class="sidenav"
@@ -8,6 +12,7 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false"
       id="sidenav"
+      [ngClass]="{ 'slim': sidenavStyle() === 'slim' }"
     >
       @defer (on idle) {
         <app-main-sidenav [routes]="routes"></app-main-sidenav>

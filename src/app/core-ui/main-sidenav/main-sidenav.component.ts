@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, InputSignal } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AppSidenavService } from '../../core/app-sidenav-service/app-sidenav.service';
 import { AppRoute } from '../../models';
 
 @Component({
@@ -10,7 +12,8 @@ import { AppRoute } from '../../models';
     MatListItem,
     MatNavList,
     RouterLinkActive,
-    RouterLink
+    RouterLink,
+    MatIcon,
   ],
   templateUrl: './main-sidenav.component.html',
   styleUrl: './main-sidenav.component.scss',
@@ -18,4 +21,5 @@ import { AppRoute } from '../../models';
 })
 export class MainSidenavComponent {
   public readonly routes: InputSignal<Array<AppRoute>> = input.required<Array<AppRoute>>();
+  public readonly sidenavService: AppSidenavService = inject(AppSidenavService);
 }
