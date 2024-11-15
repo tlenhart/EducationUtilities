@@ -1,0 +1,73 @@
+<div id="splitter-container">
+  <mat-toolbar class="schedule-toolbar">
+    <button mat-button [matMenuTriggerFor]="editorsMenu">Builders</button>
+    <mat-menu #editorsMenu="matMenu">
+      <a
+        mat-menu-item
+        [routerLink]="['./editors', 'schedule-builder']">
+        Schedule builder
+      </a>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="configurationNavigationMenu">Configuration</button>
+    <mat-menu #configurationNavigationMenu="matMenu">
+      <button
+        mat-menu-item
+        [matMenuTriggerFor]="scheduleConfigurationMenu">
+        Schedule Configuration
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+  <div class="panels-container">
+    <section id="scheduler-left-panel" class="panel position-left" #leftPanel>
+      <router-outlet></router-outlet>
+    </section>
+    <div id="scheduler-split-resize-handle" class="resize-handle small-icon-button"
+         euResizer
+         [panelOne]="leftPanel" [panelTwo]="rightPanel"
+         [(panelOneState)]="panelOneState" [(panelTwoState)]="panelTwoState"
+    >
+      @if (panelOneState === 'open') {
+        <button mat-icon-button aria-label="Hide the left editors pane." (click)="panelOneState = 'closed'"
+          disableRipple="true">
+          <mat-icon>left_panel_close</mat-icon>
+        </button>
+      } @else {
+        <button mat-icon-button aria-label="Show the left editors pane." (click)="panelOneState = 'open'"
+          disableRipple="true">
+          <mat-icon>left_panel_open</mat-icon>
+        </button>
+      }
+      <mat-icon aria-hidden="false" aria-label="Click and drag to resize the two panels." class="handle-icon">
+        drag_handle
+      </mat-icon>
+      @if (panelTwoState === 'open') {
+        <button mat-icon-button aria-label="Hide the right configuration pane." (click)="panelTwoState = 'closed'"
+          disableRipple="true">
+          <mat-icon>left_panel_open</mat-icon>
+        </button>
+      } @else {
+        <button mat-icon-button aria-label="Show the right configuration pane." (click)="panelTwoState = 'open'"
+          disableRipple="true">
+          <mat-icon>left_panel_close</mat-icon>
+        </button>
+      }
+    </div>
+    <section id="scheduler-right-panel" class="panel position-right" #rightPanel>
+      <router-outlet name="configuration"></router-outlet>
+    </section>
+  </div>
+</div>
+
+<!-- Hidden, sub mat-menus. -->
+<mat-menu #scheduleConfigurationMenu>
+  <a
+    mat-menu-item
+    [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration'] } }]">
+    Schedule Configuration
+  </a>
+  <a
+    mat-menu-item
+    [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration', 'teachers'] } }]">
+    Teachers
+  </a>
+</mat-menu>

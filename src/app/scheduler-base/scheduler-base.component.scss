@@ -1,0 +1,63 @@
+@use '../../styles/mixins' as mixins;
+
+:host {
+  $margin-spacing: 2px;
+
+  height: calc(100vh - var(--mat-toolbar-standard-height));
+  display: flex;
+  @include mixins.main-content-margin-spacing($margin-spacing - 2px, $margin-spacing);
+}
+
+#splitter-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.schedule-toolbar {
+  padding-left: 0;
+}
+
+.panels-container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100% - var(--mat-toolbar-standard-height));
+  width: 100%;
+  border-radius: 20%;
+}
+
+.panel, .resize-handle {
+  height: 100%;
+  width: 100%;
+}
+
+.panel {
+  color: white;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+#scheduler-left-panel {
+  background-color: var(--synth-purple);
+  scrollbar-color: var(--synth-pink) var(--synth-violet);
+
+  @include mixins.half-rounded-border(right);
+}
+
+#scheduler-right-panel {
+  background-color: var(--synth-violet);
+
+  @include mixins.half-rounded-border(left);
+}
+
+#scheduler-split-resize-handle {
+  width: 1em;
+  background-color: var(--sys-background);
+
+  .handle-icon {
+    margin-top: 50%;
+    margin-bottom: 50%;
+    rotate: 90deg;
+  }
+}
