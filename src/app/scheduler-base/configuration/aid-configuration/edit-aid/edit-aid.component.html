@@ -1,0 +1,10 @@
+<button (click)="addAid()">Add aid.</button>
+<pre>
+{{currentAid() | json}}
+</pre>
+<mat-form-field class="name">
+  <input
+    matInput
+    #nameInput
+    (input)="updateAidName(nameInput.value)">
+</mat-form-field>

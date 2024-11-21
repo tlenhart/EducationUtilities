@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter, TitleStrategy, withViewTransitions } from '@angular/router';
+import { provideRouter, TitleStrategy, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 
 import { routes } from './app.routes';
@@ -45,6 +45,7 @@ function provideRouting(): ReadonlyArray<Provider | EnvironmentProviders> {
   return [
     provideRouter(
       routes,
+      withComponentInputBinding(),
       withViewTransitions(),
     ),
     {

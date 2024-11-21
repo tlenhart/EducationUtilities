@@ -1,1 +1,2 @@
-<p>teacher-configuration works!</p>
+<eu-person-selector [personType]="'teacher'" [people]="teacherStore.teachers()" (selectedPerson)="selectTeacher($event)"></eu-person-selector>
+<router-outlet></router-outlet>

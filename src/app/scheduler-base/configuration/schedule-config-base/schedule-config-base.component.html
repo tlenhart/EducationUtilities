@@ -1,7 +1,14 @@
-<nav mat-tab-nav-bar [tabPanel]="tabPanel">
-  <a
-    mat-tab-link
-    [routerLink]="['./teachers']">Teachers</a>
+<nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-tab-nav-bar">
+  @for (route of configurationRoutes; track route) {
+    <a
+      mat-tab-link
+      [routerLink]="['./', route.path]"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [active]="rla.isActive">
+      {{ route.name }}
+    </a>
+  }
 </nav>
 <mat-tab-nav-panel #tabPanel>
   <router-outlet></router-outlet>

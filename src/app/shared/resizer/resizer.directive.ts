@@ -95,7 +95,7 @@ export class ResizerDirective implements OnDestroy {
 
   private initialState?: ResizePanelInitialState;
 
-  private panelOneResizeObserver: ResizeObserver = new ResizeObserver((entries) => {
+  private readonly panelResizeObserver: ResizeObserver = new ResizeObserver((entries) => {
     for (const entry of entries) {
       if (entry.contentBoxSize[0].inlineSize === 0) {
         if (entry.target === this.panelOne()) {
@@ -146,13 +146,13 @@ export class ResizerDirective implements OnDestroy {
     });
 
     effect(() => {
-      this.panelOneResizeObserver.unobserve(this.panelOne());
-      this.panelOneResizeObserver.observe(this.panelOne());
+      this.panelResizeObserver.unobserve(this.panelOne());
+      this.panelResizeObserver.observe(this.panelOne());
     });
 
     effect(() => {
-      this.panelOneResizeObserver.unobserve(this.panelTwo());
-      this.panelOneResizeObserver.observe(this.panelTwo());
+      this.panelResizeObserver.unobserve(this.panelTwo());
+      this.panelResizeObserver.observe(this.panelTwo());
     });
 
     effect(() => {
@@ -194,6 +194,7 @@ export class ResizerDirective implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.panelResizeObserver.disconnect();
     this.removeMouseMoveEventHandlers();
   }
 

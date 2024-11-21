@@ -1,0 +1,5 @@
+<eu-person-selector [personType]="'aid'" [people]="aidStore.aidEntities()" (selectedPerson)="selectPerson($event)"></eu-person-selector>
+<div>
+  Loading {{aidStore.isLoading()}}
+</div>
+<router-outlet></router-outlet>

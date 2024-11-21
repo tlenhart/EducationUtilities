@@ -12,6 +12,7 @@
   @include mat.button-theme($theme);
   @include mat.form-field-theme($theme);
   @include mat.checkbox-theme($theme);
+  @include mat.autocomplete-theme($theme);
 
   @include mat.tooltip-theme($theme);
   @include mat.select-theme($theme);

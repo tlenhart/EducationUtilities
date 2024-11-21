@@ -1,27 +1,38 @@
 <div id="splitter-container">
   <mat-toolbar class="schedule-toolbar">
+
     <button mat-button [matMenuTriggerFor]="editorsMenu">Builders</button>
     <mat-menu #editorsMenu="matMenu">
-      <a
-        mat-menu-item
-        [routerLink]="['./editors', 'schedule-builder']">
-        Schedule builder
-      </a>
+      <ng-template matMenuContent>
+        <a
+          mat-menu-item
+          [routerLink]="['./editors', 'schedule-builder']">
+          Schedule builder
+        </a>
+      </ng-template>
     </mat-menu>
+
     <button mat-button [matMenuTriggerFor]="configurationNavigationMenu">Configuration</button>
     <mat-menu #configurationNavigationMenu="matMenu">
-      <button
-        mat-menu-item
-        [matMenuTriggerFor]="scheduleConfigurationMenu">
-        Schedule Configuration
-      </button>
+      <ng-template matMenuContent>
+        <button
+          mat-menu-item
+          [matMenuTriggerFor]="scheduleConfigurationMenu">
+          Schedule Configuration
+        </button>
+      </ng-template>
     </mat-menu>
+
     <button mat-button (click)="resizeHandle.classList.toggle('slim-resize-handle')">Slim Resizer</button>
   </mat-toolbar>
+
   <div class="panels-container">
+    <!-- Left Panel. -->
     <section id="scheduler-left-panel" class="panel position-left" #leftPanel>
       <router-outlet></router-outlet>
     </section>
+
+    <!-- Panel Resizer. -->
     <div id="scheduler-split-resize-handle" #resizeHandle class="resize-handle small-icon-button"
          euResizer
          [panelOne]="leftPanel" [panelTwo]="rightPanel"
@@ -63,6 +74,8 @@
         }
       }
     </div>
+
+    <!-- Right Panel. -->
     <section id="scheduler-right-panel" class="panel position-right" #rightPanel>
       <router-outlet name="configuration"></router-outlet>
     </section>
@@ -71,14 +84,18 @@
 
 <!-- Hidden, sub mat-menus. -->
 <mat-menu #scheduleConfigurationMenu>
-  <a
-    mat-menu-item
-    [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration'] } }]">
-    Schedule Configuration
-  </a>
-  <a
-    mat-menu-item
-    [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration', 'teachers'] } }]">
-    Teachers
-  </a>
+  <ng-template matMenuContent>
+    <a
+      mat-menu-item
+      [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration'] } }]">
+      Schedule Configuration
+    </a>
+    @for (route of configurationRoutes; track route.path) {
+      <a
+        mat-menu-item
+        [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration', route.path] } }]">
+        {{route.name}}
+      </a>
+    }
+  </ng-template>
 </mat-menu>
