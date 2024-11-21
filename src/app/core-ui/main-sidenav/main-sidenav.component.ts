@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, InputSignal } from '
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AppSidenavService } from '../../core/app-sidenav-service/app-sidenav.service';
+import { GlobalUIService } from '../../core/app-sidenav-service/global-ui.service';
 import { AppRoute } from '../../models';
 
 @Component({
@@ -21,5 +21,5 @@ import { AppRoute } from '../../models';
 })
 export class MainSidenavComponent {
   public readonly routes: InputSignal<Array<AppRoute>> = input.required<Array<AppRoute>>();
-  public readonly sidenavService: AppSidenavService = inject(AppSidenavService);
+  public readonly sidenavService: GlobalUIService = inject(GlobalUIService);
 }

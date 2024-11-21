@@ -9,7 +9,7 @@ import { ClippyComponent } from './core-ui/clippy/clippy.component';
 import { LoaderComponent } from './core-ui/loader/loader.component';
 import { MainSidenavComponent } from './core-ui/main-sidenav/main-sidenav.component';
 import { MainToolbarComponent } from './core-ui/main-toolbar/main-toolbar.component';
-import { AppSidenavService } from './core/app-sidenav-service/app-sidenav.service';
+import { GlobalUIService } from './core/app-sidenav-service/global-ui.service';
 import { DeviceTypeService } from './core/device-type/device-type.service';
 import { GlobalSettingEnabledPipe } from './core/settings/setting-enabled/global-setting-enabled.pipe';
 import { SettingsService } from './core/settings/settings.service';
@@ -32,7 +32,7 @@ export class AppComponent {
   public routes: Array<AppRoute> = [];
   public readonly isHandset$: Observable<boolean>;
   private readonly deviceTypeService: DeviceTypeService = inject(DeviceTypeService);
-  private readonly sidenavService: AppSidenavService = inject(AppSidenavService);
+  private readonly globalUIService: GlobalUIService = inject(GlobalUIService);
   private readonly settingsService: SettingsService = inject(SettingsService);
 
   public settings: Signal<Versioned<GlobalSettings>> = computed(() => {
@@ -42,7 +42,9 @@ export class AppComponent {
   public sidenavStyle: Signal<'default' | 'slim'>;
 
   // Use this to toggle autosizing on the sidenav to try and avoid performance implications mentioned here: https://material.angular.io/components/sidenav/overview#resizing-an-open-sidenav.
-  public shouldAutosize: Signal<boolean> = computed(() => this.sidenavService.autosize());
+  public shouldAutosize: Signal<boolean> = computed(() => this.globalUIService.autosize());
+
+  public showAppTitleBar: Signal<boolean> = computed(() => this.globalUIService.showAppTitleBar());
 
   constructor() {
     // Use the css2 material icons, instead of the defaults.
@@ -50,7 +52,7 @@ export class AppComponent {
     const matIconRegistry: MatIconRegistry = inject(MatIconRegistry);
     matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
 
-    this.sidenavStyle = this.sidenavService.style;
+    this.sidenavStyle = this.globalUIService.style;
 
     // Just look at the root routes to determine primary routing.
     this.routes = [

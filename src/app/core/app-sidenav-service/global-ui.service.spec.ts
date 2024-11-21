@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppSidenavService } from './app-sidenav.service';
+import { GlobalUIService } from './global-ui.service';
 
 describe('AppSidenavServiceService', () => {
-  let service: AppSidenavService;
+  let service: GlobalUIService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AppSidenavService);
+    service = TestBed.inject(GlobalUIService);
   });
 
   it('should be created', () => {

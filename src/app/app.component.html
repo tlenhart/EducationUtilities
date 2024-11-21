@@ -19,8 +19,10 @@
       }
     </mat-sidenav>
     <mat-sidenav-content id="sidenav-content">
-      @defer(on idle) {
-        <app-main-toolbar [drawer]="drawer"></app-main-toolbar>
+      @if (showAppTitleBar()) {
+        @defer(on idle; when showAppTitleBar()) {
+          <app-main-toolbar [drawer]="drawer"></app-main-toolbar>
+        }
       }
       <!-- Add Content Here -->
       <main id="main">
