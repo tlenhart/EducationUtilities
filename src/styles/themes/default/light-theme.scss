@@ -1,4 +1,5 @@
 @use './m3-theme' as m3-theme;
+@use '../../functions' as _functions;
 @use '../material-theme-imports' as material-imports;
 
 // Import --sys-* variables, exported from the material figma theme builder.
@@ -8,4 +9,14 @@
 
 .light.default-theme {
   @include material-imports.material-theme-imports(m3-theme.$light-theme);
+  // @include material-imports.material-theme-imports(
+  //   _functions.get-theme(light, 0, m3-theme.$primary, m3-theme.$tertiary, true)
+  // );
 }
+
+// .slim.light.default-theme {
+//   //@include material-imports.material-theme-imports(
+//   //  _functions.get-theme(light, -3, m3-theme.$primary, m3-theme.$tertiary, true)
+//   //);
+//   //@include material-imports.material-theme-imports(m3-theme.$slim-light-theme);
+// }
