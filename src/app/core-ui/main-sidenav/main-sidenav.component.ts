@@ -7,7 +7,6 @@ import { AppRoute } from '../../models';
 
 @Component({
   selector: 'app-main-sidenav',
-  standalone: true,
   imports: [
     MatListItem,
     MatNavList,

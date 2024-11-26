@@ -26,7 +26,6 @@ import { Person, PersonType } from '../../models/person-type.model';
 
 @Component({
   selector: 'eu-person-selector',
-  standalone: true,
   imports: [
     MatFormField,
     MatInput,

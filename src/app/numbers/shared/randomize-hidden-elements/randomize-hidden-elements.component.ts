@@ -25,7 +25,6 @@ import { FormattedNumberTableConfig, FormattedNumberValue } from '../../../model
 
 @Component({
   selector: 'eu-randomize-hidden-elements',
-  standalone: true,
   imports: [
     MatButton,
     MatFormField,

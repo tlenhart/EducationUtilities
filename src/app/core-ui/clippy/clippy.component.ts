@@ -9,7 +9,6 @@ import { isGlobalSettingEnabled, isSettingEnabledAndTrue } from '../../utils/set
 
 @Component({
   selector: 'app-clippy',
-  standalone: true,
   imports: [],
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

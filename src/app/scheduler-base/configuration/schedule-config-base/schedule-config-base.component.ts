@@ -6,7 +6,6 @@ import { scheduleConfigurationAppRoutes } from '../scheduler-configuration.route
 
 @Component({
   selector: 'eu-schedule-config-base',
-  standalone: true,
   imports: [
     MatTabNav,
     MatTabLink,

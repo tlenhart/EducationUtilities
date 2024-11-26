@@ -4,7 +4,6 @@ import { TeacherStore } from '../../../stores/teacher.store';
 
 @Component({
   selector: 'eu-edit-teacher',
-  standalone: true,
   imports: [],
   templateUrl: './edit-teacher.component.html',
   styleUrl: './edit-teacher.component.scss',

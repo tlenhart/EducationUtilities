@@ -49,7 +49,6 @@ import {
 
 @Component({
   selector: 'app-multiplication-table',
-  standalone: true,
   imports: [
     DocumentActionsComponent,
     ReactiveFormsModule,

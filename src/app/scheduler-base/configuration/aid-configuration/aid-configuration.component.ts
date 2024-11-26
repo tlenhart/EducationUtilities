@@ -7,7 +7,6 @@ import { AidStore } from '../../stores/aid.store';
 
 @Component({
   selector: 'eu-aid-configuration',
-  standalone: true,
   imports: [
     PersonSelectorComponent,
     RouterOutlet,

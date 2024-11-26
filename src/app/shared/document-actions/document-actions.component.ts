@@ -4,7 +4,6 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-document-actions',
-  standalone: true,
   imports: [
     MatButton,
     MatIcon,

@@ -13,7 +13,6 @@ import { ScheduleStore } from './stores/schedule.store';
 
 @Component({
   selector: 'eu-scheduler-base',
-  standalone: true,
   imports: [
     MatIcon,
     ResizerDirective,

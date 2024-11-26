@@ -45,7 +45,6 @@ import {
 
 @Component({
   selector: 'app-numbers-table',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatInputModule,

@@ -17,7 +17,6 @@ type IdImportType = number | string;
 
 @Component({
   selector: 'eu-edit-aid',
-  standalone: true,
   imports: [
     MatFormField,
     MatInput,

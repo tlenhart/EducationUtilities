@@ -1,4 +1,4 @@
-import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,13 +17,11 @@ import {
 
 @Component({
   selector: 'app-number-grid-cell',
-  standalone: true,
   imports: [
     FormsModule,
     NgClass,
     NgStyle,
     MatTooltip,
-    NgTemplateOutlet,
     NumberGridCellTooltipMessagePipe,
   ],
   templateUrl: './number-grid-cell.component.html',

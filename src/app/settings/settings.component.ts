@@ -15,7 +15,6 @@ type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSet
 
 @Component({
   selector: 'app-settings',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatCheckbox,

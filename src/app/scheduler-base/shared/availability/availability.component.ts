@@ -6,7 +6,6 @@ type AvailabilityFormType = FormGroup<{ [K in keyof ScheduleTime]: FormControl }
 
 @Component({
   selector: 'eu-availability',
-  standalone: true,
   imports: [],
   templateUrl: './availability.component.html',
   styleUrl: './availability.component.scss',

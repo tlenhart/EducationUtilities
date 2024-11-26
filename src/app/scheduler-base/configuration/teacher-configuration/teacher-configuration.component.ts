@@ -7,7 +7,6 @@ import { TeacherStore } from '../../stores/teacher.store';
 
 @Component({
   selector: 'eu-teacher-configuration',
-  standalone: true,
   imports: [
     PersonSelectorComponent,
     RouterOutlet,

@@ -8,7 +8,6 @@ type AddAidFormType = Partial<{ [K in keyof InsertDbType<Aid>]: FormControl }>;
 
 @Component({
   selector: 'eu-add-aid',
-  standalone: true,
   imports: [],
   templateUrl: './add-aid.component.html',
   styleUrl: './add-aid.component.scss',

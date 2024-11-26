@@ -4,7 +4,6 @@ import { ScheduleTime } from '../../models/schedule-time.model';
 
 @Component({
   selector: 'eu-scheduled-time',
-  standalone: true,
   imports: [],
   templateUrl: './scheduled-time.component.html',
   styleUrl: './scheduled-time.component.scss',
@@ -12,7 +11,7 @@ import { ScheduleTime } from '../../models/schedule-time.model';
 })
 export class ScheduledTimeComponent {
 
-  public scheduledTimeForm: FormGroup<{ [K in keyof ScheduleTime ]: FormControl }>;
+  public scheduledTimeForm: FormGroup<{ [K in keyof ScheduleTime]: FormControl }>;
 
   /* Injected Dependencies. */
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);

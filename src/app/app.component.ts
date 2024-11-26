@@ -17,7 +17,6 @@ import { AppRoute, GlobalSettings, Versioned } from './models';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     AsyncPipe,
     RouterOutlet,
