@@ -28,7 +28,7 @@
     "@ngrx/operators": "^18.1.1",
     "@ngrx/signals": "^18.1.1",
     "clippy.modern": "^0.0.1",
-    "dexie": "^4.0.9",
+    "dexie": "^4.0.10",
     "pdfmake": "~0.2.15",
     "rxjs": "~7.8.0",
     "temporal-polyfill": "^0.2.5",
@@ -41,17 +41,17 @@
     "@angular/cli": "^19.0.2",
     "@angular/compiler-cli": "^19.0.1",
     "@ngrx/eslint-plugin": "^18.1.1",
-    "@stylistic/eslint-plugin": "^2.10.1",
+    "@stylistic/eslint-plugin": "^2.11.0",
     "@types/jasmine": "~5.1.0",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.0",
     "@types/pdfmake": "^0.2.9",
     "@web/test-runner": "^0.19.0",
     "angular-eslint": "18.4.0",
-    "eslint": "^9.14.0",
+    "eslint": "^9.15.0",
     "jasmine-core": "~5.4.0",
     "tsx": "^4.19.2",
-    "typescript": "~5.5.2",
-    "typescript-eslint": "8.14.0"
+    "typescript": "~5.6.3",
+    "typescript-eslint": "8.16.0"
   },
   "license": "AGPL-3.0-only"
 }
