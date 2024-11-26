@@ -8,7 +8,8 @@
   }
 
   width: var(--eu-sidebar-width, 200px);
-  background-color: var(--sys-inverse-on-surface);
+  // background-color: var(--sys-inverse-on-surface);
+  background-color: var(--mat-sys-inverse-on-surface);
 }
 
 .sidenav .mat-toolbar {

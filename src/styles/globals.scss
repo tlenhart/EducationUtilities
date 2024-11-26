@@ -9,7 +9,7 @@
 
 // Instead of using :root, use .light and .dark selectors, so the .light and .dark --sys variables apply correctly.
 // If :root is used here, the following variables are set before the --sys variables are set, and any variable referencing a --sys variable will not be changed.
-.light, .dark {
+.light, .dark, :root {
   /* Sizing for primary UI elements/containers. */
   // Default sidebar width.
   --eu-sidebar-width: 225px;
@@ -27,6 +27,7 @@
   --eu-content-section-gap: 1em;
 
   // When displaying items in a grid, the border configuration for items in the grid.
+  --eu-grid-border-color: var(--mat-sys-primary);
   --eu-grid-border-width: 1px;
   --eu-grid-border-style: solid;
 
@@ -35,7 +36,7 @@
 
 // For theme-specific colors, add the variable to each of the rules below.
 
-.light {
+.light, :root {
   &.default-theme {
     --eu-grid-border-color: #{colors.get-theme-color(m3-theme.$light-theme, tertiary)};
   }

@@ -4,6 +4,7 @@
   position: relative;
   text-align: center;
   padding: 12px;
+  box-sizing: border-box;
 
   border-bottom: scss-vars.$grid-border;
   border-right: scss-vars.$grid-border;
@@ -20,11 +21,11 @@
 
   &.column-header {
     border-top: scss-vars.$grid-border;
-    border-bottom: scss-vars.$grid-border;
+    // border-bottom: scss-vars.$grid-border;
   }
 
   &.row-header {
-    border-right: scss-vars.$grid-border;
+    // border-right: scss-vars.$grid-border;
     border-left: scss-vars.$grid-border;
   }
 

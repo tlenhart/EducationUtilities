@@ -26,9 +26,10 @@
 .panels-container {
   display: flex;
   flex-direction: row;
-  height: calc(100% - var(--mat-toolbar-standard-height));
   width: 100%;
-  border-radius: 20%;
+  height: 100%;
+  overflow-y: auto;
+  // height: calc(100% - var(--mat-toolbar-standard-height));
 }
 
 .panel, .resize-handle {
