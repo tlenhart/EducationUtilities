@@ -1,5 +1,5 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, computed, inject, Signal } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { Route, RouterOutlet } from '@angular/router';
@@ -14,6 +14,7 @@ import { DeviceTypeService } from './core/device-type/device-type.service';
 import { GlobalSettingEnabledPipe } from './core/settings/setting-enabled/global-setting-enabled.pipe';
 import { SettingsService } from './core/settings/settings.service';
 import { AppRoute, GlobalSettings, Versioned } from './models';
+import { SettingsStore } from './settings/settings.store';
 
 @Component({
   selector: 'app-root',
@@ -26,13 +27,14 @@ import { AppRoute, GlobalSettings, Versioned } from './models';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public title = 'EducationUtilities';
   public routes: Array<AppRoute> = [];
   public readonly isHandset$: Observable<boolean>;
   private readonly deviceTypeService: DeviceTypeService = inject(DeviceTypeService);
   private readonly globalUIService: GlobalUIService = inject(GlobalUIService);
   private readonly settingsService: SettingsService = inject(SettingsService);
+  private readonly settingsStore = inject(SettingsStore);
 
   public settings: Signal<Versioned<GlobalSettings>> = computed(() => {
     return this.settingsService.settings();
@@ -78,5 +80,9 @@ export class AppComponent {
     ];
 
     this.isHandset$ = this.deviceTypeService.isHandset$;
+  }
+
+  public ngOnInit(): void {
+    this.settingsStore.loadSettings();
   }
 }

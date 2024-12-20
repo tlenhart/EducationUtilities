@@ -12,11 +12,12 @@ html {
   // @include mat.elevation-classes();
   // @include mat.app-background();
 
-  color-scheme: light dark;
+  color-scheme: light;
+  //color-scheme: light dark;
   @include mat.theme((
     color: (
-      // theme-type: light,
-      theme-type: color-scheme,
+      theme-type: light,
+      //theme-type: color-scheme,
       // primary: theme-colors.$primary-palette,
       // tertiary: theme-colors.$tertiary-palette,
       primary: surf-stationary-theme-colors.$primary-palette,
