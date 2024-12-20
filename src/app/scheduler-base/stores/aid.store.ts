@@ -14,7 +14,7 @@ import { from, pipe, switchMap, take, tap } from 'rxjs';
 import { schedulerDb } from '../db/scheduler.db';
 import { Aid } from '../models/aid.model';
 import { InsertDbType, UpdateDbChanges } from '../models/db.types';
-import { setLoading, withLoadingStatus } from './features/loading-status.store.feature';
+import { setLoading, withLoadingStatus } from '../../shared/stores/features/loading-status.store.feature';
 
 const aidStoreConfig = entityConfig({
   entity: type<Aid>(),
