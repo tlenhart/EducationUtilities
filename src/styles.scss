@@ -2,6 +2,7 @@
 @use './styles/globals'; // Import global css variables.
 @use './styles/densities'; // Custom densities for specific components in specific cases.
 @use './styles/themes/surf-stationary_theme-colors.scss' as surf-stationary-theme-colors;
+@use './styles/themes/pastel-blonde_theme-colors.scss' as pastel-blonde-theme-colors;
 
 // ! https://developer.mozilla.org/en-US/docs/Web/CSS/@page
 
@@ -20,15 +21,20 @@ html {
       //theme-type: color-scheme,
       // primary: theme-colors.$primary-palette,
       // tertiary: theme-colors.$tertiary-palette,
-      primary: surf-stationary-theme-colors.$primary-palette,
-      tertiary: surf-stationary-theme-colors.$tertiary-palette,
+
+      // primary: surf-stationary-theme-colors.$primary-palette,
+      // tertiary: surf-stationary-theme-colors.$tertiary-palette,
+
+      primary: pastel-blonde-theme-colors.$primary-palette,
+      tertiary: pastel-blonde-theme-colors.$tertiary-palette,
     ),
     typography: Roboto,
     density: 0,
   ));
 
   @media (prefers-contrast: more) {
-    @include surf-stationary-theme-colors.high-contrast-overrides(color-scheme);
+    // @include surf-stationary-theme-colors.high-contrast-overrides(color-scheme);
+    @include pastel-blonde-theme-colors.high-contrast-overrides(color-scheme);
   }
 }
 
