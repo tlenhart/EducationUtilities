@@ -99,12 +99,18 @@ export class TemporalPlainDateTimeAdapter extends DateAdapter<Temporal.PlainDate
     return Temporal.Now.plainDateTimeISO();
   }
 
-  public override parse(value: unknown, parseFormat: unknown): Temporal.PlainDateTime | null {
-    throw new Error('Method not implemented.');
+  public override parse(value: Temporal.PlainDateTime | Temporal.PlainDateTimeLike | string, parseFormat?: Temporal.AssignmentOptions): Temporal.PlainDateTime | null {
+    // throw new Error('Method not implemented.');
+    if (parseFormat && !parseFormat.overflow) {
+      throw new Error('parseFormat is only supported when the type is Temporal.AssignmentOptions. Supported formats are those provided natively by Temporal.PlainDateTime.from().');
+    }
+
+    return Temporal.PlainDateTime.from(value, parseFormat);
   }
 
-  public override format(date: Temporal.PlainDateTime, displayFormat: unknown): string {
-    throw new Error('Method not implemented.');
+  public override format(date: Temporal.PlainDateTime, displayFormat?: Temporal.CalendarTypeToStringOptions): string {
+    // throw new Error('Method not implemented.');
+    return date.toString(displayFormat);
   }
 
   public override addCalendarYears(date: Temporal.PlainDateTime, years: number): Temporal.PlainDateTime {
@@ -133,14 +139,8 @@ export class TemporalPlainDateTimeAdapter extends DateAdapter<Temporal.PlainDate
   }
 
   public override invalid(): Temporal.PlainDateTime {
-    // Exceptions are thrown when generating invalid PlainDateTimes, so just return a really onld value instead.
+    // Exceptions are thrown when generating invalid PlainDateTimes, so just return a really old value instead.
     // TODO: Potentially fix.
     return Temporal.PlainDateTime.from('0000-01-01');
   }
 }
-
-// export class TemporalPlainTimeAdapter extends DateAdapter<Temporal.PlainTime> {
-//   constructor() {
-//     super();
-//   }
-// }
