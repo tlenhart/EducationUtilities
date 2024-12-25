@@ -4,6 +4,7 @@ import { concatMap, from, Subject } from 'rxjs';
 import { ValuesLoadedFromDb } from '../shared/stores/features/loaded-from-db.store.feature';
 import { settingsDb } from './settings.db';
 import { NewGlobalSettings } from './settings.model';
+import { DbEventType } from '../models/db-event-type.model';
 
 const updateQueue = new Subject<NewGlobalSettings>();
 const updateQueueSubscription = updateQueue.pipe(
@@ -22,7 +23,7 @@ const updateQueueSubscription = updateQueue.pipe(
 });
 
 addEventListener('message', ({ data }: MessageEvent<{
-  eventType: 'add' | 'update' | 'export';
+  eventType: DbEventType;
   settings: NewGlobalSettings & Partial<ValuesLoadedFromDb>;
 }>) => {
   // If the hasLoaded property is on the object, delete it so it doesn't get stored in the database.

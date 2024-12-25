@@ -61,7 +61,8 @@ export class PersonSelectorComponent<T = Person> implements OnDestroy {
     const filter = this.filterValue().toLowerCase();
 
     return this.possiblePeople().filter((option: Person) => {
-      return option.name.toLowerCase().includes(filter);
+      // return option.name.toLowerCase().includes(filter);
+      return option?.name.toLowerCase().includes(filter) ?? false;
     });
   });
 
@@ -86,7 +87,7 @@ export class PersonSelectorComponent<T = Person> implements OnDestroy {
 
     this.subscriptions.add(this.personSelectorFormControl.valueChanges.subscribe({
       next: (value) => {
-        if (typeof value !== 'string' && value) {
+        if (value && typeof value !== 'string') {
           this.setPerson(value);
         }
       }
@@ -100,6 +101,8 @@ export class PersonSelectorComponent<T = Person> implements OnDestroy {
   public setPerson(person: Person): void {
     // const actualPersonType = getActualPersonType();
     this.selectedPerson.emit(person);
+    // this.personSelectorFormControl.reset('', { onlySelf: true, emitEvent: false });
+    this.personSelectorFormControl.reset();
   }
 
   public filter(): void {

@@ -32,6 +32,12 @@
   --eu-grid-border-style: solid;
 
   --eu-icon-content-gap: 0.5em;
+
+  // Calendar variables.
+  // TODO: Provide settings options to dynamically override these.
+  --eu-calendar-day-gap: 0.5em;
+  --eu-calendar-title-separation-height: 0.75em; // TODO: Test with different scaling.
+  --eu-calendar-time-interval-gap: 2em;
 }
 
 // For theme-specific colors, add the variable to each of the rules below.

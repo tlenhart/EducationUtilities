@@ -16,9 +16,32 @@ export const schedulerRoutes: Routes = [
       AidStore,
       // StudentStore,
     ],
-    loadComponent: () => import('./scheduler-base.component').then(m =>
-      m.SchedulerBaseComponent),
-    loadChildren: () => import('./scheduling-panes.routes').then(m =>
-      m.schedulingPanesRoutes),
+    // loadComponent: () => import('./scheduler-base.component').then(m =>
+    //   m.SchedulerBaseComponent),
+    // loadChildren: () => import('./scheduling-panes.routes').then(m =>
+    //   m.schedulingPanesRoutes),
+    loadChildren: () => import('./scheduler-base.routes').then(m =>
+      m.scheduleBaseRoutes),
+    // children: [
+    //   {
+    //     path: 'schedule',
+    //     title: 'Schedule',
+    //     data: {
+    //       icon: 'edit_calendar',
+    //     },
+    //     loadComponent: () => import('./scheduler-base.component').then(m =>
+    //       m.SchedulerBaseComponent),
+    //     loadChildren: () => import('./scheduling-panes.routes').then(m =>
+    //       m.schedulingPanesRoutes),
+    //   },
+    //   {
+    //     path: 'dashboard',
+    //     title: 'Schedule',
+    //     data: {
+    //       icon: 'edit_calendar',
+    //     },
+    //     // loadComponent
+    //   },
+    // ]
   },
 ];

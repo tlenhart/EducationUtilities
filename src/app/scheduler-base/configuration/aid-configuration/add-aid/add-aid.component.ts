@@ -32,7 +32,7 @@ export class AddAidComponent {
     const aid: InsertDbType<Aid> = {
       scheduleId: 1,
       name: 'New Aid Name',
-      availability: [],
+      schedule: [],
     };
 
     const success: boolean = await this.aidStore.addAid(aid);

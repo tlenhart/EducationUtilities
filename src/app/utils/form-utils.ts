@@ -12,6 +12,16 @@ export function arrayToArrayOfFormControls<T>(values: Array<T>, fb: NonNullableF
   return values.map((value: T) => fb.control<T>(value));
 }
 
+export function* toArrayOfFormControls<T>(items: Array<T> | undefined, fb: NonNullableFormBuilder): Generator<FormControl<T>> {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  for (const item of items) {
+    yield fb.control(item);
+  }
+}
+
 /**
  * Build the data provided to a form control builder using the provided SettingValue.
  *

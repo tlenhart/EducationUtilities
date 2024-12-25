@@ -1,20 +1,24 @@
 import Dexie, { Table } from 'dexie';
-import { Aid } from '../models/aid.model';
-import { ScheduleGroup } from '../models/schedule-group.model';
-import { Schedule } from '../models/schedule.model';
-import { Student } from '../models/student.model';
-import { Teacher } from '../models/teacher.model';
+import { Exportable, maskProperty } from '../../models/exportable.model';
 
-export class SchedulerDb extends Dexie {
-  public schedules!: Table<Schedule, number>;
+import { getIncrementor } from '../../utils/number-utils';
+import { DbAid, DbAidChanges } from '../models/aid.model';
+import { ScheduleGroup } from '../models/schedule-group.model';
+import { DbScheduleChanges, Schedule } from '../models/schedule.model';
+import { Student } from '../models/student.model';
+import { DbTeacher, DbTeacherChanges, Teacher } from '../models/teacher.model';
+import { filterTables } from '../../utils/db.utils';
+
+export class SchedulerDb extends Dexie implements Exportable {
+  public schedules!: Table<Schedule, number, DbScheduleChanges>;
   public groups!: Table<ScheduleGroup, number>;
-  public teachers!: Table<Teacher, number>;
-  public aids!: Table<Aid, number>;
+  public teachers!: Table<DbTeacher, number, DbTeacherChanges>;
+  public aids!: Table<DbAid, number, DbAidChanges>;
   public students!: Table<Student, number>;
 
   constructor() {
     super('Scheduler');
-    this.version(2).stores({
+    this.version(4).stores({
       schedules: '++id',
       groups: '++id, scheduleId',
       teachers: '++id, scheduleId',
@@ -23,6 +27,40 @@ export class SchedulerDb extends Dexie {
     });
 
     this.on('populate', () => this.populate());
+  }
+  public async export(tableNames?: Array<string> | 'full'): Promise<boolean> {
+    let result: boolean = false;
+    const incrementor = getIncrementor();
+    try {
+      const exportData: Record<string, unknown> = {};
+      // const settings = await this.settings.toArray();
+
+      const filteredTables: Array<Table> = filterTables(this.tables, tableNames);
+      for (const table of filteredTables) {
+        const tableContents = await table.toArray();
+
+        // for (let i = 0; i < tableContents.length; i++) {
+        for (const entry of tableContents) {
+          // TODO: Add additional properties.
+          maskProperty('name', table.name, entry, incrementor);
+          maskProperty('Name', table.name, entry, incrementor);
+        }
+
+        exportData[table.name] = tableContents;
+      }
+
+      console.error(JSON.stringify(exportData));
+
+      result = true;
+    } catch (e: unknown) {
+      console.error('Error exporting settings db.', e);
+    }
+
+    // incrementor.next('end');
+    // TODO: Test.
+    // @ts-expect-error
+    incrementor.return();
+    return result;
   }
 
   private async populate(): Promise<void> {
@@ -34,42 +72,39 @@ export class SchedulerDb extends Dexie {
       {
         scheduleId: scheduleId,
         name: 'Mr. Anderson',
-        availability: [],
-        homeroom: 'Computers',
-      } as unknown as Teacher,
+        schedule: [],
+        room: 'Computers',
+      },
       {
         scheduleId: scheduleId,
         name: 'Mr. Bueller',
-        availability: [],
-        homeroom: 'GenPop',
-      } as unknown as Teacher,
+        schedule: [],
+        room: 'GenPop',
+      },
       {
         scheduleId: scheduleId,
         name: 'Mr. Lorensax',
-        availability: [],
-        homeroom: 'Econ 101',
-      } as unknown as Teacher,
+        schedule: [],
+        room: 'Econ 101',
+      },
     ]);
 
     await schedulerDb.aids.bulkAdd([
       {
         scheduleId: scheduleId,
         name: 'Jeff',
-        availability: [],
-        homeroom: 'GenPop',
-      } as unknown as Aid,
+        schedule: [],
+      },
       {
         scheduleId: scheduleId,
         name: 'Jeff 2',
-        availability: [],
-        homeroom: 'GenPop',
-      } as unknown as Aid,
+        schedule: [],
+      },
       {
         scheduleId: scheduleId,
         name: 'Mark',
-        availability: [],
-        homeroom: 'Shop',
-      } as unknown as Aid,
+        schedule: [],
+      },
     ]);
 
     await schedulerDb.students.bulkAdd([

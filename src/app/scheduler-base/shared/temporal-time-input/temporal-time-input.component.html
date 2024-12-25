@@ -1,0 +1,13 @@
+<div class="temporal-time-input-container">
+  @if (showLabel()) {
+    <label [for]="timeHtmlId()">
+      {{ label() }}
+    </label>
+  }
+  <input
+    type="time"
+    [id]="timeHtmlId()"
+    (focus)="markAsTouched()"
+    [(ngModel)]="time"
+    [attr.aria-label]="label()">
+</div>

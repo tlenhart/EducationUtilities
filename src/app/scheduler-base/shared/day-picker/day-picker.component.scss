@@ -1,0 +1,31 @@
+.day-picker-listbox {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  padding: 0;
+
+  li.day-of-week-option {
+    list-style: none;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    padding: 0.5em;
+    cursor: pointer;
+    user-select: none;
+
+    background-color: rgb(from var(--mat-sys-tertiary-container) R G B / 40%);
+    border-radius: 50%;
+    border: 2px solid transparent;
+
+    &[aria-selected="true"] {
+      border-width: 2px;
+      border-color: lch(from var(--mat-sys-tertiary-container) L calc(C + 80) H);
+      background-color: var(--mat-sys-primary-container);
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      filter: grayscale(90%);
+    }
+  }
+}

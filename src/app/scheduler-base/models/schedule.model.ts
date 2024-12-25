@@ -1,8 +1,14 @@
-import { DbBase } from './db.types';
+import { DbBase, UpdateDbChanges } from './db.types';
 
 export interface Schedule extends DbBase {
   title: string;
 }
+
+// ? Partial?
+// export type DbScheduleChanges = Omit<UpdateDbChanges<Schedule>, 'schedule'> & PersonScheduleDbUpdate;
+export type DbScheduleChanges = UpdateDbChanges<Schedule>;
+
+export type DbSchedule = Schedule;
 
 /**
  * School-wide schedule.

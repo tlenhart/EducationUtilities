@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const schedulingPanesRoutes: Routes = [
+const defaultOutlet: Routes = [
   {
     path: 'editors',
     title: 'Editors',
@@ -11,6 +11,18 @@ export const schedulingPanesRoutes: Routes = [
       m.scheduleEditorsRoutes),
   },
   {
+    path: 'reports',
+    title: 'Reports for ...',
+    data: {
+      icon: 'edit_calendar',
+    },
+    loadChildren: () => import('./reports/reports.routes').then(m =>
+      m.reportsRoutes),
+  },
+]
+
+const configurationOutlet: Routes = [
+  {
     path: 'config',
     title: 'Scheduler Configuration',
     data: {
@@ -20,4 +32,9 @@ export const schedulingPanesRoutes: Routes = [
       m.scheduleConfigurationRoutes),
     outlet: 'configuration',
   },
+];
+
+export const schedulingPanesRoutes: Routes = [
+  ...defaultOutlet,
+  ...configurationOutlet,
 ];

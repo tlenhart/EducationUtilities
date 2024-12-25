@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { selectedTeacherResolver } from '../../resolvers/selected-teacher/selected-teacher.resolver';
 
 export const teacherConfigurationRoutes: Routes = [
   {
@@ -15,6 +16,7 @@ export const teacherConfigurationRoutes: Routes = [
         title: 'Teacher',
         loadComponent: () => import('./edit-teacher/edit-teacher.component').then(m =>
           m.EditTeacherComponent),
+        resolve: [selectedTeacherResolver],
       },
     ],
   },

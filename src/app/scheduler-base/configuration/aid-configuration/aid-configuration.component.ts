@@ -27,7 +27,11 @@ export class AidConfigurationComponent implements OnInit {
 
   public async selectPerson(aid: Person | Aid | null): Promise<void> {
     if (aid) {
-      await this.router.navigate([aid.id], { relativeTo: this.route });
+      try {
+        await this.router.navigate([aid.id], { relativeTo: this.route });
+      } catch (e: unknown) {
+        console.error(e, `Unable to load aid with id: ${aid.id}.`);
+      }
     }
   }
 }

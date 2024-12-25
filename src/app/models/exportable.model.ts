@@ -1,5 +1,7 @@
+import { Table } from 'dexie';
+
 export interface Exportable {
-  export: () => Promise<boolean>;
+  export: (tableNames?: Array<string> | 'full') => Promise<boolean>;
 }
 
 export function maskProperty<T>(

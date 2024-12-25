@@ -9,8 +9,25 @@
           [routerLink]="['./editors', 'schedule-builder']">
           Schedule builder
         </a>
+        <a
+          mat-menu-item
+          [routerLink]="['./reports', '1']">
+          Reports
+        </a>
+        <a
+          mat-menu-item
+          [routerLink]="['../', 1]">
+          Schedule 1
+        </a>
+        <a
+          mat-menu-item
+          [routerLink]="['../', 2]">
+          Schedule 2
+        </a>
       </ng-template>
     </mat-menu>
+
+    <button (click)="export()">Current Schedule Id: {{currentSchedule()}}</button>
 
     <button mat-button [matMenuTriggerFor]="configurationNavigationMenu">Configuration</button>
     <mat-menu #configurationNavigationMenu="matMenu">
@@ -37,6 +54,8 @@
          euResizer
          [panelOne]="leftPanel" [panelTwo]="rightPanel"
          [(panelOneState)]="panelOneState" [(panelTwoState)]="panelTwoState"
+         (splitLocationPercentChange)="splitChange($event)"
+         [splitLocationPercent]="splitPercent()"
     >
       @if (!resizeHandle.classList.contains('slim-resize-handle')) {
         @if (panelOneState === 'open') {

@@ -1,6 +1,6 @@
 import {
   Directive,
-  effect,
+  effect, EffectRef,
   ElementRef,
   HostListener,
   input,
@@ -8,7 +8,7 @@ import {
   model,
   ModelSignal,
   OnDestroy,
-  Renderer2
+  Renderer2,
 } from '@angular/core';
 import { Delta, ElementSize, PanelState, SplitDirection } from './resizer.models';
 
@@ -86,9 +86,12 @@ export class ResizerDirective implements OnDestroy {
    */
   public readonly minSize: InputSignal<ElementSize> = input<ElementSize>('20px');
 
-  /* Output Signals */
+  /* Model Signals */
   public readonly panelOneState: ModelSignal<PanelState> = model<PanelState>('open');
   public readonly panelTwoState: ModelSignal<PanelState> = model<PanelState>('open');
+  public readonly splitLocationPercent: ModelSignal<number> = model<number>(0.50, {
+    debugName: 'testDebug'
+  });
 
   private mouseMoveListenerDestructor?: () => void;
   private documentMouseUpListenerDestructor?: () => void;
@@ -112,6 +115,8 @@ export class ResizerDirective implements OnDestroy {
       }
     }
   });
+
+  private readonly initialSplitPositionEffectRef?: EffectRef;
 
   @HostListener('mousedown', ['$event'])
   public onMouseDown(event: MouseEvent): void {
@@ -177,7 +182,7 @@ export class ResizerDirective implements OnDestroy {
           this.closePanel(this.panelOne(), this.panelTwo());
           break;
       }
-    }, { allowSignalWrites: true });
+    });
 
     effect(() => {
       const panelTwoState = this.panelTwoState();
@@ -190,12 +195,23 @@ export class ResizerDirective implements OnDestroy {
           this.closePanel(this.panelTwo(), this.panelOne());
           break;
       }
-    }, { allowSignalWrites: true });
+    });
+
+    this.initialSplitPositionEffectRef = effect(() => {
+      console.log('initial resize', this.splitLocationPercent());
+      if (this.splitLocationPercent() <= 1 && this.splitLocationPercent() >= 0) {
+        this.splitPanels(this.splitLocationPercent());
+      }
+
+      // Only trigger the check once.
+      this.initialSplitPositionEffectRef?.destroy();
+    });
   }
 
   public ngOnDestroy(): void {
     this.panelResizeObserver.disconnect();
     this.removeMouseMoveEventHandlers();
+    this.initialSplitPositionEffectRef?.destroy();
   }
 
   private setState(event: MouseEvent): void {
@@ -230,28 +246,44 @@ export class ResizerDirective implements OnDestroy {
 
   private resizePanelsAndMoveHandle(initialState: ResizePanelInitialState, delta: Delta): void {
     switch (this.splitDirection()) {
-      case 'horizontal':
+      case 'horizontal': {
         this.elementRef.nativeElement.style.left = `${initialState.handle.offsetLeft + delta.deltaX}px`;
         this.panelOne().style.width = `${initialState.panel1.initialWidth + delta.deltaX}px`;
         this.panelTwo().style.width = `${initialState.panel2.initialWidth - delta.deltaX}px`;
+
+        const panelOneWidth = this.panelOne().getBoundingClientRect().width;
+        const panelTwoWidth = this.panelTwo().getBoundingClientRect().width;
+
+        this.splitLocationPercent.set(panelOneWidth / (panelOneWidth + panelTwoWidth));
         break;
-      case 'vertical':
+      }
+      case 'vertical': {
         this.elementRef.nativeElement.style.top = `${initialState.handle.offsetTop + delta.deltaY}px`;
         this.panelOne().style.height = `${initialState.panel1.initialHeight + delta.deltaY}px`;
         this.panelTwo().style.height = `${initialState.panel2.initialHeight - delta.deltaY}px`;
         break;
+      }
     }
+
+    // this.splitLocationPercent.set(50);
   }
 
   private splitEvenly(): void {
+    this.splitPanels(0.5);
+  }
+
+  private splitPanels(splitPercent: number): void {
+    const panelOnePercent = Math.floor(splitPercent * 100);
+    const panelTwoPercent = 100 - panelOnePercent;
+
     switch (this.splitDirection()) {
       case 'horizontal':
-        this.panelOne().style.width = '50%';
-        this.panelTwo().style.width = '50%';
+        this.panelOne().style.width = `${panelOnePercent}%`;
+        this.panelTwo().style.width = `${panelTwoPercent}%`;
         break;
       case 'vertical':
-        this.panelOne().style.height = '50%';
-        this.panelTwo().style.height = '50%';
+        this.panelOne().style.height = `${panelOnePercent}%`;
+        this.panelTwo().style.height = `${panelTwoPercent}%`;
         break;
     }
 

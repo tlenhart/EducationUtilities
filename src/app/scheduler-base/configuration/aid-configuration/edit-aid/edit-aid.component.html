@@ -2,9 +2,22 @@
 <pre>
 {{currentAid() | json}}
 </pre>
-<mat-form-field class="name">
-  <input
-    matInput
-    #nameInput
-    (input)="updateAidName(nameInput.value)">
-</mat-form-field>
+@if (currentAid(); as currentAid) {
+  <form [formGroup]="editAidForm">
+    <mat-form-field class="name">
+      <mat-label>Update Aid Name</mat-label>
+      <input
+        matInput
+        [formControl]="editAidForm.controls.name">
+    </mat-form-field>
+
+    <eu-availability [id]="currentAid.id" [formControl]="editAidForm.controls.schedule" />
+  </form>
+}
+
+<div>
+  Current Availability:
+  {{currentAid()?.schedule | json}}
+</div>
+
+<button (click)="reset()">Reset</button>

@@ -1,3 +1,10 @@
-<div>
-  Teacher: {{id()}}.
-</div>
+<!--<div>-->
+<!--  Teacher: {{teacherStore.selectedEntityId()}}.-->
+<!--</div>-->
+
+<form>
+  <mat-form-field>
+    <mat-label>Teacher name.</mat-label>
+    <input matInput [formControl]="teacherName">
+  </mat-form-field>
+</form>

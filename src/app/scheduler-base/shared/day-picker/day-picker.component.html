@@ -1,0 +1,14 @@
+<ul
+  cdkListbox
+  cdkListboxMultiple
+  cdkListboxOrientation="horizontal"
+  [cdkListboxDisabled]="isDisabled()"
+  [(ngModel)]="days"
+  [attr.aria-label]="ariaLabel()"
+  class="day-picker-listbox"
+  [class.disabled]="isDisabled()">
+  <!--[attr.aria-labelledby]="pickerLabelIdSuffix()"-->
+  @for (day of daysOfWeek(); track day) {
+    <li [cdkOption]="day" class="day-of-week-option" [class.disabled]="isDisabled()">{{day | dayOfWeekEnum:true}}</li>
+  }
+</ul>

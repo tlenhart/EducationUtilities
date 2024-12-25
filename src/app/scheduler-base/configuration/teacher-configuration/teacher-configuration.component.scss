@@ -1,0 +1,14 @@
+@use '@angular/material' as mat;
+
+.person-action-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-primary),
+    state-layer-color: var(--mat-sys-primary),
+    //ripple-color: var(--mat-sys-primary),
+  ));
+}

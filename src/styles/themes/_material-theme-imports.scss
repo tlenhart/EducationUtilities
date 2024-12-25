@@ -17,6 +17,7 @@
 
   @include mat.expansion-theme($theme);
   @include mat.tabs-theme($theme);
+  @include mat.divider-theme($theme);
 
   @include additional-colors($theme);
 

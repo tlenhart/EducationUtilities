@@ -1,0 +1,9 @@
+<div>
+  @for (schedule of scheduleStore.entities(); track schedule.id) {
+    <a [routerLink]="['../', 'schedule', schedule.id]">{{ schedule.title }} {{ schedule.id }}</a>
+  }
+</div>
+
+<div>
+  <button (click)="addSchedule()">Add Schedule</button>
+</div>

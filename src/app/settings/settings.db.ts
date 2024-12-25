@@ -2,6 +2,7 @@ import Dexie, { Table } from 'dexie';
 import { Exportable } from '../models/exportable.model';
 import { NewGlobalSettings } from './settings.model';
 import { globalUserSettingsDefaults } from './settings.store';
+import { filterTables } from '../utils/db.utils';
 
 let count = 0;
 
@@ -29,12 +30,13 @@ export class SettingsDb extends Dexie implements Exportable {
     });
   }
 
-  public async export(): Promise<boolean> {
+  public async export(tableNames?: Array<string> | 'full'): Promise<boolean> {
     try {
       const exportData: Record<string, unknown> = {};
       // const settings = await this.settings.toArray();
 
-      for (const table of this.tables) {
+      const filteredTables: Array<Table> = filterTables(this.tables, tableNames);
+      for (const table of filteredTables) {
         const tableContents = await table.toArray();
         exportData[table.name] = tableContents;
       }
