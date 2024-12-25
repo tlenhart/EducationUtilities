@@ -22,7 +22,7 @@ export class AidConfigurationComponent implements OnInit {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
   public ngOnInit(): void {
-    this.aidStore.loadAids();
+    // this.aidStore.loadAids();
   }
 
   public async selectPerson(aid: Person | Aid | null): Promise<void> {
