@@ -1,5 +1,28 @@
+.side-nav-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 100%;
+}
+
 .navigation-link-contents {
   display: flex;
   align-content: center;
   gap: var(--eu-icon-content-gap);
+}
+
+.version-info:has(.version-icon) {
+  display: flex;
+  justify-content: center;
+}
+
+.unstyled-button {
+  all: unset;
+  user-select: text;
+  cursor: pointer;
+}
+
+.small-version-info {
+  font-size: 0.75em;
 }

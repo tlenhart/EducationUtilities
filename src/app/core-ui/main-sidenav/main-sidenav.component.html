@@ -1,22 +1,57 @@
-<mat-nav-list aria-label="Navigation for different utilities.">
-  @for(route of routes(); track route.path) {
-    <a
-      mat-list-item
-      [routerLink]="route.path"
-      routerLinkActive
-      #rla="routerLinkActive"
-      [activated]="rla.isActive"
-      ariaCurrentWhenActive="page"
-      class="navigation-link">
-      <!--[routerLinkActiveOptions]="{ exact: true }"-->
-      <span class="navigation-link-contents">
-        <mat-icon aria-hidden="false" [attr.aria-label]="route.name">
-          {{route.icon}}
+<mat-nav-list aria-label="Navigation for different utilities." class="side-nav-list">
+  <div class="utility-links">
+    @for(route of routes(); track route.path) {
+      <a
+        mat-list-item
+        [routerLink]="route.path"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+        ariaCurrentWhenActive="page"
+        class="navigation-link">
+        <!--[routerLinkActiveOptions]="{ exact: true }"-->
+        <span class="navigation-link-contents">
+          <mat-icon aria-hidden="false" [attr.aria-label]="route.name">
+            {{route.icon}}
+          </mat-icon>
+          @if (sidenavService.style() !== 'slim') {
+            {{route.name}}
+          }
+        </span>
+      </a>
+    }
+  </div>
+  <div class="version-info">
+    @if (sidenavService.style() !== 'slim') {
+      <div class="inline-version-info">
+        <button
+                class="unstyled-button"
+                aria-label="Click to copy version information."
+                (click)="copyVersionInformation()"
+                matTooltip="Click to copy version information."
+                matTooltipPosition="above">
+          <div class="small-version-info">
+            Version: {{appVersionService.version().gitVersion}}
+          </div>
+          <div class="small-version-info">
+            Build Date: {{appVersionService.version().buildDate}}
+          </div>
+        </button>
+      </div>
+    } @else {
+      <button
+              mat-icon-button
+              [attr.aria-label]="appVersionService.multiLineVersionMessageClickToCopy()"
+              (click)="copyVersionInformation()"
+              [matTooltip]="appVersionService.multiLineVersionMessageClickToCopy()"
+              matTooltipPosition="above"
+              matTooltipClass="multi-line-tooltip skip-line-wrap">
+        <mat-icon class="version-icon"
+                  aria-hidden="false"
+                  [attr.aria-label]="appVersionService.versionMessage()">
+          info
         </mat-icon>
-        @if (sidenavService.style() !== 'slim') {
-          {{route.name}}
-        }
-      </span>
-    </a>
-  }
+      </button>
+    }
+  </div>
 </mat-nav-list>

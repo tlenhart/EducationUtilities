@@ -56,6 +56,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   //@include mat.button-color(m3-theme.$dark-theme, $color-variant: tertiary);
 }
 
+.multi-line-tooltip {
+  white-space: pre-line;
+
+  &.skip-line-wrap {
+    white-space: pre;
+
+    // Increase the size of the tooltip to fit the content.
+    .mat-mdc-tooltip-surface {
+      max-width: fit-content;
+    }
+  }
+}
+
 // Print Settings.
 // ? Add the .print-area class to an element.
 // ? Add the .ignore-print class to an element to exclude it from printing.

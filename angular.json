@@ -87,7 +87,13 @@
               "baseHref": "/",
               "extractLicenses": true,
               "subresourceIntegrity": true,
-              "serviceWorker": "ngsw-config.json"
+              "serviceWorker": "ngsw-config.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/app-version.ts",
+                  "with": "src/environments/app-version.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
