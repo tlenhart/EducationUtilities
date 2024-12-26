@@ -8,6 +8,7 @@
     "build:local": "ng build --stats-json --source-map",
     "watch": "ng build --watch --configuration development",
     "lint": "ng lint",
+    "prebuild": "tsx --tsconfig build/tsconfig.json ./build/pre-build.ts",
     "postinstall": "tsx --tsconfig build/tsconfig.json ./build/post-install.ts",
     "postbuild": "tsx --tsconfig build/tsconfig.json ./build/build.ts",
     "postbuild:local": "tsx --tsconfig build/tsconfig.json ./build/build.ts"
