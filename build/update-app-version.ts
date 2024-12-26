@@ -37,7 +37,7 @@ export const appVersion: AppVersion = { packageJsonVersion, gitVersion, buildDat
 
   const prodVersionDir = await fs.realpath('./src/environments/');
 
-  await fs.writeFile(`${prodVersionDir}/version.prod.ts`, versionFileContent, { encoding: 'utf8', flag: 'w' });
+  await fs.writeFile(`${prodVersionDir}/app-version.prod.ts`, versionFileContent, { encoding: 'utf8', flag: 'w' });
 }
 
 export { updateAppVersion };
