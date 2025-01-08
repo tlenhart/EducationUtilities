@@ -31,10 +31,10 @@
                 matTooltip="Click to copy version information."
                 matTooltipPosition="above">
           <div class="small-version-info">
-            Version: {{appVersionService.version().gitVersion}}
+            Version: {{appVersionService.version().appVersion.gitVersion}}
           </div>
           <div class="small-version-info">
-            Build Date: {{appVersionService.version().buildDate}}
+            Build Date: {{appVersionService.version().appVersion.buildDate}}
           </div>
         </button>
       </div>
