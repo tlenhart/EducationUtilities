@@ -17,4 +17,5 @@ export interface AngularHashVersion {
 export interface FullVersionInfo {
   appVersion: AppVersion;
   angularVersion: AngularHashVersion;
+  userAgent: string;
 }
