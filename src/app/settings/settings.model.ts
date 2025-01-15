@@ -5,6 +5,7 @@ export interface NewGlobalSettings {
   // id: number; // May not be needed.
   name: 'user' | 'default';
   schedulerSettings: SchedulerSettings;
+  feedbackSettings: FeedbackSettings;
 }
 
 export interface Setting_New<T> {
@@ -34,4 +35,10 @@ export interface SchedulerSettings {
   date: ScheduleDateSettings;
   calendar: ScheduleCalendarSettings;
   panelSplitPercentage: number;
+}
+
+export interface FeedbackSettings {
+  secret: string;
+  showSecret: boolean;
+  enabled: boolean;
 }

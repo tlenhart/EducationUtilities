@@ -21,37 +21,62 @@
       </a>
     }
   </div>
-  <div class="version-info">
-    @if (sidenavService.style() !== 'slim') {
-      <div class="inline-version-info">
-        <button
-                class="unstyled-button"
-                aria-label="Click to copy version information."
-                (click)="copyVersionInformation()"
-                matTooltip="Click to copy version information."
-                matTooltipPosition="above">
-          <div class="small-version-info">
-            Version: {{appVersionService.version().appVersion.gitVersion}}
-          </div>
-          <div class="small-version-info">
-            Build Date: {{appVersionService.version().appVersion.buildDate}}
-          </div>
+  <div class="sidebar-lower-content">
+    <!-- Feedback Icon/Button -->
+    <div class="feedback-container">
+      @if (sidenavService.style() !== 'slim') {
+        <button mat-flat-button (click)="openFeedbackDialog()" class="feedback-button">
+          <mat-icon class="feedback-icon"
+                    aria-hidden="false"
+                    aria-label="Submit feedback">
+            feedback
+          </mat-icon>
+          <span class="feedback-text">Feedback</span>
         </button>
-      </div>
-    } @else {
-      <button
-              mat-icon-button
-              [attr.aria-label]="appVersionService.multiLineVersionMessageClickToCopy()"
-              (click)="copyVersionInformation()"
-              [matTooltip]="appVersionService.multiLineVersionMessageClickToCopy()"
-              matTooltipPosition="above"
-              matTooltipClass="multi-line-tooltip skip-line-wrap">
-        <mat-icon class="version-icon"
-                  aria-hidden="false"
-                  [attr.aria-label]="appVersionService.versionMessage()">
-          info
-        </mat-icon>
-      </button>
-    }
+      } @else {
+        <button mat-icon-button (click)="openFeedbackDialog()" class="feedback-button">
+          <mat-icon class="feedback-icon"
+                    aria-hidden="false"
+                    aria-label="Submit feedback">
+            feedback
+          </mat-icon>
+        </button>
+      }
+    </div>
+
+    <!-- Version Info -->
+    <div class="version-info">
+      @if (sidenavService.style() !== 'slim') {
+        <div class="inline-version-info">
+          <button
+                  class="unstyled-button"
+                  aria-label="Click to copy version information."
+                  (click)="copyVersionInformation()"
+                  matTooltip="Click to copy version information."
+                  matTooltipPosition="after">
+            <div class="small-version-info">
+              Version: {{appVersionService.version().appVersion.gitVersion}}
+            </div>
+            <div class="small-version-info">
+              Build Date: {{appVersionService.version().appVersion.buildDate}}
+            </div>
+          </button>
+        </div>
+      } @else {
+        <button
+                mat-icon-button
+                [attr.aria-label]="appVersionService.multiLineVersionMessageClickToCopy()"
+                (click)="copyVersionInformation()"
+                [matTooltip]="appVersionService.multiLineVersionMessageClickToCopy()"
+                matTooltipPosition="after"
+                matTooltipClass="multi-line-tooltip skip-line-wrap">
+          <mat-icon class="version-icon"
+                    aria-hidden="false"
+                    [attr.aria-label]="appVersionService.versionMessage()">
+            info
+          </mat-icon>
+        </button>
+      }
+    </div>
   </div>
 </mat-nav-list>

@@ -8,7 +8,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { AgentType } from 'clippy.modern';
 import { SettingsService } from '../core/settings/settings.service';
 import { ClippySettings, GlobalSettingFormGroup, GlobalSettings, TooltipSettings, Versioned } from '../models';
-import { buildFormControlDefaults, buildIndividualFormControlData } from '../utils/form-utils';
+import { buildFormControlDefaults, buildIndividualFormControlData } from '../utils/form.utils';
 
 type ClippySettingsFormValues = { [J in keyof GlobalSettingFormGroup<ClippySettings>]: ClippySettings[J]['value'] };
 type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSettings>]: TooltipSettings[J]['value'] };

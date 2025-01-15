@@ -5,6 +5,7 @@
   @include mat.toolbar-theme($theme);
   @include mat.list-theme($theme);
   @include mat.menu-theme($theme);
+  @include mat.dialog-theme($theme);
 
   @include mat.slide-toggle-theme($theme);
   @include mat.button-theme($theme);

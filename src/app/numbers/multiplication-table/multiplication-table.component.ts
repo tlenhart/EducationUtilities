@@ -40,7 +40,7 @@ import {
 } from '../../models/forms.types';
 import { DocumentActionsComponent } from '../../shared/document-actions/document-actions.component';
 import { buildColorsArray } from '../../utils/color.utils';
-import { arrayToArrayOfFormControls } from '../../utils/form-utils';
+import { arrayToArrayOfFormControls } from '../../utils/form.utils';
 import { multiplicationTableNumberGenerator } from '../../utils/number-utils';
 import { NumberGridComponent } from '../number-grid/number-grid.component';
 import {
