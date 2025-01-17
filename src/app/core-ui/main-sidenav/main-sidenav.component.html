@@ -7,6 +7,8 @@
         routerLinkActive
         #rla="routerLinkActive"
         [activated]="rla.isActive"
+        [matTooltip]="sidenavService.style() === 'slim' ? route.name : ''"
+        matTooltipPosition="right"
         ariaCurrentWhenActive="page"
         class="navigation-link">
         <!--[routerLinkActiveOptions]="{ exact: true }"-->
@@ -25,7 +27,10 @@
     <!-- Feedback Icon/Button -->
     <div class="feedback-container">
       @if (sidenavService.style() !== 'slim') {
-        <button mat-flat-button (click)="openFeedbackDialog()" class="feedback-button">
+        <button
+          mat-flat-button
+          (click)="openFeedbackDialog()"
+          class="feedback-button">
           <mat-icon class="feedback-icon"
                     aria-hidden="false"
                     aria-label="Submit feedback">
@@ -34,7 +39,12 @@
           <span class="feedback-text">Feedback</span>
         </button>
       } @else {
-        <button mat-icon-button (click)="openFeedbackDialog()" class="feedback-button">
+        <button
+          mat-icon-button
+          matTooltip="Feedback"
+          matTooltipPosition="right"
+          (click)="openFeedbackDialog()"
+          class="feedback-button">
           <mat-icon class="feedback-icon"
                     aria-hidden="false"
                     aria-label="Submit feedback">
