@@ -15,7 +15,7 @@
       [ngClass]="{ 'slim': sidenavStyle() === 'slim' }"
     >
       @defer (on idle) {
-        <app-main-sidenav [routes]="routes"></app-main-sidenav>
+        <app-main-sidenav [routes]="routes()"></app-main-sidenav>
       }
     </mat-sidenav>
     <mat-sidenav-content id="sidenav-content">

@@ -35,7 +35,7 @@ import { FormattedNumberTableConfig, FormattedNumberValue } from '../../models';
 import { NumberFormConfig, NumberFormForm } from '../../models/forms.types';
 import { DocumentActionsComponent } from '../../shared/document-actions/document-actions.component';
 import { buildColorsArray } from '../../utils/color.utils';
-import { arrayToArrayOfFormControls } from '../../utils/form-utils';
+import { arrayToArrayOfFormControls } from '../../utils/form.utils';
 import { formattedSequentialNumberGenerator } from '../../utils/number-utils';
 import { isNotValueValidator, numberTableConfigValidator, VALIDATION_ERROR_KEYS } from '../../validators';
 import { NumberGridComponent } from '../number-grid/number-grid.component';

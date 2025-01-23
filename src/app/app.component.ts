@@ -2,13 +2,13 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
-import { Route, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
-import { routes } from './app.routes';
 import { ClippyComponent } from './core-ui/clippy/clippy.component';
 import { LoaderComponent } from './core-ui/loader/loader.component';
 import { MainSidenavComponent } from './core-ui/main-sidenav/main-sidenav.component';
 import { MainToolbarComponent } from './core-ui/main-toolbar/main-toolbar.component';
+import { AppLocationService } from './core/app-location/app-location.service';
 import { GlobalUIService } from './core/app-sidenav-service/global-ui.service';
 import { DeviceTypeService } from './core/device-type/device-type.service';
 import { GlobalSettingEnabledPipe } from './core/settings/setting-enabled/global-setting-enabled.pipe';
@@ -29,8 +29,9 @@ import { SettingsStore } from './settings/settings.store';
 })
 export class AppComponent implements OnInit {
   public title = 'EducationUtilities';
-  public routes: Array<AppRoute> = [];
+  public readonly routes: Signal<ReadonlyArray<AppRoute>>;
   public readonly isHandset$: Observable<boolean>;
+  private readonly appLocationService: AppLocationService = inject(AppLocationService);
   private readonly deviceTypeService: DeviceTypeService = inject(DeviceTypeService);
   private readonly globalUIService: GlobalUIService = inject(GlobalUIService);
   private readonly settingsService: SettingsService = inject(SettingsService);
@@ -55,29 +56,7 @@ export class AppComponent implements OnInit {
 
     this.sidenavStyle = this.globalUIService.style;
 
-    // Just look at the root routes to determine primary routing.
-    this.routes = [
-      ...routes.map((route: Route): AppRoute | null => {
-        // ! Something like this may be needed if/when child routes are added.
-        // if (!route.path && route.path !== '') {
-        //   return null;
-        // }
-        switch (route.path) {
-          case undefined:
-          case ('**'):
-          case (''): {
-            return null;
-          }
-          default: {
-            return {
-              path: `/${route.path}`,
-              name: `${route.path[0].toLocaleUpperCase()}${route.path.slice(1).replace('-', ' ')}`,
-              icon: (route.data?.['icon']) as string | undefined ?? 'error',
-            };
-          }
-        }
-      }).filter((value: AppRoute | null) => value !== null),
-    ];
+    this.routes = this.appLocationService.routes;
 
     this.isHandset$ = this.deviceTypeService.isHandset$;
   }

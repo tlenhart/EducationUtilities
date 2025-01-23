@@ -23,7 +23,7 @@ import {
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
-import { arrayToArrayOfFormControls } from '../../../utils/form-utils';
+import { arrayToArrayOfFormControls } from '../../../utils/form.utils';
 import {
   ControlValueAccessorDefaultChangeMethods
 } from '../../models/control-value-accessor-default-change-methods.model';

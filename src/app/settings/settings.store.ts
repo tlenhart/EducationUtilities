@@ -43,6 +43,11 @@ export const globalUserSettingsDefaults: Readonly<NewGlobalSettings> = {
     },
     panelSplitPercentage: 0.50,
   },
+  feedbackSettings: {
+    showSecret: false,
+    enabled: true,
+    secret: '',
+  },
 };
 
 // export type NewGlobalSettings_Defaults = NewGlobalSettings;
@@ -92,7 +97,33 @@ export const SettingsStore = signalStore(
           panelSplitPercentage: percent,
         },
       }));
-    }
+    },
+    enableDisableFeedback(enabled: boolean): void {
+      patchState(store, (state) => ({
+        feedbackSettings: {
+          ...state.feedbackSettings,
+          enabled: enabled,
+        },
+      }));
+    },
+    updateSecret(secret: string): void {
+      // Storing and updating the secret this way isn't the most secure, but the secret does stay local to the device,
+      //  and the scope of current users is 1
+      patchState(store, (state) => ({
+        feedbackSettings: {
+          ...state.feedbackSettings,
+          secret: secret,
+        },
+      }));
+    },
+    showHideFeedbackSecret(show: boolean): void {
+      patchState(store, (state) => ({
+        feedbackSettings: {
+          ...state.feedbackSettings,
+          showSecret: show,
+        },
+      }));
+    },
   })),
   // withComputed(({ schedulerSettings }) => ({
   //   schedulerDayStart: computed(() => Temporal.PlainTime.from(schedulerSettings.time.dayStart())),

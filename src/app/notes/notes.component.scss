@@ -1,0 +1,46 @@
+:host {
+  $margin-spacing: 2.2em;
+
+  height: calc(100vh - #{$margin-spacing * 2});
+  max-height: calc(100vh - #{$margin-spacing * 2});
+  width: 100%;
+  display: flex;
+}
+
+.notes-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  justify-content: space-between;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+
+  .note-control {
+    width: calc(100% - 2em);
+    margin: 0 1em;
+  }
+}
+
+.show-notes-table {
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.button-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}

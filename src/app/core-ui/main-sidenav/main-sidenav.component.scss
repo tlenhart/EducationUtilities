@@ -12,9 +12,23 @@
   gap: var(--eu-icon-content-gap);
 }
 
-.version-info:has(.version-icon) {
+.sidebar-lower-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.feedback-container {
+  .feedback-button:has(.feedback-text) {
+    width: 100%;
+  }
+}
+
+.version-info, .feedback-container {
+  &:has(.version-icon, .feedback-icon) {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .unstyled-button {

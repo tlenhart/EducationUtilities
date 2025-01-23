@@ -1,0 +1,134 @@
+<h2 mat-dialog-title>Submit Feedback</h2>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="feedbackForm" class="feedback-form">
+
+    <!-- Type -->
+    <div class="form-control-container feedback-type-container">
+      <label id="feedback-type-label" for="feedback-type-radio-group">Type of feedback</label>
+      <mat-radio-group
+        id="feedback-type-radio-group"
+        class="feedback-type-group"
+        aria-labelledby="feedback-type-label"
+        formControlName="type">
+        @for (feedbackType of feedbackTypes(); track feedbackType) {
+          <mat-radio-button [value]="feedbackType" [aria-label]="(feedbackType | titlecase) + ' feedback'">
+            <span class="feedback-radio-text">{{feedbackType | titlecase}}</span>
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    </div>
+
+    <!-- Category -->
+    <mat-form-field>
+      <mat-label>Utility/Category</mat-label>
+      <mat-select formControlName="utility" id="feedback-utility-input">
+        @for (route of routes(); track route.path) {
+          <mat-option [value]="route.name">{{route.name | titlecase}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Feedback Message -->
+    <mat-form-field class="feedback-message">
+      <mat-label>
+        @switch (feedbackForm.controls.type.value) {
+          @case ('bug') {
+            Reproduction Steps
+          }
+          @case ('feature') {
+            Feature Details
+          }
+          @default {
+            Feedback Message
+          }
+        }
+      </mat-label>
+      <textarea
+        rows="10"
+        matInput
+        formControlName="feedbackMessage"
+        [placeholder]="feedbackForm.controls.type.value === 'bug' ? 'Steps to reproduce the bug' : 'Feature Details'">
+      </textarea>
+      @if (feedbackForm.controls.feedbackMessage.hasError('required')) {
+        <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Secret -->
+    <mat-form-field>
+      <mat-label>Secret</mat-label>
+      <input
+        formControlName="secret"
+        matInput
+        autocomplete="off"
+        [type]="settingsStore.feedbackSettings.showSecret() ? 'text' : 'password'"/>
+      <!--autocomplete="new-password"-->
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="showHideFeedback($event)"
+        [attr.aria-label]="settingsStore.feedbackSettings.showSecret() ? 'Hide secret' : 'Show Secret'"
+        [attr.aria-pressed]="!settingsStore.feedbackSettings.showSecret()"
+        [disabled]="submitting()">
+        <mat-icon aria-hidden="false" aria-label="Click to show/hide secret">
+          {{ settingsStore.feedbackSettings.showSecret() ? 'visibility' : 'visibility_off' }}
+        </mat-icon>
+      </button>
+      @if (feedbackForm.controls.secret.hasError('required')) {
+        <mat-error>Secret is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Does not contain private information checkbox -->
+    <mat-checkbox
+      formControlName="doesNotContainPrivateInformation"
+      class="assert-no-private-checkbox">
+      <span class="no-assert-text">
+        <span class="checkbox-text"
+              [ngClass]="{ error: feedbackForm.dirty && feedbackForm.controls.doesNotContainPrivateInformation.hasError('required') }">
+          I assert this feedback does not contain any private information. *
+        </span>
+        <mat-icon
+          [matTooltip]="'Feedback information is publicly visible in the source code repository for this application.\nRequired.'"
+          matTooltipPosition="above"
+          matTooltipClass="multi-line-tooltip skip-line-wrap"
+          (click)="$event.preventDefault()"
+          (keydown)="$event.preventDefault()"
+          (beforeinput)="$event.preventDefault()">
+          info
+        </mat-icon>
+      </span>
+    </mat-checkbox>
+
+  </form>
+
+  @if (submitError()) {
+    <div class="submit-error">
+      Error occurred while submitting feedback form.
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-button
+    mat-dialog-close
+    type="button"
+    [disabled]="submitting()">
+    Cancel
+  </button>
+  <button
+    mat-button
+    class="submit-button"
+    (click)="submitFeedback()"
+    type="submit"
+    [disabled]="submitting() || feedbackForm.invalid">
+    <span class="submit-button-text">
+      Submit
+      @if (submitting()) {
+        <mat-spinner [diameter]="20" matSuffix></mat-spinner>
+      }
+    </span>
+  </button>
+</mat-dialog-actions>

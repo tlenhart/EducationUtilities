@@ -20,6 +20,7 @@ export class AppVersionService implements OnDestroy {
     return {
       appVersion: this.currentVersion(),
       angularVersion: this.currentAngularHashVersion(),
+      userAgent: navigator.userAgent,
     };
   });
   public readonly versionMessage: Signal<string> = computed(() => `Version: ${this.currentVersion().gitVersion}. Build Date: ${this.currentVersion().buildDate}`);
