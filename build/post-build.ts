@@ -5,12 +5,17 @@
 
 import fs from 'node:fs/promises';
 import { removeSoundFromAllAgents } from './remove-sound-from-agent';
+import { copy3rdPartyLicenses } from './copy-3rd-party-licenses';
 
 async function postBuild(): Promise<void> {
   // Get no-sound agent directories.
   const baseDirectory: string = await fs.realpath('./dist/education-utilities/browser/agents-no-sound');
 
   await removeSoundFromAllAgents(baseDirectory);
+
+  const thirdPartyLicenseDirectory: string = await fs.realpath('./dist/education-utilities');
+
+  await copy3rdPartyLicenses(thirdPartyLicenseDirectory);
 }
 
 export { postBuild };
