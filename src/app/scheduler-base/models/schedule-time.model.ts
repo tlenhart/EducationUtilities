@@ -86,6 +86,10 @@ export type DbEntryWithTemporalType<T> = {
   [K in keyof T]: T[K] extends Temporal.PlainTime ? string : T[K];
 };
 
+export type DbEntryWithZonedTemporalType<T> = {
+  [K in keyof T]: T[K] extends Temporal.ZonedDateTime ? string : T[K];
+};
+
 export function availabilityIsScheduleTimeArray(schedule: Array<ScheduleTime> | Array<DbEntryWithTemporalType<ScheduleTime>> | undefined): schedule is Array<ScheduleTime> {
   if (Array.isArray(schedule) && schedule.length > 0) {
     if (typeof schedule[0] === 'string') {
