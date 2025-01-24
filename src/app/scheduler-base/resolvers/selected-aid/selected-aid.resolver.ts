@@ -22,4 +22,4 @@ export const selectedAidResolver: ResolveFn<boolean> = async (route: ActivatedRo
   }
 
   return false;
-}
+};

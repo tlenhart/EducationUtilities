@@ -40,7 +40,7 @@ addEventListener('message', ({ data }: MessageEvent<{
     })();
   } else if (data.eventType === 'export') {
     void (async () => {
-      const result = await settingsDb.export();
+      const result = await settingsDb.exportDb();
       console.warn('result', result);
     })();
   }

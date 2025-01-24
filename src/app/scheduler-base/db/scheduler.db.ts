@@ -28,7 +28,7 @@ export class SchedulerDb extends Dexie implements Exportable {
 
     this.on('populate', () => this.populate());
   }
-  public async export(tableNames?: Array<string> | 'full'): Promise<boolean> {
+  public async exportDb(tableNames?: Array<string> | 'full'): Promise<boolean> {
     let result: boolean = false;
     const incrementor = getIncrementor();
     try {

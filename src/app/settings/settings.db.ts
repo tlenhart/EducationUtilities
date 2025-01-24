@@ -30,7 +30,7 @@ export class SettingsDb extends Dexie implements Exportable {
     });
   }
 
-  public async export(tableNames?: Array<string> | 'full'): Promise<boolean> {
+  public async exportDb(tableNames?: Array<string> | 'full'): Promise<boolean> {
     try {
       const exportData: Record<string, unknown> = {};
       // const settings = await this.settings.toArray();

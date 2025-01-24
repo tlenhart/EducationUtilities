@@ -39,7 +39,7 @@ addEventListener('message', ({ data }: MessageEvent<DbWorkerModification<Teacher
     })();
   } else if (data.eventType === 'export') {
     void (async () => {
-      const result = await schedulerDb.export(data.tables);
+      const result = await schedulerDb.exportDb(data.tables);
       console.warn('export teacher result', result);
     })();
   } else if (data.eventType === 'delete') {

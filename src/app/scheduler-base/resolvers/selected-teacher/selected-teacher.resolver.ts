@@ -18,8 +18,8 @@ export const selectedTeacherResolver: ResolveFn<boolean> = async (route: Activat
       }
     }
 
-    return setSelectedSuccess
+    return setSelectedSuccess;
   }
 
   return false;
-}
+};
