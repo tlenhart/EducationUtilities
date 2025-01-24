@@ -58,7 +58,7 @@ export class SchedulerBaseComponent implements OnDestroy {
     this.settingsStore.updateSchedulerPanelSplitPercent(splitPercentage);
   }
 
-  public export(): void {
-    this.settingsStore.exportSettings();
+  public async export(): Promise<void> {
+    await this.settingsStore.exportSettings();
   }
 }

@@ -1,12 +1,9 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
-import { AidStore } from './stores/aid.store';
 import { ScheduleStore } from './stores/schedule.store';
 
 export const scheduleIdResolver: ResolveFn<boolean> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const scheduleStore = inject(ScheduleStore);
-  const aidStore = inject(AidStore);
-  // const studentStore = inject(StudentStore);
 
   // TODO: Figure out how to prevent routing to the new thing and fall back to the dashboard.
   // TODO: Needs setSelectedEntity to be able to check the database first though.

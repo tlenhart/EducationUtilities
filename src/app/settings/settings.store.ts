@@ -11,7 +11,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import Dexie from 'dexie';
 import { from, of, pipe, switchMap, take, tap, throwError } from 'rxjs';
 import { Temporal } from 'temporal-polyfill';
 import { getDaysOfWeek, TemporalDayOfWeek } from '../scheduler-base/models/schedule-time.model';
@@ -182,7 +181,7 @@ function withLoadFromDb() {
                 tapResponse({
                   next: (settings?: NewGlobalSettings) => {
                     // ? Keep?
-                    settingsDb.close();
+                    // settingsDb.close(); // TODO: Re-enable if you start using the background worker.
 
                     if (settings) {
                       patchState(store, settings);
@@ -209,32 +208,23 @@ function withLoadFromDb() {
   );
 }
 
-let settingsDbWorker: Worker | null; // TODO: Maybe pass this into the storeFeature? (And other settings like script path so this can be used elsewhere.)
-function withSaveToDatabase(db?: Dexie) {
+function withSaveToDatabase() {
   return signalStoreFeature(
     withState<Partial<NewGlobalSettings> & Partial<ValuesLoadedFromDb>>({}),
-    withMethods((state) => ({
-      exportSettings(): void {
-        settingsDbWorker?.postMessage({ eventType: 'export' });
+    // withProps((store) => ({
+    //   _settingsDbWorker: typeof Worker !== 'undefined'
+    //     ? new Worker(new URL('./settings.db.worker', import.meta.url), { type: 'module' })
+    //     : null,
+    // } as { _settingsDbWorker: Worker | null })),
+    withMethods((store) => ({
+      async exportSettings(): Promise<void> {
+        // store._settingsDbWorker?.postMessage({ eventType: 'export' });
+        const result = await settingsDb.exportDb();
+        console.warn('result', result);
       },
     })),
     withHooks({
-      // TODO: Get better typing here.
       onInit(store) {
-        // TODO: Store in state instead?
-
-        if (typeof Worker !== 'undefined') {
-          settingsDbWorker = new Worker(new URL('./settings.db.worker', import.meta.url), { type: 'module' });
-          // settingsDbWorker.onmessage = ({ data }: MessageEvent<string>) => {
-          //   // this.updateTableValues.emit(data);
-          //   console.warn('db worker response', data);
-          // };
-        } else {
-          // Web Workers are not supported in this environment.
-          // this.useWorkerFallback = true;
-          settingsDbWorker = null;
-        }
-
         effect(() => {
           // if (store)
           const state = getState(store);
@@ -242,26 +232,30 @@ function withSaveToDatabase(db?: Dexie) {
           if (Object.hasOwn(state, 'hasLoaded') && (state as ValuesLoadedFromDb).hasLoaded) {
             // console.warn('updating in db.');
 
-            if (settingsDbWorker) {
-              settingsDbWorker.postMessage({ eventType: 'update', settings: state });
-            } else {
-              // TODO: Test.
-              // void (async () => {
-              //   await settingsDb.settings.update('user', state);
-              // })();
-            }
+            void (async () => {
+              await settingsDb.settings.update('user', { ...state });
+            })();
+
+            // if (store._settingsDbWorker) {
+            //   store._settingsDbWorker.postMessage({ eventType: 'update', settings: state });
+            // } else {
+            //   // TODO: Test.
+            //   // void (async () => {
+            //   //   await settingsDb.settings.update('user', state);
+            //   // })();
+            // }
           }
         });
       },
-      onDestroy(store) {
-        if (settingsDbWorker) {
-          console.log('destroying worker');
-          // TODO: Consider sending a signal to the worker to terminate itself so the db reference can be closed and the subscription cleaned up.
-          //    Assuming this code is ever called at all.
-          //    Which it might not be because the settings store is global.
-          settingsDbWorker.terminate();
-        }
-      },
+      // onDestroy(store) {
+      //   if (store._settingsDbWorker) {
+      //     console.log('destroying worker');
+      //     // TODO: Consider sending a signal to the worker to terminate itself so the db reference can be closed and the subscription cleaned up.
+      //     //    Assuming this code is ever called at all.
+      //     //    Which it might not be because the settings store is global.
+      //     store._settingsDbWorker.terminate();
+      //   }
+      // },
     }),
   );
 }
