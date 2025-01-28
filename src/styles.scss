@@ -69,6 +69,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+.showTableOnHover {
+  pointer-events: none;
+}
+
 // Print Settings.
 // ? Add the .print-area class to an element.
 // ? Add the .ignore-print class to an element to exclude it from printing.
