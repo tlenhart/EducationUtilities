@@ -13,11 +13,20 @@
   width: 100%;
 
   justify-content: space-between;
+
+  .notes-container {
+    overflow-y: auto;
+  }
+}
+
+.note-form-container {
+  position: sticky;
 }
 
 .note-form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 4px;
 
   .note-control {
     width: calc(100% - 2em);
@@ -27,6 +36,7 @@
 
 .show-notes-table {
   opacity: 0;
+  transition: 500ms;
 
   &:hover {
     opacity: 1;
@@ -37,6 +47,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  position: sticky;
 
   opacity: 0;
 

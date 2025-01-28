@@ -1,3 +1,4 @@
+import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,8 +10,9 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { FormControl, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import {
   MatCell,
@@ -24,6 +26,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
 import { liveQuery } from 'dexie';
 import { from, map } from 'rxjs';
 import { Temporal } from 'temporal-polyfill';
@@ -51,6 +54,10 @@ import { notesDb } from './notes.db';
     MatHeaderRow,
     MatRowDef,
     MatHeaderRowDef,
+    MatIcon,
+    MatIconButton,
+    MatTooltip,
+    CdkCopyToClipboard,
   ],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.scss',
@@ -61,9 +68,10 @@ export class NotesComponent {
   public readonly noteControl: FormControl<string>;
   public readonly saveMessage: WritableSignal<string> = signal('');
   public readonly showNotes: WritableSignal<boolean> = signal(false);
-  public readonly displayedColumns: ReadonlyArray<keyof Note> = [
+  public readonly displayedColumns: ReadonlyArray<keyof Note | 'copyNote'> = [
     'timestamp',
     'content',
+    'copyNote',
   ];
   public readonly noteTextArea: Signal<ElementRef<HTMLTextAreaElement>> = viewChild.required('noteArea');
 
@@ -104,12 +112,17 @@ export class NotesComponent {
     this.showNotes.set(!this.showNotes());
   }
 
+  public copyNoteWithTimestamp(displayNote: DbNote): string {
+    return this.createExportNote(displayNote.timestamp, displayNote.content);
+  }
+
   public async exportNotes(): Promise<void> {
     const allNotes = await notesDb.notes.toArray();
 
     const result: string = allNotes.map((note: DbEntryWithZonedTemporalType<DbNote>) => {
       const timestamp = Temporal.ZonedDateTime.from(note.timestamp).toLocaleString();
-      return `${timestamp}\n${note.content}\n`;
+      return this.createExportNote(timestamp, note.content);
+      // return `${timestamp}\n${note.content}\n`;
     }).join('\n');
 
     const file: Blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
@@ -125,5 +138,9 @@ export class NotesComponent {
     document.body.removeChild(downloadElement);
 
     window.URL.revokeObjectURL(downloadElement.href);
+  }
+
+  private createExportNote(timestamp: string, content: string): string {
+    return `[${timestamp}]\n${content}\n`;
   }
 }
