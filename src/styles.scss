@@ -3,6 +3,7 @@
 @use './styles/densities'; // Custom densities for specific components in specific cases.
 @use './styles/themes/surf-stationary_theme-colors.scss' as surf-stationary-theme-colors;
 @use './styles/themes/pastel-blonde_theme-colors.scss' as pastel-blonde-theme-colors;
+@use './styles/global-definitions';
 
 // ! https://developer.mozilla.org/en-US/docs/Web/CSS/@page
 
@@ -67,6 +68,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       max-width: fit-content;
     }
   }
+}
+
+.showTableOnHover {
+  pointer-events: none;
 }
 
 // Print Settings.
