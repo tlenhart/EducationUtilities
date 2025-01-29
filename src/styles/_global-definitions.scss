@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+@mixin _get-icon-button-styles-for-var($var) {
+  @include mat.icon-button-overrides((
+    icon-color: #{$var},
+  ));
+
+  // https://material.angular.io/components/icon/styling
+  @include mat.icon-overrides((
+    color: #{$var},
+  ));
+}
+
+.primary-button {
+  @include _get-icon-button-styles-for-var(var(--mat-sys-primary));
+}
+
+.error-button {
+  @include _get-icon-button-styles-for-var(var(--mat-sys-error));
+}

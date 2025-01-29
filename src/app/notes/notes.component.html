@@ -1,41 +1,135 @@
 <div class="notes-wrapper">
-  <div class="notes-container">
-    <div class="note-form-container">
-      <form class="note-form">
-        <mat-form-field class="note-control">
-          <mat-label>Note Content</mat-label>
-          <textarea
-            rows="10"
-            matInput
-            [formControl]="noteControl"
-            #noteArea>
-          </textarea>
-        </mat-form-field>
+  <div class="note-form-container">
+    <form class="note-form" #noteForm>
+      <mat-form-field class="note-control">
+        <mat-label>Note Content</mat-label>
+        <textarea
+          rows="10"
+          matInput
+          [formControl]="noteControl"
+          #noteArea>
+        </textarea>
+      </mat-form-field>
 
-        <button mat-flat-button (click)="addNote()" type="submit" [disabled]="noteControl.invalid">Save Note</button>
-      </form>
-    </div>
+      <button mat-flat-button
+              (click)="addNote()"
+              type="submit"
+              class="save-note-button"
+              [disabled]="noteControl.invalid">Save Note</button>
+    </form>
+  </div>
+
+  <div class="notes-container">
+
+    @let deleteRestore = !showNoteTrash() ? 'delete' : 'restore_from_trash';
+    @let trashTooltipMessage = !showNoteTrash() ? 'Send Note To Trash' : 'Restore From Trash';
 
     @if (showNotes()) {
-      <table mat-table [dataSource]="allNotes" class="show-notes-table">
+      <table mat-table [dataSource]="!showNoteTrash() ? allNotes : allNotesTrash"
+        class="show-notes-table"
+        [trackBy]="tableTrackBy">
         <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef>Timestamp</th>
-          <td mat-cell *matCellDef="let note">{{note.timestamp}}</td>
+          <th mat-header-cell *matHeaderCellDef class="timestamp-column">Timestamp</th>
+          <td mat-cell *matCellDef="let note" class="timestamp-column">{{note.timestamp}}</td>
         </ng-container>
 
         <ng-container matColumnDef="content">
           <th mat-header-cell *matHeaderCellDef>Note</th>
-          <td mat-cell *matCellDef="let note">{{note.content}}</td>
+          <td mat-cell *matCellDef="let note" style="overflow-x: auto; max-width: 400px;">
+<pre>
+{{note.content}}
+</pre>
+          </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-column" [class.show-trash]="showNoteTrash()">
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let note" class="actions-column" [class.show-trash]="showNoteTrash()">
+            <div class="actions-buttons-container">
+            <button
+              mat-icon-button
+              aria-label="Copy Note Only"
+              matTooltip="Copy Note Only"
+              matTooltipPosition="above"
+              matTooltipClass="showTableOnHover"
+              matTooltipHideDelay="0"
+              matTooltipShowDelay="100"
+              [cdkCopyToClipboard]="note.content">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              aria-label="Copy Note With Timestamp"
+              matTooltip="Copy Note With Timestamp"
+              matTooltipPosition="above"
+              matTooltipClass="showTableOnHover"
+              matTooltipHideDelay="0"
+              matTooltipShowDelay="100"
+              [cdkCopyToClipboard]="copyNoteWithTimestamp(note)">
+              <mat-icon>copy_all</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="delete-note-button"
+              [class.error-button]="!showNoteTrash()"
+              [class.primary-button]="showNoteTrash()"
+              [attr.aria-label]="trashTooltipMessage"
+              [matTooltip]="trashTooltipMessage"
+              matTooltipPosition="above"
+              matTooltipClass="showTableOnHover"
+              matTooltipHideDelay="0"
+              matTooltipShowDelay="100"
+              (click)="sendToOrRestoreFromTrash(note.id, showNoteTrash())">
+              <mat-icon>{{ deleteRestore }}</mat-icon>
+            </button>
+
+            @if (showNoteTrash()) {
+              <button
+                mat-icon-button
+                class="delete-note-note-forever-button error-button"
+                aria-label="Delete Forever"
+                matTooltip="Delete Forever"
+                matTooltipPosition="above"
+                matTooltipClass="showTableOnHover"
+                matTooltipHideDelay="0"
+                matTooltipShowDelay="100"
+                (click)="deleteForever(note.id)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            }
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     }
   </div>
 
   <div class="button-actions">
-    <button mat-button (click)="showHideNotes()">{{showNotes() ? 'Hide' : 'Show'}} Notes</button>
-    <button mat-button (click)="exportNotes()">Export Notes</button>
+    @if (showNotes()) {
+      <eu-button-with-icon
+        (btnClicked)="toggleTrash()"
+        [btnText]="showNoteTrashBtnMessage()"
+        btnType="button"
+        iconPosition="left"
+        disabled="false"
+        [showIcon]="true">
+        <ng-template #btnIcon>
+          <mat-icon>
+            @if (!showNoteTrash()) {
+              delete
+            } @else {
+              close
+            }
+          </mat-icon>
+        </ng-template>
+      </eu-button-with-icon>
+    }
+    <button mat-button type="button" (click)="showHideNotes()">{{showNotes() ? 'Hide' : 'Show'}} Notes</button>
+    <button mat-button type="button" (click)="exportNotes()">Export Notes</button>
   </div>
 </div>

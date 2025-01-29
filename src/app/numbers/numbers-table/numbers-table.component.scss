@@ -3,7 +3,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  @include mixins.main-content-margin-spacing(8px);
+  @include mixins.main-content-margin-spacing(8px, 0);
 }
 
 .config-section, .config-group {

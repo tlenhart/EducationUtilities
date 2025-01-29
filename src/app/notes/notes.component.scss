@@ -13,11 +13,27 @@
   width: 100%;
 
   justify-content: space-between;
+
+  .notes-container {
+    overflow-y: auto;
+    flex: auto;
+  }
+}
+
+.note-form-container {
+  position: sticky;
+
+  .save-note-button {
+    &:focus:not(:active) {
+      border: 2px solid var(--mat-sys-primary-fixed);
+    }
+  }
 }
 
 .note-form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 4px;
 
   .note-control {
     width: calc(100% - 2em);
@@ -27,9 +43,32 @@
 
 .show-notes-table {
   opacity: 0;
+  transition: 500ms;
 
   &:hover {
     opacity: 1;
+  }
+}
+
+.timestamp-column {
+  width: 220px;
+}
+
+.actions-column {
+  width: 160px;
+
+  &.show-trash {
+    width: 120px;
+  }
+}
+
+td.actions-column.show-trash {
+  .actions-buttons-container {
+    margin: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 4px;
   }
 }
 
@@ -37,7 +76,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-
+  position: sticky;
   opacity: 0;
 
   &:hover {

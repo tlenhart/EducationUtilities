@@ -35,7 +35,7 @@ export const scheduleConfigurationRoutes: Routes = [
         data: {
           icon: 'edit_calendar',
         },
-        loadComponent: () => import('./student-configuration/student-configuration.component').then(m =>
+        loadComponent: () => import('../../configuration/student-configuration/student-configuration.component').then(m =>
           m.StudentConfigurationComponent),
       },
       ...teacherConfigurationRoutes,

@@ -26,3 +26,7 @@ export function toDisplayNote(dbNote: DbNote): DbNote {
     timestamp: Temporal.ZonedDateTime.from(dbNote.timestamp).toLocaleString(),
   };
 }
+
+export function createExportNote(timestamp: string, content: string): string {
+  return `[${timestamp}]\n${content}\n`;
+}
