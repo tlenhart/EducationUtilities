@@ -2,6 +2,7 @@ import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
   Signal,
@@ -31,8 +32,16 @@ import { liveQuery } from 'dexie';
 import { from, map } from 'rxjs';
 import { Temporal } from 'temporal-polyfill';
 import { UpdateSpecWithoutPropModification } from '../models/db-event-type.model';
-import { convertToDbNote, DbNote, Note, toDisplayNote } from '../scheduler-base/models/notes.model';
+import {
+  convertToDbNote,
+  createExportNote,
+  DbNote,
+  Note,
+  NoteId,
+  toDisplayNote,
+} from '../scheduler-base/models/notes.model';
 import { DbEntryWithZonedTemporalType } from '../scheduler-base/models/schedule-time.model';
+import { ButtonWithIconComponent } from '../shared/button-with-icon/button-with-icon.component';
 import { notesDb } from './notes.db';
 
 @Component({
@@ -58,6 +67,7 @@ import { notesDb } from './notes.db';
     MatIconButton,
     MatTooltip,
     CdkCopyToClipboard,
+    ButtonWithIconComponent,
   ],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.scss',
@@ -65,21 +75,41 @@ import { notesDb } from './notes.db';
 })
 export class NotesComponent {
 
-  public readonly noteControl: FormControl<string>;
   public readonly saveMessage: WritableSignal<string> = signal('');
   public readonly showNotes: WritableSignal<boolean> = signal(false);
-  public readonly displayedColumns: ReadonlyArray<keyof Note | 'copyNote'> = [
+  public readonly showNoteTrash: WritableSignal<boolean> = signal<boolean>(false);
+  public readonly noteTextArea: Signal<ElementRef<HTMLTextAreaElement>> = viewChild.required('noteArea');
+  public readonly formContainer: Signal<ElementRef<HTMLFormElement>> = viewChild.required<ElementRef>('noteForm');
+
+  public readonly showNoteTrashBtnMessage = computed(() => {
+    const showTrash = this.showNoteTrash();
+
+    if (showTrash) {
+      return 'Close Note Trash (Show Notes)';
+    } else {
+      return 'Open Note Trash';
+    }
+  });
+
+  public readonly displayedColumns: ReadonlyArray<keyof Note | 'copyNote' | 'actions'> = [
     'timestamp',
     'content',
-    'copyNote',
+    'actions',
   ];
-  public readonly noteTextArea: Signal<ElementRef<HTMLTextAreaElement>> = viewChild.required('noteArea');
-
+  public readonly noteControl: FormControl<string>;
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
 
   public readonly allNotes = from(
     liveQuery(() => {
       return notesDb.notes.reverse().toArray();
+    }))
+    .pipe(map(notes => {
+      return notes.map(toDisplayNote);
+    }));
+
+  public readonly allNotesTrash = from(
+    liveQuery(() => {
+      return notesDb.noteDumpster.reverse().toArray();
     }))
     .pipe(map(notes => {
       return notes.map(toDisplayNote);
@@ -100,7 +130,8 @@ export class NotesComponent {
 
     if (addResult > 0) {
       this.saveMessage.set('Note saved successfully.');
-      this.noteControl.setValue('');
+      this.formContainer().nativeElement.reset();
+      this.noteControl.reset();
     } else {
       this.saveMessage.set('Error while saving note.');
     }
@@ -108,21 +139,38 @@ export class NotesComponent {
     this.noteTextArea().nativeElement.focus();
   }
 
-  public showHideNotes(): void {
-    this.showNotes.set(!this.showNotes());
+  public copyNoteWithTimestamp(displayNote: DbNote): string {
+    return createExportNote(displayNote.timestamp, displayNote.content);
   }
 
-  public copyNoteWithTimestamp(displayNote: DbNote): string {
-    return this.createExportNote(displayNote.timestamp, displayNote.content);
+  public async sendToOrRestoreFromTrash(noteId: NoteId, noteTrashShown: boolean): Promise<void> {
+    if (!noteTrashShown) {
+      await this.sendToTrash(noteId);
+    } else {
+      await this.restoreFromTrash(noteId);
+    }
+  }
+
+  public async deleteForever(noteId: NoteId): Promise<void> {
+    await notesDb.noteDumpster.delete(noteId);
+  }
+
+  public toggleTrash(): void {
+    this.showNoteTrash.set(!this.showNoteTrash());
+  }
+
+  public showHideNotes(): void {
+    this.showNotes.set(!this.showNotes());
+
+    this.showNoteTrash.set(false);
   }
 
   public async exportNotes(): Promise<void> {
-    const allNotes = await notesDb.notes.toArray();
+    const allNotes = await notesDb.notes.reverse().toArray();
 
     const result: string = allNotes.map((note: DbEntryWithZonedTemporalType<DbNote>) => {
       const timestamp = Temporal.ZonedDateTime.from(note.timestamp).toLocaleString();
-      return this.createExportNote(timestamp, note.content);
-      // return `${timestamp}\n${note.content}\n`;
+      return createExportNote(timestamp, note.content);
     }).join('\n');
 
     const file: Blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
@@ -136,11 +184,18 @@ export class NotesComponent {
     downloadElement.click();
 
     document.body.removeChild(downloadElement);
-
     window.URL.revokeObjectURL(downloadElement.href);
   }
 
-  private createExportNote(timestamp: string, content: string): string {
-    return `[${timestamp}]\n${content}\n`;
+  public tableTrackBy(index: number, item: DbNote): number {
+    return item.id;
+  }
+
+  private async sendToTrash(noteId: NoteId): Promise<void> {
+    await notesDb.moveToTrash(noteId);
+  }
+
+  private async restoreFromTrash(noteId: NoteId): Promise<void> {
+    await notesDb.restoreNote(noteId);
   }
 }
