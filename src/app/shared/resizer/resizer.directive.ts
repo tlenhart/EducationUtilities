@@ -305,12 +305,16 @@ export class ResizerDirective implements OnDestroy {
   }
 
   private resizePanelsAndMoveHandle(initialState: ResizePanelInitialState, delta: Delta): void {
+    const { width: splitterWidth, height: splitterHeight } = this.elementRef.nativeElement.getBoundingClientRect();
+
     switch (this.splitDirection()) {
       case 'horizontal': {
         // this.renderer.setStyle(this.elementRef.nativeElement, 'left', `${initialState.handle.offsetLeft + delta.deltaX}px`);
         this.elementRef.nativeElement.style.left = `${initialState.handle.offsetLeft + delta.deltaX}px`;
-        this.panelOne().style.width = `${initialState.panel1.initialWidth + delta.deltaX}px`;
-        this.panelTwo().style.width = `${initialState.panel2.initialWidth - delta.deltaX}px`;
+
+        const calculatedPanelOneWidth = `${initialState.panel1.initialWidth + splitterWidth + delta.deltaX}px`;
+        this.panelOne().style.width = calculatedPanelOneWidth;
+        this.panelTwo().style.width = `calc(100% - ${calculatedPanelOneWidth})`;
 
         const panelOneWidth = this.panelOne().getBoundingClientRect().width;
         const panelTwoWidth = this.panelTwo().getBoundingClientRect().width;
@@ -321,8 +325,15 @@ export class ResizerDirective implements OnDestroy {
       case 'vertical': {
         // this.renderer.setStyle(this.elementRef.nativeElement, 'top', `${initialState.handle.offsetTop + delta.deltaY}px`);
         this.elementRef.nativeElement.style.top = `${initialState.handle.offsetTop + delta.deltaY}px`;
-        this.panelOne().style.height = `${initialState.panel1.initialHeight + delta.deltaY}px`;
-        this.panelTwo().style.height = `${initialState.panel2.initialHeight - delta.deltaY}px`;
+
+        const calculatedPanelOneHeight = `${initialState.panel1.initialHeight + splitterHeight + delta.deltaY}px`;
+        this.panelOne().style.height = calculatedPanelOneHeight;
+        this.panelTwo().style.height = `calc(100% - ${calculatedPanelOneHeight})`;
+
+        const panelOneHeight = this.panelOne().getBoundingClientRect().height;
+        const panelTwoHeight = this.panelTwo().getBoundingClientRect().height;
+
+        this.splitLocationPercent.set(panelOneHeight / (panelOneHeight + panelTwoHeight));
         break;
       }
     }
