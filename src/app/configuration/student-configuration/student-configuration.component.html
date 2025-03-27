@@ -1,1 +1,13 @@
-<p>student-configuration works!</p>
+<div class="entity-selector">
+  <eu-entity-selector
+    [entities]="studentStore.entities()"
+    [entityDisplayPropertyKey]="'name'"
+    [entityType]="'student'"
+    (selectedEntityChange)="selectStudent($event)"
+    showAddButton="true"
+    (addNewEntity)="addStudent()"/>
+</div>
+
+<div class="route-container">
+  <router-outlet/>
+</div>

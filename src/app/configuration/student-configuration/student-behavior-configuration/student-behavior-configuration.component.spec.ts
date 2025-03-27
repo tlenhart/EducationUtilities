@@ -1,19 +1,19 @@
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudentConfigurationComponent } from './student-configuration.component';
+import { StudentBehaviorConfigurationComponent } from './student-behavior-configuration.component';
 
-describe('StudentConfigurationComponent', () => {
-  let component: StudentConfigurationComponent;
-  let fixture: ComponentFixture<StudentConfigurationComponent>;
+describe('StudentBehaviorConfigurationComponent', () => {
+  let component: StudentBehaviorConfigurationComponent;
+  let fixture: ComponentFixture<StudentBehaviorConfigurationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideExperimentalZonelessChangeDetection()],
-      imports: [StudentConfigurationComponent],
+      imports: [StudentBehaviorConfigurationComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StudentConfigurationComponent);
+    fixture = TestBed.createComponent(StudentBehaviorConfigurationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
