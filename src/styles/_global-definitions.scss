@@ -11,10 +11,44 @@
   ));
 }
 
-.primary-button {
-  @include _get-icon-button-styles-for-var(var(--mat-sys-primary));
+@mixin _get-flat-button-styles-for-var($var) {
+  @include mat.button-overrides((
+    filled-container-color: #{$var},
+  ));
 }
 
-.error-button {
-  @include _get-icon-button-styles-for-var(var(--mat-sys-error));
+.primary {
+  &-button {
+    @include _get-icon-button-styles-for-var(var(--mat-sys-primary));
+
+    // The following isn't necessary as this is the default.
+    //@include _get-flat-button-styles-for-var(var(--mat-sys-primary));
+  }
+}
+
+.secondary {
+  &-button {
+    @include _get-icon-button-styles-for-var(var(--mat-sys-secondary));
+    @include _get-flat-button-styles-for-var(var(--mat-sys-secondary));
+  }
+}
+
+.tertiary {
+  &-button {
+    @include _get-icon-button-styles-for-var(var(--mat-sys-tertiary));
+    @include _get-flat-button-styles-for-var(var(--mat-sys-tertiary));
+  }
+}
+
+.error{
+  &-button {
+    // TODO: Find a more efficient way.
+    &:not(.disabled) {
+      @include _get-icon-button-styles-for-var(var(--mat-sys-error));
+    }
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

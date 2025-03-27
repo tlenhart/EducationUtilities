@@ -30,9 +30,9 @@
           <router-outlet></router-outlet>
         }
       </main>
-      @if (settings().clippy | globalSettingEnabled) {
+      @if ((settings().clippy | globalSettingEnabled) && !hideClippyManually()) {
         @defer(on idle) {
-          <app-clippy class="ignore-print"></app-clippy>
+          <app-clippy class="ignore-print" (removeClippy)="removeClippy()"></app-clippy>
         }
       }
     </mat-sidenav-content>
