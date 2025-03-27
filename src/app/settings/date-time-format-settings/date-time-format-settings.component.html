@@ -1,0 +1,204 @@
+<div class="example-date-time">
+  {{dateTimeValueToDisplay() | zonedDateTime:settingsStore.dateTimeFormatter()}}
+</div>
+
+<form class="date-time-format-form" [formGroup]="dateTimeFormatForm">
+  <!--<mat-slide-toggle-->
+  <!--  formControlName="useDetailedDateTimeFormatting"-->
+  <!--  id="useDetailedDateTimeFormatting-toggle"-->
+  <!--  style="width: 100%;"-->
+  <!--&gt;-->
+  <!--  @if (dateTimeFormSettingsForm.controls.useDetailedDateTimeFormatting.value) {-->
+  <!--    Detailed Formatting Options-->
+  <!--  } @else {-->
+  <!--    Simple Formatting Options-->
+  <!--  }-->
+  <!--</mat-slide-toggle>-->
+
+  <ng-container formGroupName="dateTimeFormat">
+  @if (!dateTimeFormatForm.controls.useDetailedDateTimeFormatting.value) {
+    @if (!timeOnly()) {
+      <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+        <mat-label>Date Style</mat-label>
+        <mat-select formControlName="dateStyle">
+          <!--<mat-option [value]="undefined">Hide Date</mat-option>-->
+          @for (option of dateTimeFormatDefaults.dateStyle; track option) {
+            <!-- Don't use the value in the settings store as we actually want to show the options. -->
+            <mat-option [value]="option">{{dateTimeValueToDisplay() | zonedDateTime:{ dateStyle: option } }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (!dateOnly()) {
+      <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+        <mat-label>Time Style</mat-label>
+        <mat-select formControlName="timeStyle">
+          <!--<mat-option [value]="undefined">Hide Time</mat-option>-->
+          @for (option of dateTimeFormatDefaults.timeStyle; track option) {
+            <!-- Don't use the value in the settings store as we actually want to show the options. -->
+            <mat-option [value]="option">{{dateTimeValueToDisplay() | zonedDateTime:{ timeStyle: option, hour12: dateTimeFormatForm.controls.dateTimeFormat.controls.hour12?.value } }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  } @else {
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>localeMatcher</mat-label>
+      <mat-select formControlName="localeMatcher">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.localeMatcher; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>weekday</mat-label>
+      <mat-select formControlName="weekday">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.weekday; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>era</mat-label>
+      <mat-select formControlName="era">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.era; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>year</mat-label>
+      <mat-select formControlName="year">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.year; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>month</mat-label>
+      <mat-select formControlName="month">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.month; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>day</mat-label>
+      <mat-select formControlName="day">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.day; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>hour</mat-label>
+      <mat-select formControlName="hour">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.hour; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>minute</mat-label>
+      <mat-select formControlName="minute">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.minute; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>second</mat-label>
+      <mat-select formControlName="second">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.second; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>timeZoneName</mat-label>
+      <mat-select formControlName="timeZoneName">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.timeZoneName; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>formatMatcher</mat-label>
+      <mat-select formControlName="formatMatcher">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.formatMatcher; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>dayPeriod</mat-label>
+      <mat-select formControlName="dayPeriod">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.dayPeriod; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>hourCycle</mat-label>
+      <mat-select formControlName="hourCycle">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.hourCycle; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+      <mat-label>fractionalSecondDigits</mat-label>
+      <mat-select formControlName="fractionalSecondDigits">
+        <mat-option [value]="undefined">Unset</mat-option>
+        @for (option of dateTimeFormatDefaults.fractionalSecondDigits; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  <!-- Shared form controls. -->
+    @if (!dateOnly()) {
+      <mat-form-field class="date-time-format-settings-control" subscriptSizing="dynamic">
+        <mat-label>Use 12 or 24 hour clocks</mat-label>
+        <mat-select formControlName="hour12">
+          <mat-option [value]="undefined">Default</mat-option>
+          <mat-option [value]="true">12 hour</mat-option> <!--  - ({{dateTimeValueToDisplay() | zonedDateTime:{ timeStyle: 'short', hour12: true } }})</mat-option> -->
+          <mat-option [value]="false">24 hour</mat-option> <!--  - ({{dateTimeValueToDisplay() | zonedDateTime:{ timeStyle: 'short', hour12: false } }})</mat-option> -->
+        </mat-select>
+      </mat-form-field>
+    }
+  </ng-container>
+
+  <button mat-flat-button (click)="dateTimeFormatForm.reset()" type="button">Reset</button>
+</form>
+
+<!--<div>-->
+<!--  {{dateTimeFormSettingsForm.valueChanges | async | json}}-->
+<!--  <div>-->
+<!--    Undo stack length: {{undoStack.length}}-->
+<!--    @for (item of undoStack; track $index) {-->
+<!--      <pre>{{item}}</pre>-->
+<!--    }-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    Redo stack length: {{redoStack.length}}-->
+<!--    @for (item of redoStack; track $index) {-->
+<!--      <pre>{{item}}</pre>-->
+<!--    }-->
+<!--  </div>-->
+<!--</div>-->

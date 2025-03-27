@@ -8,11 +8,12 @@ import {
   withComputed,
   withHooks,
   withMethods,
+  withProps,
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { from, of, pipe, switchMap, take, tap, throwError } from 'rxjs';
-import { Temporal } from 'temporal-polyfill';
+import { Intl as TemporalIntl, Temporal } from 'temporal-polyfill';
 import { getDaysOfWeek, TemporalDayOfWeek } from '../scheduler-base/models/schedule-time.model';
 import {
   setLoadedFromDb,
@@ -21,7 +22,13 @@ import {
 } from '../shared/stores/features/loaded-from-db.store.feature';
 import { generateTemporalRange } from '../utils/time.utils';
 import { settingsDb } from './settings.db';
-import { NewGlobalSettings, ScheduleDateSettings, ScheduleTimeSettings } from './settings.model';
+import {
+  DateTimeDisplaySettings,
+  DisplaySettings,
+  NewGlobalSettings,
+  ScheduleDateSettings,
+  ScheduleTimeSettings,
+} from './settings.model';
 
 export const globalUserSettingsDefaults: Readonly<NewGlobalSettings> = {
   name: 'user',
@@ -46,6 +53,20 @@ export const globalUserSettingsDefaults: Readonly<NewGlobalSettings> = {
     showSecret: false,
     enabled: true,
     secret: '',
+  },
+  displaySettings: {
+    dateTimeFormat: {},
+    useDetailedDateTimeFormatting: false,
+    dateOnlyFormat: {
+      enabled: false,
+      useDetailedFormatting: false,
+      format: {},
+    },
+    timeOnlyFormat: {
+      enabled: false,
+      useDetailedFormatting: false,
+      format: {},
+    },
   },
 };
 
@@ -123,6 +144,25 @@ export const SettingsStore = signalStore(
         },
       }));
     },
+    updateDisplaySettings(displaySettings: DisplaySettings): void {
+      patchState(store, (state) => ({
+        displaySettings: {
+          ...state.displaySettings,
+          ...displaySettings,
+        },
+      }));
+    },
+    updateDateTimeFormatSettings(dateTimeFormatOptions: Intl.DateTimeFormatOptions): void {
+      patchState(store, (state) => ({
+        displaySettings: {
+          ...state.displaySettings,
+          dateTimeFormat: {
+            ...state.displaySettings.dateTimeFormat,
+            ...dateTimeFormatOptions,
+          },
+        },
+      }));
+    },
   })),
   // withComputed(({ schedulerSettings }) => ({
   //   schedulerDayStart: computed(() => Temporal.PlainTime.from(schedulerSettings.time.dayStart())),
@@ -130,6 +170,54 @@ export const SettingsStore = signalStore(
   // })),
   withComputed(({ schedulerSettings }) => ({
     calendarDays: computed(() => getDaysOfWeek(schedulerSettings.date.excludeDays(), schedulerSettings.date.weekStart())),
+  })),
+  withProps((store) => ({
+    _intlResolvedOptions: Intl.NumberFormat().resolvedOptions(),
+  })),
+  withComputed(({ displaySettings, _intlResolvedOptions }) => ({
+    dateTimeFormatter: computed(() => {
+      // TODO: Make sure this doesn't fire when other display settings are changed.
+      const settings = displaySettings.dateTimeFormat();
+
+      // return new Intl.DateTimeFormat(undefined, settings);
+      return new TemporalIntl.DateTimeFormat(_intlResolvedOptions.locale, settings);
+    }),
+  })),
+  withComputed(({ displaySettings, _intlResolvedOptions }) => ({
+    dateOnlyFormatter: computed((): Intl.DateTimeFormat => {
+      const defaultFormat = displaySettings.dateTimeFormat();
+      const dateOnlyFormat: DateTimeDisplaySettings | null = displaySettings.dateOnlyFormat();
+
+      if (!dateOnlyFormat) {
+        const format: Intl.DateTimeFormatOptions = {
+          ...defaultFormat,
+          timeStyle: undefined,
+        };
+
+        // return new Intl.DateTimeFormat(_intlResolvedOptions.locale, format);
+        return new TemporalIntl.DateTimeFormat(_intlResolvedOptions.locale, format);
+      }
+
+      // return new Intl.DateTimeFormat(_intlResolvedOptions.locale, dateOnlyFormat.format);
+      return new TemporalIntl.DateTimeFormat(_intlResolvedOptions.locale, dateOnlyFormat.format);
+    }),
+    timeOnlyFormatter: computed((): Intl.DateTimeFormat => {
+      const defaultFormat = displaySettings.dateTimeFormat();
+      const timeOnlyFormat: DateTimeDisplaySettings | null = displaySettings.timeOnlyFormat();
+
+      if (!timeOnlyFormat) {
+        const format: Intl.DateTimeFormatOptions = {
+          ...defaultFormat,
+          dateStyle: undefined,
+        };
+
+        // return new Intl.DateTimeFormat(_intlResolvedOptions.locale, format);
+        return new TemporalIntl.DateTimeFormat(_intlResolvedOptions.locale, format);
+      }
+
+      // return new Intl.DateTimeFormat(_intlResolvedOptions.locale, timeOnlyFormat.format);
+      return new TemporalIntl.DateTimeFormat(_intlResolvedOptions.locale, timeOnlyFormat.format);
+    }),
   })),
   withComputed(({ schedulerSettings }) => ({
     calendarDayIntervals: computed(() => Array.from(generateTemporalRange(
