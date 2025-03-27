@@ -1,0 +1,288 @@
+<div class="existing-sessions">
+  <div class="actions-toolbar">
+    @let student = studentStore.primaryEntity();
+    <span class="student-name">Sessions for {{ student?.name }}</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button
+            (click)="newObservationSession()"
+    >
+      New Observation Session
+    </button>
+
+    <button mat-button
+            (click)="collapseAll()"
+    >
+      Collapse All
+    </button>
+  </div>
+
+  <table mat-table
+         [dataSource]="userSessionDataSource"
+         multiTemplateDataRows
+         matSort
+         (matSortChange)="announceSortChange($event)"
+         class="mat-elevation-z3"
+  >
+    @for (column of observationSessionColumns(); track column) {
+      <ng-container matColumnDef="{{column}}">
+
+        <!-- TODO: Determine if this is how you want to do this. -->
+        @switch (column) {
+          @case ('createdDate') {
+            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                sortActionDescription="Sort by created date and time">
+              Created
+            </th>
+            <td mat-cell *matCellDef="let session">
+              {{ session.session[column] | zonedDateTime:settingsStore.dateTimeFormatter() }}
+            </td>
+          }
+          @case ('startTime') {
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                sortActionDescription="Sort by start date and time"
+            >
+              Started
+            </th>
+            <td mat-cell *matCellDef="let session">
+              {{ session.session[column] | zonedDateTime:settingsStore.dateTimeFormatter():'Session not started' }}
+            </td>
+          }
+          @default {
+            <th mat-header-cell
+                *matHeaderCellDef
+            >
+              {{ column | titlecase }}
+            </th>
+            <td mat-cell *matCellDef="let session">
+              {{ session.session[column] }}
+            </td>
+          }
+        }
+      </ng-container>
+    }
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by id"
+          class="slim-column left"
+      >
+        Id
+      </th>
+      <td mat-cell *matCellDef="let session" class="slim-column left">
+        {{ session.session.id }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef class="slim-column">
+        View/Edit
+      </th>
+      <td mat-cell *matCellDef="let session" class="slim-column">
+        <a mat-icon-button
+           tabIndex="0"
+           [attr.aria-label]="'Edit/Continue observation session for ' + (session.session['createdDate'] | zonedDateTime:settingsStore.dateTimeFormatter())"
+           [routerLink]="session.session.id | routerLinkBuilder:baseRouteToSession"
+        >
+          <mat-icon>
+            note_alt
+            <!--pending_actions-->
+            <!--stylus_note-->
+          </mat-icon>
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef class="slim-column">
+        Expand
+      </th>
+      <td mat-cell *matCellDef="let session" class="slim-column">
+        <button
+          mat-icon-button
+          aria-label="Expand observation session details"
+          class="expand-session-button"
+          [class.expand-session-button-expanded]="isExpanded(session)"
+          (click)="toggle(session)"
+        >
+          <mat-icon aria-hidden="false">keyboard_arrow_down</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Expanded student content shown when a column is expanded. -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell
+          *matCellDef="let session"
+          [attr.colspan]="columnsToDisplayWithExpand().length"
+          class="expanded-cell"
+      >
+
+        @let expanded = isExpanded(session);
+
+        <div
+          class="expanded-session-details-wrapper"
+          [class.expanded-session-details-wrapper-expanded]="expanded"
+        >
+          @if (expanded || markedForClosure()[session.session.id]) {
+            <div class="expanded-session-details">
+              @let showCharts = showChartsFor()[session.session.id];
+              @let showComparisonStudent = showComparisonStudentFor()[session.session.id];
+
+              <div class="expanded-session-details-content-container">
+
+                <!-- Primary Student Observation Session Data -->
+                <div class="student-observation-session-details primary-student-session-details">
+
+                  <div class="session-entries">
+                    <div class="session-details-subheading">Entries</div>
+                    <eu-observation-session-entries
+                      [entries]="session.entries"
+                      [showDeleteButton]="false"
+                      (deleteObservationEntry)="deleteObservationEntry($event)"
+                    />
+                  </div>
+
+                  <div class="session-notes-container">
+                    <div class="session-details-subheading">Notes</div>
+                    <div class="session-notes">
+                      <mat-form-field class="note-control"
+                                      subscriptSizing="dynamic"
+                      >
+                        <textarea
+                          matInput
+                          disabled
+                          cdkTextareaAutosize
+                          aria-label="Session Notes"
+                          [value]="session.session.notes ?? 'Notes have not been added.'"
+                        >
+                        </textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                </div>
+
+                @if (showComparisonStudent) {
+                  <div class="student-observation-session-details comparison-student-session-details">
+
+                    <div class="session-entries">
+                      <div class="session-details-subheading">Comparison Student Entries</div>
+                      <eu-observation-session-entries
+                        [entries]="session.comparisonStudentEntries"
+                        [showDeleteButton]="false"
+                        (deleteObservationEntry)="deleteObservationEntry($event)"
+                      />
+                    </div>
+
+                    <div class="session-notes-container">
+                      <div class="session-details-subheading">Comparison Student Notes</div>
+                      <div class="session-notes">
+                        <mat-form-field class="note-control"
+                                        subscriptSizing="dynamic"
+                        >
+                          <textarea
+                            matInput
+                            disabled
+                            cdkTextareaAutosize
+                            aria-label="Session Notes for Comparison Student"
+                            [value]="session.session.comparisonStudentNotes ?? 'Notes have not been added.'"
+                          >
+                        </textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                  </div>
+                }
+
+                @if (showCharts) {
+                  <div class="session-charts">
+                    <div class="session-details-subheading">Charts</div>
+                    <div class="chart-data">
+                      @let metrics = session | observationSessionMetrics:behaviorStore.entityMap();
+
+                      <div class="primary-student-observation-metrics">
+                        <div class="behavior-metrics">
+                          @for (behaviorId of metrics.primaryStudent.behaviorMetrics | keyvalue; track behaviorId.key) {
+                            <div class="behavior-metric-container">
+                              <span class="behavior-name">{{behaviorStore.entityMap()[behaviorId.key].behavior}}: </span>
+                              <span class="behavior-count">{{behaviorId.value}}</span>
+                            </div>
+                          }
+                        </div>
+
+                        <div class="total-count">Total: {{metrics.primaryStudent.count}}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="session-charts">
+                    <div class="session-details-subheading">Comparison Student Charts</div>
+                    <div class="chart-data">
+                      <div class="comparison-student-observation-metrics">
+                        <div class="behavior-metrics">
+                          @for (behaviorId of metrics.comparisonStudent.behaviorMetrics | keyvalue; track behaviorId.key) {
+                            <div class="behavior-metric-container">
+                              <span class="behavior-name">{{behaviorStore.entityMap()[behaviorId.key].behavior}}: </span>
+                              <span class="behavior-count">{{behaviorId.value}}</span>
+                            </div>
+                          }
+                        </div>
+
+                        <div class="total-count">Total: {{metrics.comparisonStudent.count}}</div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="session-footer">
+                <button mat-flat-button
+                        class="tertiary-button"
+                        type="button"
+                        (click)="toggleComparisonStudent(session)"
+                >
+                  @if (!showComparisonStudent) {
+                    Show Comparison Student Data
+                  } @else {
+                    Hide Comparison Student Data
+                  }
+                </button>
+                <span class="spacer"></span>
+                <a
+                  mat-button
+                  [routerLink]="['/', 'frequency-data', 'frequency-record', 'observation-session-form', session.session.id]"
+                >
+                  Edit
+                </a>
+                <button mat-flat-button
+                        type="button"
+                        (click)="toggleCharts(session)"
+                >
+                  @if (!showCharts) {
+                    View Charts
+                  } @else {
+                    Hide Charts
+                  }
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand()"></tr>
+    <tr mat-row *matRowDef="let session; columns: columnsToDisplayWithExpand();"
+        class="session-row"
+        [class.expanded-session-row]="isExpanded(session)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+        class="session-detail-row">
+    </tr>
+  </table>
+</div>

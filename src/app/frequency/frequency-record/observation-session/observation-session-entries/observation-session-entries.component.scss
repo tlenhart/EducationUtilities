@@ -1,0 +1,24 @@
+.behavior-entries-container {
+  height: 10.5rem;
+}
+
+.behavior-entry {
+  // TODO: Make sure you update the cdkVirtualScroll size after getting the right size.
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 0.5fr;
+  align-items: center;
+  border-bottom: 1px solid var(--mat-sys-primary);
+  box-sizing: border-box;
+
+  &.behavior-entry-header {
+    margin: 0.5rem 0;
+    font: var(--mat-sys-title-medium);
+    border-bottom: 1px solid black;
+    position: sticky;
+  }
+}
+
+.entries-for-observation {
+  height: 100%;
+  overflow-y: auto;
+}

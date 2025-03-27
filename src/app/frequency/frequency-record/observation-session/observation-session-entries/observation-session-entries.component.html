@@ -1,0 +1,45 @@
+<div>
+  <div class="behavior-entry behavior-entry-header">
+    <div class="entry-behavior">
+      Behavior
+    </div>
+    <div class="entry-time">Timestamp</div>
+    <div class="entry-note">Notes</div>
+    <div class="entry-delete"></div>
+  </div>
+</div>
+
+<div class="behavior-entries-container">
+  <cdk-virtual-scroll-viewport
+    [itemSize]="itemSize"
+    class="entries-for-observation"
+  >
+    <!-- TODO: If you enable entry note editing, make sure the changes are propagated, and show up here. -->
+    <div
+      *cdkVirtualFor="let entry of entries(); trackBy: trackEntry"
+      class="behavior-entry"
+    >
+      <div class="entry-behavior">
+        {{behaviorStore.entityMap()[entry.behaviorId].behavior}}
+      </div>
+      <div class="entry-time">
+        {{entry.timestamp | zonedDateTime:settingsStore.dateTimeFormatter()}}
+      </div>
+      <div class="entry-note">
+        {{entry.notes ?? ''}}
+      </div>
+      <div class="entry-delete error-button" [class.disabled]="!showDeleteButton()">
+        <button mat-icon-button
+                type="button"
+                aria-label="Delete observation entry"
+                (click)="deleteEntry(entry.id)"
+                [disabled]="!showDeleteButton()"
+        >
+          <mat-icon>
+            delete
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</div>
