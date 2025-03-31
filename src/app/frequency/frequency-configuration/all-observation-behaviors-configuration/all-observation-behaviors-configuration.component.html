@@ -1,0 +1,9 @@
+<eu-entity-selector
+  [entities]="observationBehaviorStore.sortedBehaviors()"
+  [entityDisplayPropertyKey]="'behavior'"
+  [entityType]="'Observation Behavior'"
+  showAddButton="true"
+  (selectedEntityChange)="selectObservationBehavior($event)"
+  (addNewEntity)="addNewObservationBehavior()"/>
+
+<router-outlet/>

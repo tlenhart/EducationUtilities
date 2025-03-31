@@ -122,10 +122,6 @@
   flex-basis: 0;
   flex-grow: 1;
   gap: 1rem;
-
-  @include mat.button-overrides((
-    filled-container-shape: var(--mat-sys-corner-medium),
-  ));
 }
 
 .behavior-counter-button {

@@ -63,6 +63,7 @@ import { ZonedDateTimePipe } from '../../../../shared/pipes/zoned-date-time/zone
 import { ObservationBehaviorStore } from '../../../../shared/stores/observation-behavior.store';
 import { ObservationEntriesStore } from '../../../../shared/stores/observation-entries.store';
 import { StudentStore } from '../../../../shared/stores/student.store';
+import { frequencyRouteKeys } from '../../../frequency-base.routes';
 import {
   ObservationSessionEntriesComponent,
 } from '../observation-session-entries/observation-session-entries.component';
@@ -153,7 +154,7 @@ export class StudentObservationSessionsComponent implements OnInit, OnDestroy {
     ];
   });
 
-  public readonly baseRouteToSession: ReadonlyArray<string> = ['/', 'frequency-data', 'frequency-record', 'observation-session-form'];
+  public readonly baseRouteToSession: ReadonlyArray<string> = ['/', 'frequency-data', frequencyRouteKeys.base.record, 'observation-session-form'];
 
   public readonly sort = viewChild.required(MatSort);
 

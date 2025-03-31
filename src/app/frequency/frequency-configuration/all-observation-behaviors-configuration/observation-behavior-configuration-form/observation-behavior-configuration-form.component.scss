@@ -1,0 +1,59 @@
+@use '@angular/material' as mat;
+@use '../../../../../styles/mixins' as mixins;
+
+.observation-behavior-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  & > mat-form-field {
+    width: clamp(100px, 600px, 100%);
+  }
+}
+
+.color-button-container {
+  width: clamp(100px, 600px, 100%);
+  display: grid;
+  gap: 0.25rem;
+}
+
+.behavior-button-color-selector {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .color-picker-form-field {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  .color-picker {
+    cursor: pointer;
+  }
+
+  .randomize-color-button {
+    margin-top: 0.6rem;
+  }
+}
+
+.behavior-counter-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .button-preview-text {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-left: 0.25rem;
+    font: var(--mat-sys-body-medium);
+    letter-spacing: var(--mat-sys-body-medium-tracking);
+
+    &:hover {
+      cursor: help;
+    }
+  }
+}

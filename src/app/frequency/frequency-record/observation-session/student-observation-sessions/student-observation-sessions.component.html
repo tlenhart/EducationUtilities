@@ -203,7 +203,7 @@
                   <div class="session-charts">
                     <div class="session-details-subheading">Charts</div>
                     <div class="chart-data">
-                      @let metrics = session | observationSessionMetrics:behaviorStore.entityMap();
+                      @let metrics = session | observationSessionMetrics;
 
                       <div class="primary-student-observation-metrics">
                         <div class="behavior-metrics">
@@ -255,7 +255,7 @@
                 <span class="spacer"></span>
                 <a
                   mat-button
-                  [routerLink]="['/', 'frequency-data', 'frequency-record', 'observation-session-form', session.session.id]"
+                  [routerLink]="['/', 'frequency-data', 'frequency-records', 'observation-session-form', session.session.id]"
                 >
                   Edit
                 </a>

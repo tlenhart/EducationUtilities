@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  height: 100%;
+  padding: 0 16px;
+}
+
+.dashboard-container {
+  max-height: 100%;
+  gap: 2rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}

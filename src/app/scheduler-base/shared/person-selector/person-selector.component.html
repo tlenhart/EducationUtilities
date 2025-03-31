@@ -18,8 +18,8 @@
   <mat-autocomplete
     requireSelection
     autoActiveFirstOption
-    [displayWith]="displayPersonName"
     #auto="matAutocomplete">
+    <!--[displayWith]="displayPersonName"-->
     <!-- TODO: Make sure updates trigger when tracking by id, and across components. -->
     @for (person of filteredPeople(); track person.id) {
       <mat-option [value]="person">{{person.name}}</mat-option>

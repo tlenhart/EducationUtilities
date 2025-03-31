@@ -106,7 +106,6 @@ export class NewObservationSessionDialogComponent implements OnDestroy {
     this.newObservationSessionForm = this.fb.group<NewObservationSessionForm>({
       /* eslint-disable @typescript-eslint/unbound-method */
       definedInitialSessionLength: this.fb.control(15, [Validators.required, Validators.min(0.5), Validators.max(24 * 60)]),
-      // trackedBehaviorIds: this.fb.control([]),
       /* eslint-enable @typescript-eslint/unbound-method */
     });
 
@@ -152,7 +151,6 @@ export class NewObservationSessionDialogComponent implements OnDestroy {
     // TODO: Add other parameters.
     const createResult: DexieResult<ObservationSessionId> = await this.currentObservationSessionStore.initializeObservationSession(
       student.id,
-      undefined, // [behavior.id],
       `${this.newObservationSessionForm.controls.definedInitialSessionLength.value}m`,
     );
 
