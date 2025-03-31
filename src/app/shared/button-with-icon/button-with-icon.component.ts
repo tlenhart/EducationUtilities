@@ -1,13 +1,16 @@
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { NgTemplateOutlet } from '@angular/common';
+import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component, contentChild,
+  Component,
+  contentChild,
   input,
   InputSignal,
   InputSignalWithTransform,
   output,
-  OutputEmitterRef, Signal, TemplateRef,
+  OutputEmitterRef,
+  Signal,
+  TemplateRef,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { BtnType } from '../../models/html-utility.types';
@@ -17,6 +20,7 @@ import { BtnType } from '../../models/html-utility.types';
   imports: [
     MatButton,
     NgTemplateOutlet,
+    NgStyle,
   ],
   templateUrl: './button-with-icon.component.html',
   styleUrl: './button-with-icon.component.scss',
@@ -26,6 +30,9 @@ export class ButtonWithIconComponent {
   public readonly btnText: InputSignal<string> = input.required<string>();
   public readonly btnType: InputSignal<BtnType> = input<BtnType>('button');
   public readonly btnClass: InputSignal<string> = input<string>('');
+  public readonly btnColor: InputSignal<string | undefined> = input<string | undefined>();
+  public readonly flatButton: InputSignal<boolean> = input<boolean>(false);
+  public readonly ariaLabel: InputSignal<string | null> = input<string | null>(null);
   public readonly iconPosition: InputSignal<'left' | 'right'> = input<'left' | 'right'>('right');
   public readonly disabled: InputSignalWithTransform<boolean, BooleanInput> = input.required<boolean, BooleanInput>({
     transform: (value: BooleanInput) => {
