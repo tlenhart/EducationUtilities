@@ -24,11 +24,42 @@ export function mapFromDbAvailability(availabilityEntries: Array<DbEntryWithTemp
   }) ?? [];
 }
 
-export function filterTables(tables: Array<Table>, pickTableNames?: Array<string> | 'full'): Array<Table> {
+export function filterTables(tables: Array<Table>, pickTableNames?: Array<string> | 'full', format: 'include' | 'exclude' = 'include'): Array<Table> {
   // If no table names were provided, return all tables.
   if (!pickTableNames || pickTableNames === 'full' || pickTableNames.length === 0) {
+    if (format === 'exclude') {
+      return []; // TODO: Might not be correct.
+    }
     return tables;
   }
 
-  return tables.filter((table: Table) => pickTableNames.includes(table.name) ?? false); // TODO? Decide what to return when no valid table names were matched.
+  // TODO: This may not work correctly.
+  return tables.filter((table: Table) => {
+    if (pickTableNames.includes(table.name)) {
+      return format === 'include' ? true : false;
+    }
+
+    return format === 'exclude';
+    // return false;
+  }); // TODO? Decide what to return when no valid table names were matched.
+}
+
+export function filterTablesWithSets(tables: Array<Table>, pickTableNames: Array<string> | 'full' | undefined, format: 'include' | 'exclude'): Array<string> {
+  const tableNames: Set<string> = new Set<string>(tables.map((table) => table.name));
+
+  if (pickTableNames === 'full' || !pickTableNames) {
+    return format === 'include' ? Array.from(tableNames) : []; // TODO: make sure [] works with Dexie skipTables.
+  }
+
+  const pickNames = new Set(pickTableNames);
+
+  if (!Set.prototype.intersection || !Set.prototype.difference) {
+    throw new Error('Set methods not supported.');
+  }
+
+  const intersection: Set<string> = tableNames.intersection(pickNames);
+
+  const result: Set<string> = format === 'include' ? intersection : tableNames.difference(intersection);
+
+  return Array.from(result);
 }
