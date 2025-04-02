@@ -90,21 +90,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button.observation-behavior-button {
   $solid-button-border: light-dark(rgba(0,0,0,1), rgba(255,255,255,1));
 
-  text-align: start;
-  white-space: pre-line;
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-medium),
+  ));
 
-  padding: 2rem 1.25rem;
-  max-width: 8rem;
-  width: 8rem;
-  min-height: 5rem;
+  & {
+    text-align: start;
+    white-space: pre-line;
 
-  &:focus {
-    border-color: $solid-button-border;
-    outline: 2px solid $solid-button-border;
-  }
+    padding: 2rem 1.25rem;
+    max-width: 8rem;
+    width: 8rem;
+    min-height: 5rem;
 
-  &:hover {
-    cursor: pointer;
+    &:focus {
+      border-color: $solid-button-border;
+      outline: 2px solid $solid-button-border;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
