@@ -1,50 +1,74 @@
 <div class="settings-container">
   @if (settings(); as settings) {
-    <form [formGroup]="settingsForm()">
-      @if (settings.clippy.settingGroupAvailable) {
-        <div class="form-section clippy-form" formGroupName="clippy"> <!-- [formGroup]="settingsForm.controls.clippy"> -->
-          <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-clippy-and-friends" class="enable-disable-toggle">
-            {{settings.clippy.userEnabledGroup.description}}
-          </mat-slide-toggle>
-          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="select-dropdown">
-            <mat-label>{{settings.clippy.selectedAgent.description}}</mat-label>
-            <mat-select formControlName="selectedAgent" id="clippy-and-friends-selection">
-              @for (option of settings.clippy.selectedAgent.possibleValues; track option) {
-                <mat-option [value]="option">{{option}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+    <div class="settings-group">
+      <h2 class="heading page-heading">Settings</h2>
+      <form [formGroup]="settingsForm()">
+        @if (settings.clippy.settingGroupAvailable) {
+          <div class="form-section clippy-form" formGroupName="clippy"> <!-- [formGroup]="settingsForm.controls.clippy"> -->
+            <h3 class="heading section-heading">Clippy and Friends</h3>
 
-          <div class="checkboxes">
-            <mat-checkbox formControlName="playRandomAnimations" id="play-random-animations-for-clippy-and-friends-checkbox">
-              {{settings.clippy.playRandomAnimations.description}}
-            </mat-checkbox>
-            <mat-checkbox formControlName="playSounds" id="play-sounds-for-clippy-and-friends-checkbox">
-              {{settings.clippy.playSounds.description}}
-            </mat-checkbox>
+            <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-clippy-and-friends" class="enable-disable-toggle">
+              {{settings.clippy.userEnabledGroup.description}}
+            </mat-slide-toggle>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="select-dropdown">
+              <mat-label>{{settings.clippy.selectedAgent.description}}</mat-label>
+              <mat-select formControlName="selectedAgent" id="clippy-and-friends-selection">
+                @for (option of settings.clippy.selectedAgent.possibleValues; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <div class="checkboxes">
+              <mat-checkbox formControlName="playRandomAnimations" id="play-random-animations-for-clippy-and-friends-checkbox">
+                {{settings.clippy.playRandomAnimations.description}}
+              </mat-checkbox>
+              <mat-checkbox formControlName="playSounds" id="play-sounds-for-clippy-and-friends-checkbox">
+                {{settings.clippy.playSounds.description}}
+              </mat-checkbox>
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      @if (settings.tooltips.settingGroupAvailable) {
-        <div class="form-section tooltips-form" formGroupName="tooltips"> <!-- [formGroup]="settingsForm.controls.tooltips"> -->
-          <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-tooltips" class="enable-disable-toggle">
-            {{settings.tooltips.userEnabledGroup.description}}
-          </mat-slide-toggle>
+        @if (settings.tooltips.settingGroupAvailable) {
+          <div class="form-section tooltips-form" formGroupName="tooltips"> <!-- [formGroup]="settingsForm.controls.tooltips"> -->
+            <h3 class="heading section-heading">Tooltips</h3>
 
-          <div class="checkboxes">
-            <mat-checkbox formControlName="showHideTableCell" id="tooltips-show-hide-table-cell-tooltip-checkbox">
-              {{settings.tooltips.showHideTableCell.description}}
-            </mat-checkbox>
+            <mat-slide-toggle formControlName="userEnabledGroup" id="enable-disable-tooltips" class="enable-disable-toggle">
+              {{settings.tooltips.userEnabledGroup.description}}
+            </mat-slide-toggle>
+
+            <div class="checkboxes">
+              <mat-checkbox formControlName="showHideTableCell" id="tooltips-show-hide-table-cell-tooltip-checkbox">
+                {{settings.tooltips.showHideTableCell.description}}
+              </mat-checkbox>
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      <!-- Form Actions -->
-      <div class="form-actions">
-        <button type="button" id="save-changes-btn" mat-flat-button (click)="save()" [disabled]="settingsForm().untouched">Save Changes</button>
-        <button type="button" id="reset-changes-button" class="error-button" mat-flat-button (click)="resetSettings()">Reset To Default Settings</button>
-      </div>
-    </form>
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" id="save-changes-btn" mat-flat-button (click)="save()" [disabled]="settingsForm().untouched">Save Changes</button>
+          <button type="button" id="reset-changes-button" class="error-button" mat-flat-button (click)="resetSettings()">Reset To Default Settings</button>
+        </div>
+      </form>
+    </div>
   }
+
+  <div class="settings-group">
+    <h3 class="heading section-heading">Date/Time</h3>
+    <eu-date-time-format-settings/>
+  </div>
+
+  <!-- TODO: When enabling this, make sure the correct settings in the store are updated. -->
+  <!--<div class="settings-group">-->
+  <!--  <h3 class="heading section-heading">Date Only</h3>-->
+  <!--  <eu-date-time-format-settings [dateOnly]="true"/>-->
+  <!--</div>-->
+
+  <!--<div class="settings-group">-->
+  <!--  <h3 class="heading section-heading">Time Only</h3>-->
+  <!--  <eu-date-time-format-settings [timeOnly]="true"/>-->
+  <!--</div>-->
 </div>

@@ -7,7 +7,7 @@ import {
   Signal,
   signal,
   viewChild,
-  WritableSignal
+  WritableSignal,
 } from '@angular/core';
 import {
   FormArray,
@@ -15,7 +15,7 @@ import {
   FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatOption } from '@angular/material/core';
@@ -24,7 +24,7 @@ import {
   MatExpansionPanel,
   MatExpansionPanelContent,
   MatExpansionPanelHeader,
-  MatExpansionPanelTitle
+  MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -36,15 +36,15 @@ import { FormattedNumberTableConfig, FormattedNumberValue } from '../../models';
 import {
   ColorAlignmentOptions,
   MultiplicationFormConfig,
-  MultiplicationTableConfigForm
+  MultiplicationTableConfigForm,
 } from '../../models/forms.types';
 import { DocumentActionsComponent } from '../../shared/document-actions/document-actions.component';
-import { buildColorsArray } from '../../utils/color.utils';
+import { buildColorsArray, ColorValues } from '../../utils/color.utils';
 import { arrayToArrayOfFormControls } from '../../utils/form.utils';
 import { multiplicationTableNumberGenerator } from '../../utils/number-utils';
 import { NumberGridComponent } from '../number-grid/number-grid.component';
 import {
-  RandomizeHiddenElementsComponent
+  RandomizeHiddenElementsComponent,
 } from '../shared/randomize-hidden-elements/randomize-hidden-elements.component';
 
 @Component({
@@ -195,7 +195,7 @@ export class MultiplicationTableComponent implements OnDestroy {
       return currentValue;
     });
 
-    const currentColorControls: FormArray<FormControl<string>> = this.multiplicationTableConfigForm.controls.colors;
+    const currentColorControls: FormArray<FormControl<ColorValues>> = this.multiplicationTableConfigForm.controls.colors;
     const columnCount: number = this.currentConfig().colors.length;
     if (currentColorControls.length > columnCount) {
       // Count backwards so the removals and array index can remain consistent.

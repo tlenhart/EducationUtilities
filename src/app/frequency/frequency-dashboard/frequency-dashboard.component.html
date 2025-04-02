@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <eu-linkable-navigation-card
+    [link]="['../', 'frequency-records']"
+    cardTitle="Frequency Records"
+    cardDetails="View and create new frequency recording sessions."
+    icon="track_changes"/>
+
+  <eu-linkable-navigation-card
+    [link]="['../', 'frequency-reporting']"
+    cardTitle="Frequency Reports"
+    cardDetails="View and create reports and charts for frequency records."
+    icon="query_stats"/>
+
+  <eu-linkable-navigation-card
+    [link]="frequencyDataSplitPanelStore.routeToObservationBehaviorConfig()"
+    cardTitle="Configure Frequency Behaviors"
+    cardDetails="Configure, edit, or define the behaviors you wish to track or report on."
+    icon="psychology"/>
+
+  <eu-linkable-navigation-card
+    [link]="frequencyDataSplitPanelStore.routeToStudentConfig()"
+    cardTitle="Configure Students"
+    cardDetails="Configure and edit a student and the behaviors you wish to track for that student."
+    icon="manage_accounts"/>
+
+  <eu-linkable-navigation-card
+    [link]="[]"
+    roleType="button"
+    cardTitle="New Observation Session"
+    cardDetails="Start a new observation session"
+    icon="assignment_add"
+    (buttonClicked)="openCreateObservationSessionDialog()"/>
+
+  <eu-linkable-navigation-card
+    [link]="['../', 'frequency-records', 'observation-sessions']"
+    cardTitle="Observation Sessions"
+    cardDetails="View Past Observation Sessions"
+    icon="assignment"/>
+</div>

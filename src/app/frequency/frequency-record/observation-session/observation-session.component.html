@@ -1,0 +1,14 @@
+<div class="observation-route-container">
+  <div class="observation-session-container">
+    <eu-entity-selector
+      [entities]="studentStore.entities()"
+      [entityDisplayPropertyKey]="'name'"
+      [entityType]="'Student'"
+      showValueAfterSelection="false"
+      showAddButton="false"
+      (selectedEntityChange)="setStudent($event)"
+    />
+  </div>
+  <router-outlet>
+  </router-outlet>
+</div>

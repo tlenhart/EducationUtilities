@@ -6,13 +6,15 @@ import { AssociatedSchedule } from './schedule.model';
 
 export type PersonType = 'teacher' | 'student' | 'aid';
 
+export type PersonId = number;
+
 export type AvailabilitySchedule = Array<ScheduleTime>;
 
 export interface PersonSchedule {
   availability?: AvailabilitySchedule;
 }
 
-export interface Person extends DbBase, AssociatedSchedule {
+export interface Person extends DbBase<PersonId>, AssociatedSchedule {
   name: string,
   schedule: AvailabilitySchedule;
 }

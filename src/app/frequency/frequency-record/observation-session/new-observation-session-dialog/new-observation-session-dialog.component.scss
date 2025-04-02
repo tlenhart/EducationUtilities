@@ -1,0 +1,35 @@
+.dialog-title {
+  padding-top: 0.5rem;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  padding-top: 0.5rem;
+
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-field-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5rem;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    .help-icon {
+      margin-top: 1rem;
+    }
+  }
+}

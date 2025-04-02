@@ -1,0 +1,11 @@
+:host {
+  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 455px), 1fr));
+  max-width: 1200px;
+  height: 100%;
+}
+
+.observation-session {
+  width: 100%;
+}

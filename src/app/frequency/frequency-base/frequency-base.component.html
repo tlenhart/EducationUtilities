@@ -1,0 +1,70 @@
+<eu-split-routing-pane
+  [showResizeHandle]="frequencyDataSplitPaneStore.showDivider()">
+  <ng-template #toolbarContent>
+
+    @if (deviceTypeService.isHandset$ | async) {
+      <!-- Put everything under a single menu when on a smaller device. -->
+      <button mat-button [matMenuTriggerFor]="allItemsMenu">
+        Frequency Data
+      </button>
+    } @else {
+      @for (baseRoute of primaryFrequencyRoutes(); track baseRoute) {
+        <a mat-button
+           [routerLink]="['./', baseRoute.path]"
+           tabIndex="0"
+        >
+          {{baseRoute.name}}
+        </a>
+      }
+
+      <button mat-button [matMenuTriggerFor]="configurationMenu">
+        Configuration
+      </button>
+    }
+
+    <!-- Menu used when the device is smaller. More items. -->
+    <mat-menu #allItemsMenu="matMenu">
+      <ng-template matMenuContent>
+        @for (baseRoute of primaryFrequencyRoutes(); track baseRoute) {
+          <a mat-menu-item
+             [routerLink]="['./', baseRoute.path]"
+             tabIndex="0"
+          >
+            {{baseRoute.name}}
+          </a>
+        }
+
+        <button mat-menu-item [matMenuTriggerFor]="configurationMenu">
+          Configuration
+        </button>
+      </ng-template>
+    </mat-menu>
+
+    <mat-menu #configurationMenu="matMenu">
+      <ng-template matMenuContent>
+        @for (route of frequencyDataSplitPaneStore.configRoutes(); track route.name) {
+          <a
+            mat-menu-item
+            [routerLink]="route.path"
+            tabIndex="0"
+        >
+            {{ route.name }}
+          </a>
+        }
+      </ng-template>
+    </mat-menu>
+
+  </ng-template>
+
+  @if (frequencyDataSplitPaneStore.showLeftPane()) {
+    <ng-template #leftPanelOutlet>
+      <router-outlet/>
+    </ng-template>
+  }
+
+  @if (frequencyDataSplitPaneStore.showRightPane()) {
+    <ng-template #rightPanelOutlet>
+      <router-outlet name="configuration"/>
+    </ng-template>
+  }
+</eu-split-routing-pane>

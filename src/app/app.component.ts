@@ -1,5 +1,14 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, computed, inject, OnInit, Signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
@@ -26,9 +35,11 @@ import { SettingsStore } from './settings/settings.store';
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   public title = 'EducationUtilities';
+  public hideClippyManually: WritableSignal<boolean> = signal(false);
   public readonly routes: Signal<ReadonlyArray<AppRoute>>;
   public readonly isHandset$: Observable<boolean>;
   private readonly appLocationService: AppLocationService = inject(AppLocationService);
@@ -63,5 +74,9 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.settingsStore.loadSettings();
+  }
+
+  public removeClippy(): void {
+    this.hideClippyManually.set(true);
   }
 }

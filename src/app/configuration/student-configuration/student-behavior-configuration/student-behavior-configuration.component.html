@@ -1,0 +1,56 @@
+<h4 style="margin-bottom: 0; padding-bottom: 0;">Behaviors</h4>
+<span>(Checked behaviors are assigned.)</span>
+<span>Select behaviors to assign them to the student.</span>
+
+<mat-chip-listbox
+  aria-label="Behaviors being tracked for this student."
+  multiple
+  class="chip-listbox"
+>
+  @for (behavior of behaviorStore.sortedBehaviors(); let index = $index; track behavior.id) {
+    <mat-chip-option
+      [value]="behavior.id"
+      [selected]="selectedBehaviors().has(behavior.id)"
+      (selectionChange)="changeBehaviorAssignment($event)">
+      {{ behavior.behavior }}
+    </mat-chip-option>
+  }
+</mat-chip-listbox>
+
+<form>
+  <mat-form-field class="behavior-input" floatLabel="always">
+    <mat-label>Assigned Behaviors</mat-label>
+    <mat-chip-grid #behaviorGrid aria-label="Assigned behavior selection">
+      @for (behaviorId of selectedBehaviors(); track behaviorId) {
+        <mat-chip-row (removed)="removeBehavior(behaviorId)">
+          {{ behaviorStore.entityMap()[behaviorId].behavior }}
+          <button matChipRemove
+                  [attr.aria-label]="'Remove ' + behaviorStore.entityMap()[behaviorId].behavior + ' from student.'">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </mat-chip-grid>
+
+    <!-- Move the input into the mat-chip-grid to show the placeholder on the same line. -->
+    <input
+      name="currentBehavior"
+      placeholder="Select or search for behaviors..."
+      #behaviorSelectorInput
+      [(ngModel)]="currentFilterValue"
+      [matChipInputFor]="behaviorGrid"
+      [matAutocomplete]="behaviorAutocomplete"
+      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+      (matChipInputTokenEnd)="addBehavior($event)"
+    />
+    <mat-autocomplete
+      #behaviorAutocomplete="matAutocomplete"
+      (optionSelected)="selectBehavior($event); behaviorSelectorInput.value = ''"
+      [autoActiveFirstOption]="true"
+    >
+      @for (behavior of filteredBehaviors(); track behavior.id) {
+        <mat-option [value]="behavior.id">{{ behavior.behavior }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

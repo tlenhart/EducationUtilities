@@ -1,6 +1,6 @@
 // export const basicTimeInputRegex: RegExp = /^\d{2}:\d{2}$/; // TODO: Doesn't handle 0 - 23 changes or am/pm (if needed.)
 import { Temporal } from 'temporal-polyfill';
-import { PlainTimeInput, TimeInterval } from '../models/time.model';
+import { PlainDateTimeInput, PlainTimeInput, TimeInterval, ZonedDateTimeInput } from '../models/time.model';
 
 export const basicTimeInputRegex: RegExp = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/; // Time is always done in 24-hour format. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time#time_value_format
 // export const basicTimeInputRegex: RegExp = /^([0-1][0-9]|2[0-3]):([0-5][0-9]) ?([ap]\.?m\.?)?$/; // TODO: Doesn't handle am/pm (if needed.)
@@ -31,14 +31,34 @@ export function toPlainTime(time: PlainTimeInput): Temporal.PlainTime {
   return Temporal.PlainTime.from(time);
 }
 
-export function toDurationLike(interval: TimeInterval): Temporal.DurationLike {
+export function toTemporalPlainDateTime(dateTime: PlainDateTimeInput): Temporal.PlainDateTime {
+  if (dateTime instanceof Temporal.PlainDateTime) {
+    return dateTime;
+  }
+
+  return Temporal.PlainDateTime.from(dateTime);
+}
+
+export function toTemporalZonedDateTime(dateTime: ZonedDateTimeInput): Temporal.ZonedDateTime {
+  if (dateTime instanceof Temporal.ZonedDateTime) {
+    return dateTime;
+  }
+
+  return Temporal.ZonedDateTime.from(dateTime);
+}
+
+export function toDurationLike(interval: TimeInterval | undefined): Temporal.DurationLike {
+  if (interval === undefined) {
+    return { seconds: 0 };
+  }
+
   if (typeof interval === 'number') {
     return { seconds: interval };
   }
 
   // TODO: Add bounds and regex check for correct formatting.
   const units = interval.at(-1) ?? '';
-  const total = (interval as string).slice(0, interval.length - 1);
+  const total = interval.slice(0, interval.length - 1);
   const amount = parseInt(total, 10);
 
   switch (units) {

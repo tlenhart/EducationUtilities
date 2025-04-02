@@ -1,17 +1,42 @@
-<button
-  mat-button
-  class="icon-button-with-text"
-  [class]="btnClass()"
-  (click)="btnClick()"
-  [type]="btnType()"
-  [disabled]="disabled()">
-    <span class="icon-button-text" [class.reverse-order]="iconPosition() === 'left'">
-      <span class="btn-text">{{ btnText() }}</span>
+<!-- ! When updating one button, make sure you update the other. ! -->
+@if (!flatButton()) {
+  <button
+    mat-button
+    class="icon-button-with-text"
+    [class]="btnClass()"
+    [class.custom-button-color]="!!btnColor()"
+    (click)="btnClick()"
+    [type]="btnType()"
+    [disabled]="disabled()"
+    [attr.aria-label]="ariaLabel()"
+    [ngStyle]="{ '--btn-background-color': btnColor() }"
+  >
+    <ng-container [ngTemplateOutlet]="btnContent"/>
+  </button>
+} @else {
+  <button
+    mat-flat-button
+    class="icon-button-with-text"
+    [class]="btnClass()"
+    [class.custom-button-color]="!!btnColor()"
+    (click)="btnClick()"
+    [type]="btnType()"
+    [disabled]="disabled()"
+    [attr.aria-label]="ariaLabel()"
+    [ngStyle]="{ '--btn-background-color': btnColor() }"
+  >
+    <ng-container [ngTemplateOutlet]="btnContent"/>
+  </button>
+}
 
+<ng-template #btnContent>
+  <span class="icon-button-text" [class.reverse-order]="iconPosition() === 'left'">
+    <span class="btn-text">{{ btnText() }}</span>
+
+    @if (showIcon()) {
       <span class="button-icon">
-        @if (showIcon()) {
-          <ng-container [ngTemplateOutlet]="btnIcon()"/>
-        }
+        <ng-container [ngTemplateOutlet]="btnIcon()"/>
       </span>
+    }
     </span>
-</button>
+</ng-template>

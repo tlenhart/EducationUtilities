@@ -1,0 +1,5 @@
+<eu-observation-session-form class="observation-session" [isComparisonStudent]="false" [isPrimaryStudent]="true"/>
+
+@if (currentObservationSessionStore.currentObservation.showComparisonStudent()) {
+  <eu-observation-session-form class="observation-session" [isComparisonStudent]="true" [isPrimaryStudent]="false"/>
+}

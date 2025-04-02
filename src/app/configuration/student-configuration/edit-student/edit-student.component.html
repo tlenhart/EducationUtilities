@@ -1,0 +1,31 @@
+<div class="student-configuration-elements-container">
+  <form>
+    <mat-form-field>
+      <mat-label>Student name.</mat-label>
+      <input matInput [formControl]="nameFormControl">
+      @if (nameFormControl.hasError('required')) {
+        <mat-error>A name is required. Current name: {{studentStore.configurationEntity()?.name}}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+
+  @defer (when showBehaviorConfiguration()) {
+    <eu-student-behavior-configuration/>
+  }
+</div>
+
+<h4>Primary</h4>
+<div class="current-student">
+  {{studentStore.primaryEntity() | json}}
+</div>
+<div class="current-student">
+  {{studentStore.primaryEntity()?.testBehaviors?.entries()?.toArray() | json}}
+</div>
+
+<h4>Configuration</h4>
+<div class="current-student">
+  {{studentStore.configurationEntity() | json}}
+</div>
+<div class="current-student">
+  {{studentStore.configurationEntity()?.testBehaviors?.entries()?.toArray() | json}}
+</div>

@@ -9,6 +9,7 @@ import { GlobalUIService } from '../../core/app-sidenav-service/global-ui.servic
 import { AppVersionService } from '../../core/version/app-version.service';
 import { FeedbackDialogComponent } from '../../feedback-dialog/feedback-dialog.component';
 import { AppRoute } from '../../models';
+import { buildWidthString } from '../../utils/css.utils';
 import { copyToClipboard } from '../../utils/dom.utils';
 
 @Component({
@@ -38,6 +39,8 @@ export class MainSidenavComponent {
   }
 
   public openFeedbackDialog(): void {
-    this.dialog.open(FeedbackDialogComponent);
+    this.dialog.open(FeedbackDialogComponent, {
+      width: buildWidthString(`400px`, `600px`),
+    });
   }
 }

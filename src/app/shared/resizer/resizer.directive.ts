@@ -1,8 +1,10 @@
 import {
   Directive,
-  effect, EffectRef,
+  effect,
+  EffectRef,
   ElementRef,
   HostListener,
+  inject,
   input,
   InputSignal,
   model,
@@ -10,10 +12,13 @@ import {
   OnDestroy,
   Renderer2,
 } from '@angular/core';
+import { isMouseEvent, isTouchEvent } from '../../utils/event.utils';
 import { Delta, ElementSize, PanelState, SplitDirection } from './resizer.models';
 
-interface ResizePanelInitialState {
-  event: MouseEvent,
+interface ResizePanelInitialState<T = MouseEvent | TouchEvent> {
+  event: T,
+  eventX: number;
+  eventY: number;
   handle: {
     offsetTop: number;
     offsetLeft: number;
@@ -90,11 +95,11 @@ export class ResizerDirective implements OnDestroy {
   public readonly panelOneState: ModelSignal<PanelState> = model<PanelState>('open');
   public readonly panelTwoState: ModelSignal<PanelState> = model<PanelState>('open');
   public readonly splitLocationPercent: ModelSignal<number> = model<number>(0.50, {
-    debugName: 'testDebug'
+    debugName: 'splitPanelPercentage',
   });
 
-  private mouseMoveListenerDestructor?: () => void;
-  private documentMouseUpListenerDestructor?: () => void;
+  private resizeMoveListenerDestructor?: () => void;
+  private resizeCancelListenerDestructor?: () => void;
 
   private initialState?: ResizePanelInitialState;
 
@@ -121,25 +126,46 @@ export class ResizerDirective implements OnDestroy {
   @HostListener('mousedown', ['$event'])
   public onMouseDown(event: MouseEvent): void {
     // Remove the existing events, in case they already exist.
-    this.removeMouseMoveEventHandlers();
+    this.removeResizeCancelEventHandlers();
 
-    // Set the initial state that will be referenced as teh panels are resized.
+    // Set the initial state that will be referenced as the panels are resized.
     this.setState(event);
 
     // As the mouse is moved, resize the panels and move the handle.
-    this.mouseMoveListenerDestructor = this.renderer.listen('document', 'mousemove', (mouseMoveEvent: MouseEvent) => {
+    this.resizeMoveListenerDestructor = this.renderer.listen('document', 'mousemove', (mouseMoveEvent: MouseEvent) => {
       this.resizePanels(mouseMoveEvent);
     });
 
     // When the mouse is released, clean up the event listeners.
-    this.documentMouseUpListenerDestructor = this.renderer.listen('document', 'mouseup', () => {
-      this.removeMouseMoveEventHandlers();
+    this.resizeCancelListenerDestructor = this.renderer.listen('document', 'mouseup', () => {
+      this.removeResizeCancelEventHandlers();
     });
   }
 
-  constructor(private readonly elementRef: ElementRef<HTMLElement>, private readonly renderer: Renderer2) {
-    this.elementRef.nativeElement.style.userSelect = 'none';
-    // this.elementRef.nativeElement.style.backgroundColor = 'var(--synth-light-blue)';
+  @HostListener('touchstart', ['$event'])
+  public onTouchStart(event: TouchEvent): void {
+    // Remove the existing events, in case they already exist.
+    this.removeResizeCancelEventHandlers();
+
+    // Set the initial state that will be referenced as the panels are resized.
+    this.setState(event);
+
+    // As interaction device is moved, resize the panels and move the handle.
+    this.resizeMoveListenerDestructor = this.renderer.listen('document', 'touchmove', (touchMoveEvent: TouchEvent) => {
+      this.resizeTouchPanels(touchMoveEvent);
+    });
+
+    // When touch event has ended, clean up the event listeners.
+    this.resizeCancelListenerDestructor = this.renderer.listen('document', 'touchend', () => {
+      this.removeResizeCancelEventHandlers();
+    });
+  }
+
+  private readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef) as ElementRef<HTMLElement>;
+  private readonly renderer: Renderer2 = inject(Renderer2);
+
+  constructor() {
+    this.renderer.setStyle(this.elementRef.nativeElement, 'userSelect', 'none');
 
     // Set the default styles for the panels so they can work properly.
     effect(() => {
@@ -163,10 +189,10 @@ export class ResizerDirective implements OnDestroy {
     effect(() => {
       switch (this.splitDirection()) {
         case 'horizontal':
-          this.elementRef.nativeElement.style.cursor = 'col-resize';
+          this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'col-resize');
           break;
         case 'vertical':
-          this.elementRef.nativeElement.style.cursor = 'row-resize';
+          this.renderer.setStyle(this.elementRef.nativeElement, 'cursor', 'row-resize');
           break;
       }
     });
@@ -210,12 +236,18 @@ export class ResizerDirective implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.panelResizeObserver.disconnect();
-    this.removeMouseMoveEventHandlers();
+    this.removeResizeCancelEventHandlers();
     this.initialSplitPositionEffectRef?.destroy();
+
+    this.panelOne().style.width = '100%';
+    this.panelTwo().style.width = '100%';
   }
 
-  private setState(event: MouseEvent): void {
-    this.initialState = {
+  private setState(event: MouseEvent | TouchEvent): void {
+    // Set the document cursor style when "clicking" down to prevent it from changing while resizing and the cursor escapes the host element's bounds.
+    document.body.style.cursor = this.splitDirection() === 'horizontal' ? 'col-resize' : 'row-resize';
+
+    const constructedState: ResizePanelInitialState = {
       event: event,
       handle: {
         offsetTop: this.elementRef.nativeElement.offsetTop,
@@ -229,27 +261,72 @@ export class ResizerDirective implements OnDestroy {
         initialWidth: this.panelTwo().offsetWidth,
         initialHeight: this.panelTwo().offsetHeight,
       },
+      eventX: 0,
+      eventY: 0,
     };
+
+    if (isTouchEvent(event)) {
+      const touchTarget = event.targetTouches.item(0);
+
+      constructedState.eventX = touchTarget?.clientX ?? 0;
+      constructedState.eventY = touchTarget?.clientY ?? 0;
+    } else if (isMouseEvent(event)) {
+      constructedState.eventX = event.x;
+      constructedState.eventY = event.y;
+    }
+
+    this.initialState = constructedState;
   }
 
   private resizePanels(mouseMoveEvent: MouseEvent): void {
+    this.resize(mouseMoveEvent.x, mouseMoveEvent.y);
+  }
+
+  private resizeTouchPanels(touchMoveEvent: TouchEvent): void {
+    const touchTarget = touchMoveEvent.targetTouches.item(0);
+
+    if (!touchTarget) {
+      return;
+    }
+
+    this.resize(touchTarget.clientX, touchTarget.clientY);
+  }
+
+  private resize(x: number, y: number): void {
     if (!this.initialState) {
       return;
     }
 
     const delta: Delta = {
-      deltaX: mouseMoveEvent.x - this.initialState.event.x,
-      deltaY: mouseMoveEvent.y - this.initialState.event.y,
+      deltaX: x - this.initialState.eventX,
+      deltaY: y - this.initialState.eventY,
     };
+
     this.resizePanelsAndMoveHandle(this.initialState, delta);
   }
 
   private resizePanelsAndMoveHandle(initialState: ResizePanelInitialState, delta: Delta): void {
+    const { width: splitterWidth, height: splitterHeight } = this.elementRef.nativeElement.getBoundingClientRect();
+    const { width: parentWidth, height: parentHeight } = this.panelOne().parentElement?.getBoundingClientRect() ?? { width: undefined, height: undefined };
+
     switch (this.splitDirection()) {
       case 'horizontal': {
+        // this.renderer.setStyle(this.elementRef.nativeElement, 'left', `${initialState.handle.offsetLeft + delta.deltaX}px`);
         this.elementRef.nativeElement.style.left = `${initialState.handle.offsetLeft + delta.deltaX}px`;
-        this.panelOne().style.width = `${initialState.panel1.initialWidth + delta.deltaX}px`;
-        this.panelTwo().style.width = `${initialState.panel2.initialWidth - delta.deltaX}px`;
+
+        const computedPanelOneWidth = initialState.panel1.initialWidth + splitterWidth + delta.deltaX;
+
+        if (parentWidth) {
+          const leftPanelWidth = computedPanelOneWidth - splitterWidth;
+          const rightPanelWidth = parentWidth - computedPanelOneWidth;
+
+          const splitPercent = leftPanelWidth / (leftPanelWidth + rightPanelWidth); //  + splitterWidth);
+          const leftPanelPercent = splitPercent * 100;
+          const rightPanelPercent = 100 - leftPanelPercent;
+
+          this.panelOne().style.width = `${leftPanelPercent}%`;
+          this.panelTwo().style.width = `${rightPanelPercent}%`;
+        }
 
         const panelOneWidth = this.panelOne().getBoundingClientRect().width;
         const panelTwoWidth = this.panelTwo().getBoundingClientRect().width;
@@ -258,9 +335,17 @@ export class ResizerDirective implements OnDestroy {
         break;
       }
       case 'vertical': {
+        // this.renderer.setStyle(this.elementRef.nativeElement, 'top', `${initialState.handle.offsetTop + delta.deltaY}px`);
         this.elementRef.nativeElement.style.top = `${initialState.handle.offsetTop + delta.deltaY}px`;
-        this.panelOne().style.height = `${initialState.panel1.initialHeight + delta.deltaY}px`;
-        this.panelTwo().style.height = `${initialState.panel2.initialHeight - delta.deltaY}px`;
+
+        const calculatedPanelOneHeight = `${initialState.panel1.initialHeight + splitterHeight + delta.deltaY}px`;
+        this.panelOne().style.height = calculatedPanelOneHeight;
+        this.panelTwo().style.height = `calc(100% - ${calculatedPanelOneHeight})`;
+
+        const panelOneHeight = this.panelOne().getBoundingClientRect().height;
+        const panelTwoHeight = this.panelTwo().getBoundingClientRect().height;
+
+        this.splitLocationPercent.set(panelOneHeight / (panelOneHeight + panelTwoHeight));
         break;
       }
     }
@@ -304,15 +389,17 @@ export class ResizerDirective implements OnDestroy {
     }
   }
 
-  private removeMouseMoveEventHandlers(): void {
-    if (this.mouseMoveListenerDestructor) {
-      this.mouseMoveListenerDestructor();
-      this.mouseMoveListenerDestructor = undefined;
+  private removeResizeCancelEventHandlers(): void {
+    document.body.style.cursor = 'auto';
+
+    if (this.resizeMoveListenerDestructor) {
+      this.resizeMoveListenerDestructor();
+      this.resizeMoveListenerDestructor = undefined;
     }
 
-    if (this.documentMouseUpListenerDestructor) {
-      this.documentMouseUpListenerDestructor();
-      this.documentMouseUpListenerDestructor = undefined;
+    if (this.resizeCancelListenerDestructor) {
+      this.resizeCancelListenerDestructor();
+      this.resizeCancelListenerDestructor = undefined;
     }
   }
 
