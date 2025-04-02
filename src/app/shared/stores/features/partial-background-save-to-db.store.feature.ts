@@ -8,7 +8,7 @@ export function withPartialBackgroundSaveToDb(worker: Worker) {
     withProps((store) => ({
       // _dbWorker: new Worker(new URL(workerPath, import.meta.url), { type: 'module' }), // TODO: Check for worker support.
       _dbWorker: worker, // TODO: Check for worker support.
-    } as { _dbWorker: Worker | null})),
+    } as { _dbWorker: Worker | null })),
     withHooks({
       onInit(store) {
         // store._dbWorker?.onmessage
