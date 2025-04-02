@@ -39,8 +39,18 @@ html {
   ));
 }
 
+.light-dark-backdrop {
+  background: rgba(0,0,0,.32);
+}
+
 .no-outlet-backdrop {
   opacity: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .light-dark-backdrop {
+    background: rgba(0,0,0,.81);
+  }
 }
 
 html, body { height: 100%; }
