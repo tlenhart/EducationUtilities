@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.dialog-overrides((
+    subhead-color: var(--mat-sys-primary),
+  ));
+}
+
+.dialog-content .add-observation-behavior-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.75rem;
+}

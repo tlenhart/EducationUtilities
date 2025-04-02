@@ -238,8 +238,9 @@ export class ResizerDirective implements OnDestroy {
     this.panelResizeObserver.disconnect();
     this.removeResizeCancelEventHandlers();
     this.initialSplitPositionEffectRef?.destroy();
-    this.panelOne().style.width = 'auto';
-    this.panelTwo().style.width = 'auto';
+
+    this.panelOne().style.width = '100%';
+    this.panelTwo().style.width = '100%';
   }
 
   private setState(event: MouseEvent | TouchEvent): void {
@@ -305,12 +306,27 @@ export class ResizerDirective implements OnDestroy {
   }
 
   private resizePanelsAndMoveHandle(initialState: ResizePanelInitialState, delta: Delta): void {
+    const { width: splitterWidth, height: splitterHeight } = this.elementRef.nativeElement.getBoundingClientRect();
+    const { width: parentWidth, height: parentHeight } = this.panelOne().parentElement?.getBoundingClientRect() ?? { width: undefined, height: undefined };
+
     switch (this.splitDirection()) {
       case 'horizontal': {
         // this.renderer.setStyle(this.elementRef.nativeElement, 'left', `${initialState.handle.offsetLeft + delta.deltaX}px`);
         this.elementRef.nativeElement.style.left = `${initialState.handle.offsetLeft + delta.deltaX}px`;
-        this.panelOne().style.width = `${initialState.panel1.initialWidth + delta.deltaX}px`;
-        this.panelTwo().style.width = `${initialState.panel2.initialWidth - delta.deltaX}px`;
+
+        const computedPanelOneWidth = initialState.panel1.initialWidth + splitterWidth + delta.deltaX;
+
+        if (parentWidth) {
+          const leftPanelWidth = computedPanelOneWidth - splitterWidth;
+          const rightPanelWidth = parentWidth - computedPanelOneWidth;
+
+          const splitPercent = leftPanelWidth / (leftPanelWidth + rightPanelWidth); //  + splitterWidth);
+          const leftPanelPercent = splitPercent * 100;
+          const rightPanelPercent = 100 - leftPanelPercent;
+
+          this.panelOne().style.width = `${leftPanelPercent}%`;
+          this.panelTwo().style.width = `${rightPanelPercent}%`;
+        }
 
         const panelOneWidth = this.panelOne().getBoundingClientRect().width;
         const panelTwoWidth = this.panelTwo().getBoundingClientRect().width;
@@ -321,8 +337,15 @@ export class ResizerDirective implements OnDestroy {
       case 'vertical': {
         // this.renderer.setStyle(this.elementRef.nativeElement, 'top', `${initialState.handle.offsetTop + delta.deltaY}px`);
         this.elementRef.nativeElement.style.top = `${initialState.handle.offsetTop + delta.deltaY}px`;
-        this.panelOne().style.height = `${initialState.panel1.initialHeight + delta.deltaY}px`;
-        this.panelTwo().style.height = `${initialState.panel2.initialHeight - delta.deltaY}px`;
+
+        const calculatedPanelOneHeight = `${initialState.panel1.initialHeight + splitterHeight + delta.deltaY}px`;
+        this.panelOne().style.height = calculatedPanelOneHeight;
+        this.panelTwo().style.height = `calc(100% - ${calculatedPanelOneHeight})`;
+
+        const panelOneHeight = this.panelOne().getBoundingClientRect().height;
+        const panelTwoHeight = this.panelTwo().getBoundingClientRect().height;
+
+        this.splitLocationPercent.set(panelOneHeight / (panelOneHeight + panelTwoHeight));
         break;
       }
     }

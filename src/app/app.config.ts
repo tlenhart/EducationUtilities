@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import {
   ApplicationConfig,
   EnvironmentProviders,
@@ -7,13 +7,20 @@ import {
   provideExperimentalZonelessChangeDetection,
   Provider,
 } from '@angular/core';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material/dialog';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter, TitleStrategy, withComponentInputBinding, withViewTransitions } from '@angular/router';
+import {
+  provideRouter,
+  TitleStrategy,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+  withViewTransitions,
+} from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 
 import { routes } from './app.routes';
 import { PageTitleStrategy } from './strategies/page-title.strategy';
+import { buildWidthString } from './utils/css.utils';
 
 /**
  * The primary application configuration.
@@ -29,13 +36,12 @@ export const appConfig: ApplicationConfig = {
       // useNgZoneOnStable: true,
     }),
     ...provideRouting(),
-    provideAnimationsAsync(),
     ...provideMaterialDefaults(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
   ],
 };
 
@@ -49,6 +55,9 @@ function provideRouting(): ReadonlyArray<Provider | EnvironmentProviders> {
       routes,
       withComponentInputBinding(),
       withViewTransitions(),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      }),
     ),
     {
       provide: TitleStrategy,
@@ -72,6 +81,20 @@ function provideMaterialDefaults(): ReadonlyArray<Provider | EnvironmentProvider
         subscriptSizing: 'fixed',
       } as MatFormFieldDefaultOptions,
       multi: false,
+    } as Provider,
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        autoFocus: 'first-tabbable',
+        closeOnNavigation: true,
+        disableClose: false,
+        hasBackdrop: true,
+        backdropClass: 'light-dark-backdrop',
+        panelClass: 'light-dark-panel',
+        restoreFocus: true,
+        role: 'dialog',
+        width: buildWidthString(`200px`, `400px`, `100vw`),
+      } as MatDialogConfig,
     } as Provider,
   ];
 }

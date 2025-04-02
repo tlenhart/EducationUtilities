@@ -69,7 +69,7 @@ export function withSelectedEntity<TEntity>() {
         }
 
         return -1;
-      })
+      }),
     })),
   );
 }

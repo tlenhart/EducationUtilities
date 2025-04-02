@@ -1,0 +1,55 @@
+<div class="entity-selector-wrapper">
+  <mat-form-field
+    class="entity-selector-control"
+    subscriptSizing="dynamic"
+    [ngStyle]="{ width: entitySelectorFormControlWidth() }"
+  >
+    <mat-label>Select {{entityType() | titlecase}}</mat-label>
+    <input #filterEntityInput
+           type="text"
+           autocomplete="off"
+           matInput
+           [placeholder]="(entityType() | titlecase)"
+           [attr.aria-label]="'Select a ' + entityType() + ' to use or edit.'"
+           [formControl]="entitySelectorFormControl"
+           [matAutocomplete]="auto"
+           (input)="filter()"
+           (focus)="filter()">
+    <button
+      mat-icon-button
+      (click)="clear($event)"
+      matIconSuffix
+      [attr.aria-label]="'Clear the ' + entityType() + ' input and show available options.'"
+    >
+      <mat-icon>
+        keyboard_arrow_down
+      </mat-icon>
+    </button>
+    <mat-autocomplete
+      requireSelection
+      autoActiveFirstOption
+      [displayWith]="displayFn()"
+      #auto="matAutocomplete">
+      <!-- TODO: Make sure updates trigger when tracking by id, and across components. -->
+      @for (entity of filteredEntities(); track entity['id']) {
+        <mat-option [value]="entity">{{entity[entityDisplayPropertyKey()]}}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  @if (showAddButton()) {
+    <button
+      mat-icon-button
+      (click)="addNewEntity.emit()"
+      class="primary-button entity-action-button"
+      [attr.aria-label]="'Add new ' + entityType()"
+      [matTooltip]="'Add ' + entityType()"
+      matTooltipPosition="above"
+      type="button"
+    >
+      <mat-icon>
+        add_circle
+      </mat-icon>
+    </button>
+  }
+</div>

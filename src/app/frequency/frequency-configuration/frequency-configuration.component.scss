@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.tabs-overrides((
+    container-height: 36px,
+  ));
+}
+
+.pane-actions-container {
+  display: flex;
+  align-content: space-around;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  padding: 4px;
+}
+
+.nav-tab-nav-bar {
+  margin-bottom: 1rem;
+}

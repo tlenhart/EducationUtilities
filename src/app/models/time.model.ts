@@ -10,3 +10,6 @@ export type PlainTimeInput = Temporal.PlainTime | BasicTimeInput;
  * 50 would be equivalent to 50s.
  */
 export type TimeInterval = number | `${number}${'s' | 'm' | 'h'}`;
+
+export type PlainDateTimeInput = Parameters<typeof Temporal.PlainDateTime.from>[0]; // Temporal.PlainDateTime | Temporal.PlainDateTimeLike
+export type ZonedDateTimeInput = Parameters<typeof Temporal.ZonedDateTime.from>[0]; // Temporal.ZonedDateTime | Temporal.ZonedDateTimeLike

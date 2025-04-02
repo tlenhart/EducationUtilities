@@ -83,11 +83,21 @@ export interface ScheduleTime {
 }
 
 export type DbEntryWithTemporalType<T> = {
-  [K in keyof T]: T[K] extends Temporal.PlainTime ? string : T[K];
+  [K in keyof T]: T[K] extends Temporal.PlainTime // (Temporal.PlainTime | Temporal.PlainDateTime)
+    ? string
+    : T[K] extends Temporal.PlainDateTime
+      ? string
+      : T[K] extends (Temporal.PlainDateTime | undefined)
+        ? string | undefined
+        : T[K];
 };
 
 export type DbEntryWithZonedTemporalType<T> = {
-  [K in keyof T]: T[K] extends Temporal.ZonedDateTime ? string : T[K];
+  [K in keyof T]: T[K] extends Temporal.ZonedDateTime
+    ? string
+    : T[K] extends (Temporal.ZonedDateTime | undefined)
+      ? string | undefined
+      : T[K];
 };
 
 export function availabilityIsScheduleTimeArray(schedule: Array<ScheduleTime> | Array<DbEntryWithTemporalType<ScheduleTime>> | undefined): schedule is Array<ScheduleTime> {

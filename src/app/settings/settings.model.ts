@@ -6,6 +6,7 @@ export interface NewGlobalSettings {
   name: 'user' | 'default';
   schedulerSettings: SchedulerSettings;
   feedbackSettings: FeedbackSettings;
+  displaySettings: DisplaySettings;
 }
 
 export interface Setting_New<T> {
@@ -42,3 +43,23 @@ export interface FeedbackSettings {
   showSecret: boolean;
   enabled: boolean;
 }
+
+export interface DisplaySettings {
+  /**
+   * Use settingsStore.dateTimeFormatter.format() instead of using this directly.
+   *   (Except when setting the settings in the first place.)
+   */
+  dateTimeFormat: Intl.DateTimeFormatOptions;
+  useDetailedDateTimeFormatting: boolean;
+  dateOnlyFormat: OptionalDateTimeDisplaySettings;
+  timeOnlyFormat: OptionalDateTimeDisplaySettings;
+}
+
+export interface DateTimeDisplaySettings {
+  format: Intl.DateTimeFormatOptions;
+  useDetailedFormatting: boolean;
+}
+
+export type OptionalDateTimeDisplaySettings = DateTimeDisplaySettings & {
+  enabled: boolean;
+};

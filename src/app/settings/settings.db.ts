@@ -12,7 +12,7 @@ export class SettingsDb extends Dexie implements Exportable {
   constructor() {
     super('SettingsDb');
 
-    this.version(1).stores({
+    this.version(2).stores({
       settings: 'name',
     });
 

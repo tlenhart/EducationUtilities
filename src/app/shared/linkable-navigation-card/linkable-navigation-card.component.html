@@ -1,0 +1,35 @@
+@if (roleType() === 'link') {
+  <a
+    [routerLink]="link()"
+    [queryParams]="queryParams()"
+    class="application-card-link"
+    mat-ripple
+    tabIndex="0"
+    (keyup.space)="$any($event.target)?.click()">
+    <ng-container [ngTemplateOutlet]="cardContents"/>
+  </a>
+} @else {
+  <button
+    class="application-card-link"
+    mat-ripple
+    tabIndex="0"
+    type="button"
+    (click)="buttonClicked.emit()">
+    <ng-container [ngTemplateOutlet]="cardContents"/>
+  </button>
+}
+
+<ng-template #cardContents>
+  <div class="application-card">
+    @if (icon()) {
+      <div class="application-card-icon-container">
+        <mat-icon class="application-card-icon"
+                  aria-hidden="true">
+          {{ icon() }}
+        </mat-icon>
+      </div>
+    }
+    <div class="application-card-title">{{ cardTitle() }}</div>
+    <div class="application-card-details">{{ cardDetails() }}</div>
+  </div>
+</ng-template>

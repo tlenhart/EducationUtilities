@@ -1,6 +1,8 @@
 import { fillArrayFunction } from './number-utils';
 
-export function buildColorsArray(size: number = 10, currentColors: Array<string> = defaultColors): Array<string> {
+export type ColorValues = `#${string}`;
+
+export function buildColorsArray(size: number = 10, currentColors: Array<ColorValues> = defaultColors): Array<ColorValues> {
   if (currentColors.length < defaultColors.length) {
     currentColors.push(...defaultColors.slice(currentColors.length));
   }
@@ -12,7 +14,7 @@ export function buildColorsArray(size: number = 10, currentColors: Array<string>
   return colors.slice(0, size);
 }
 
-export const defaultColors: Array<string> = [
+export const defaultColors: Array<ColorValues> = [
   '#D4BBDD', '#F6E6E8', '#FBDFA0', '#FFC2C7',
   '#5DD9FB', '#BBD5D2', '#FBE7C6', '#B4F8C8',
   '#A0E7E5', '#ffd8c0', '#FFAEBC', '#EDD1FA',
@@ -22,6 +24,6 @@ export const defaultColors: Array<string> = [
   // '#2ec5e8', '#d5ec86'
 ];
 
-function randomColor(): string {
+export function randomColor(): ColorValues {
   return `#${Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, 'F')}`;
 }

@@ -1,0 +1,79 @@
+<div id="splitter-container">
+  <!-- Toolbar. -->
+  <mat-toolbar class="split-pane-toolbar">
+    <ng-container [ngTemplateOutlet]="toolbarContent()" class="toolbar-content"/>
+  </mat-toolbar>
+
+  <div class="panels-container">
+
+    <!-- Left Panel. -->
+    <section id="left-panel"
+             class="panel position-left"
+             [class.hide-panel]="!leftPanelOutlet()"
+             #leftPanel
+    >
+      @if (leftPanelOutlet(); as leftPaneContainerOutlet) {
+        <ng-container [ngTemplateOutlet]="leftPaneContainerOutlet" class="left-panel-outlet"/>
+      }
+    </section>
+
+    <!-- Panel Resizer. -->
+    @if (showResizeHandle()) {
+      <div id="split-resize-handle" #resizeHandle class="resize-handle xs-small-icon-button"
+           euResizer
+           [panelOne]="leftPanel" [panelTwo]="rightPanel"
+           [(panelOneState)]="panelOneState" [(panelTwoState)]="panelTwoState"
+           (splitLocationPercentChange)="splitChange($event)"
+           [splitLocationPercent]="splitPercent()"
+      >
+        @if (!resizeHandle.classList.contains('slim-resize-handle')) {
+          @if (panelOneState === 'open') {
+            <button mat-icon-button aria-label="Hide the left pane."
+                    class="offset-handle-left"
+                    (click)="panelOneState = 'closed'"
+                    disableRipple="true">
+              <mat-icon>left_panel_close</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button aria-label="Show the left pane."
+                    class="offset-handle-left"
+                    (click)="panelOneState = 'open'"
+                    disableRipple="true">
+              <mat-icon>left_panel_open</mat-icon>
+            </button>
+          }
+          <mat-icon aria-label="Click and drag to resize the two panels." class="handle-icon">
+            drag_handle
+          </mat-icon>
+          @if (panelTwoState === 'open') {
+            <button mat-icon-button aria-label="Hide the right configuration pane."
+                    class="offset-handle-right"
+                    (click)="panelTwoState = 'closed'"
+                    disableRipple="true">
+              <mat-icon>left_panel_open</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button aria-label="Show the right configuration pane."
+                    class="offset-handle-right"
+                    (click)="panelTwoState = 'open'"
+                    disableRipple="true">
+              <mat-icon>left_panel_close</mat-icon>
+            </button>
+          }
+        }
+      </div>
+    }
+
+    <!-- Right Panel. -->
+    <section id="right-panel"
+             class="panel position-right"
+             [class.hide-panel]="!rightPanelOutlet()"
+             [class.overlay-panel]="shouldOverlayRightPanel()"
+             #rightPanel
+    >
+      @if (rightPanelOutlet(); as rightPanelContainerOutlet) {
+        <ng-container [ngTemplateOutlet]="rightPanelContainerOutlet" class="right-panel-outlet"/>
+      }
+    </section>
+  </div>
+</div>

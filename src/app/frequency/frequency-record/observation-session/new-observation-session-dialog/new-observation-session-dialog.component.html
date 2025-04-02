@@ -1,0 +1,90 @@
+<h2 mat-dialog-title class="dialog-title">
+  New Observation Session
+</h2>
+
+<mat-dialog-content class="dialog-content-container">
+  <div class="dialog-content">
+  <eu-entity-selector
+    [entities]="studentStore.entities()"
+    entityDisplayPropertyKey="name"
+    entitySelectorFormControlWidth="100%"
+    showValueAfterSelection="true"
+    [entityType]="'Student'"
+    showAddButton="false"
+    [(selectedEntity)]="selectedStudent"
+  />
+
+  @if (selectedStudent()) {
+    <form [formGroup]="newObservationSessionForm">
+      <div class="form-field-container">
+        <mat-form-field hintLabel="Initial length of the observation session in minutes." class="input-form-field">
+          <mat-label>Initial Session Length (Minutes)</mat-label>
+          <input
+            matInput
+            formControlName="definedInitialSessionLength"
+            type="number"
+            placeholder="15">
+          <span matTextSuffix>minutes</span>
+          @let sessionLengthControl = newObservationSessionForm.controls.definedInitialSessionLength;
+          @if (sessionLengthControl.hasError('required')) {
+            <mat-error>Initial session length is required.</mat-error>
+          } @else if (sessionLengthControl.hasError('min')) {
+            <mat-error>Initial session length must be greater than 0 minutes.</mat-error>
+          } @else if (sessionLengthControl.hasError('max')) {
+            <mat-error>Initial session length cannot be greater than 1 day (1440 minutes).</mat-error>
+          }
+        </mat-form-field>
+        <mat-icon
+          class="help-icon"
+          matTooltip="This is used primarily for display purposes, so you know how much time is left in the session, and does not control the actual length of the session."
+          matTooltipPosition="above">
+          help
+        </mat-icon>
+      </div>
+    </form>
+
+    <!-- Show the behaviors selected for the student, but don't allow any changes. -->
+    <mat-chip-listbox
+      aria-label="Behaviors being tracked."
+      multiple
+      class="chip-listbox"
+    >
+      @for (behavior of behaviorStore.sortedBehaviors(); track behavior.id) {
+        @if (selectedStudentBehaviors().has(behavior.id)) {
+          <mat-chip-option
+            [value]="behavior.id"
+            [selected]="selectedStudentBehaviors().has(behavior.id)"
+            [disabled]="true"
+          >
+            {{behavior.behavior}}
+          </mat-chip-option>
+        }
+      }
+    </mat-chip-listbox>
+  }
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-button
+    mat-dialog-close
+    type="button"
+    [disabled]="submitting()">
+    Cancel
+  </button>
+  <eu-button-with-icon
+    iconPosition="right"
+    [showIcon]="submitting()"
+    [disabled]="submitting() || !selectedStudent() || newObservationSessionForm.invalid"
+    btnClass="submit-button"
+    (btnClicked)="createNewObservationSession()"
+    btnType="submit"
+    btnText="Create Observation Session"
+  >
+    <ng-template #btnIcon>
+      <mat-spinner [diameter]="20"/>
+    </ng-template>
+  </eu-button-with-icon>
+</mat-dialog-actions>

@@ -1,0 +1,15 @@
+.session-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.observation-session-title {
+  font: var(--mat-sys-headline-small);
+  margin-bottom: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.observation-session-content {
+  height: 100%;
+}

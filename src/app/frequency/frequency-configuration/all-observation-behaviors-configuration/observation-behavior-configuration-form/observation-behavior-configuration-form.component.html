@@ -1,0 +1,77 @@
+@let observationForm = observationBehaviorForm();
+
+<form [formGroup]="observationForm" class="observation-behavior-form">
+  <mat-form-field>
+    <mat-label>Behavior</mat-label>
+    <input matInput formControlName="behavior" placeholder="Staying on task, not getting up, etc." type="text">
+    @if (observationForm.controls.behavior.hasError('required')) {
+      <mat-error>Behavior is required.</mat-error>
+    } @else if (observationForm.controls.behavior.hasError('duplicate')) {
+      <mat-error>Behavior already exists. Please use a different name for the behavior.</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" placeholder="A description of the observation behavior."></textarea>
+  </mat-form-field>
+
+  <!-- Default color (--mat-sys-primary) or custom. -->
+  <div class="color-button-container">
+    <div class="behavior-button-color-selector">
+      <mat-form-field subscriptSizing="dynamic"
+                      hintLabel="Click above to pick the color used when displaying this behavior, when recording frequency data."
+                      class="color-picker-form-field"
+      >
+        <mat-label>Observation Behavior Counter Button Color</mat-label>
+        <input matInput type="color" formControlName="color" class="color-picker" aria-label="Click here to pick the color used when displaying this behavior, when recording frequency data.">
+        <!--<mat-hint>Click above to pick the color used when displaying this behavior, when recording frequency data.</mat-hint>-->
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        matTooltip="Randomize Color"
+        matTooltipPosition="above"
+        matTooltipShowDelay="0"
+        aria-label="Randomize Button Color"
+        (click)="randomizeButtonColor()"
+        class="randomize-color-button"
+        type="button">
+        <mat-icon>
+          autorenew
+        </mat-icon>
+      </button>
+    </div>
+
+    <div class="behavior-counter-button-container">
+      <span class="button-preview-text"
+            [matTooltip]="previewButtonDisclaimerText()"
+            matTooltipPosition="above"
+            [attr.aria-label]="previewButtonDisclaimerText()"
+      >
+        Button Preview
+        <mat-icon>
+          info
+        </mat-icon>
+      </span>
+
+      <eu-button-with-icon
+        [btnText]="observationForm.controls.behavior.value"
+        [btnColor]="observationForm.controls.color?.getRawValue() ?? '#123456'"
+        btnClass="observation-behavior-button"
+        btnType="button"
+        iconPosition="right"
+        [showIcon]="true"
+        [flatButton]="true"
+        [disabled]="false"
+        ariaLabel="Button preview for the new observation behavior."
+      >
+        <ng-template #btnIcon>
+          @if (observationForm.controls.behavior.value) {
+            [1]
+          }
+        </ng-template>
+      </eu-button-with-icon>
+    </div>
+  </div>
+</form>

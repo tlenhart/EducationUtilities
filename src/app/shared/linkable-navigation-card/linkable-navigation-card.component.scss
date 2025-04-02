@@ -1,0 +1,80 @@
+@use '../../../styles/mixins' as mixins;
+
+:host {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+button {
+  @include mixins.button-reset();
+
+  // overflow and position are to allow the mat-ripple to display properly.
+  overflow: hidden;
+  position: relative;
+}
+
+.application-card-link {
+  margin-top: 20px;
+  border: 1px solid var(--mat-sys-outline);
+  border-radius: 0.75em;
+
+  padding: 0.25em;
+
+  text-decoration: none;
+  max-width: 300px;
+
+  color: var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface);
+  transition: background-color 250ms;
+
+  cursor: pointer;
+
+  @media (prefers-color-scheme: light) {
+    &:hover, &:focus, &:active {
+      color: var(--mat-sys-background);
+      background: var(--mat-sys-surface-tint);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:hover, &:focus, &:active {
+      color: var(--mat-sys-on-primary-container);
+      background: var(--mat-sys-primary-container);
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    transition: none;
+  }
+
+  .application-card {
+    $application-card-margin: 20px;
+    $icon-size: 80px;
+
+    height: 100%;
+
+    .application-card-icon-container {
+      padding-top: $application-card-margin;
+      display: block;
+      text-align: center;
+
+      .application-card-icon {
+        font-size: $icon-size;
+        width: $icon-size;
+        height: $icon-size;
+      }
+    }
+
+    .application-card-title {
+      font: var(--mat-sys-headline-medium);
+      padding: $application-card-margin - 4px $application-card-margin $application-card-margin;
+    }
+
+    .application-card-details {
+      font-size: var(--mat-sys-body-medium);
+      padding: 0 $application-card-margin $application-card-margin;
+    }
+  }
+}
+

@@ -1,0 +1,176 @@
+@let showComparisonStudent = currentObservationSessionStore.currentObservation.showComparisonStudent();
+<mat-card
+  class="observation-session-card"
+  [class.is-primary]="isPrimaryStudent()"
+  [class.is-comparison]="isComparisonStudent()"
+  appearance="outlined"
+>
+  <mat-card-header class="observation-session-card-header">
+    <mat-card-title class="observation-session-card-title card-title">
+      <h2 class="student-type-header">
+        @if (isPrimaryStudent()) {
+          Primary Student
+        } @else {
+          Comparison Student
+        }
+      </h2>
+      <span class="show-hide-comparison-toggle">
+
+        @if (isPrimaryStudent()) {
+          <!-- Edit Student Button -->
+          <a mat-icon-button
+             [routerLink]="editStudentRoute()"
+             [queryParams]="{ showBehaviorConfiguration: true }"
+             matTooltip="Edit Student"
+             matTooltipPosition="above"
+             tabIndex="0"
+          >
+            <mat-icon>
+              edit
+            </mat-icon>
+          </a>
+
+          <!-- Show/Hide Comparison Student Button -->
+          <button mat-icon-button
+                  (click)="showHideComparisonStudent(!showComparisonStudent)"
+                  [matTooltip]="showComparisonStudent ? 'Hide comparison student' : 'Show comparison student'"
+                  matTooltipPosition="above"
+                  type="button"
+          >
+            <mat-icon>
+              @if (showComparisonStudent) {
+                visibility
+              } @else {
+                visibility_off
+              }
+            </mat-icon>
+          </button>
+        }
+
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle class="observation-session-card-subtitle">
+      <div>
+        <span style="font-weight: 500;">
+          @if (isPrimaryStudent()) {
+            Name: {{ currentObservationSessionStore.currentStudent().name }}
+          } @else {
+            Comparison student for {{ currentObservationSessionStore.currentStudent().name }}
+          }
+        </span>
+      </div>
+      <div style="font-weight: 500;">
+        @if (isPrimaryStudent()) {
+          <div>Start
+            Time: {{ currentObservationSessionStore.currentObservation.startTime() | zonedDateTime:settingsStore.dateTimeFormatter():'Session not yet started' }}
+          </div>
+          <div>End
+            Time: {{ currentObservationSessionStore.currentObservation.endTime() | zonedDateTime:settingsStore.dateTimeFormatter():'Session has not ended' }}
+          </div>
+        } @else {
+          <div>&nbsp;</div>
+          <div>&nbsp;</div>
+        }
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="session-card-content">
+
+    <div class="behavior-buttons observation-section">
+      @for (behavior of currentObservationSessionStore.currentStudentSortedBehaviors(); track behavior) {
+        <eu-button-with-icon
+          (btnClicked)="addObservationEntry(behavior.id)"
+          [btnText]="behavior.behavior"
+          [btnColor]="behavior.color"
+          btnClass="observation-behavior-button"
+          btnType="button"
+          iconPosition="right"
+          [disabled]="!currentObservationSessionStore.currentObservation.startTime() || !!currentObservationSessionStore.currentObservation.endTime()"
+          [showIcon]="true"
+          [flatButton]="true"
+          [ariaLabel]="`Add observation entry for ${behavior.behavior} to the ${isPrimaryStudent() ? 'primary' : 'comparison'} student.`"
+        >
+          <ng-template #btnIcon>
+            [{{ behaviorCounts[behavior.id] | async }}]
+          </ng-template>
+        </eu-button-with-icon>
+      }
+    </div>
+
+    <div class="entries observation-section">
+      <h3 class="observation-section-header">Entries</h3>
+
+      @if (isPrimaryStudent()) {
+        <eu-observation-session-entries
+          [entries]="currentObservationSessionStore.primaryStudentObservationEntries()"
+          (deleteObservationEntry)="deleteObservationEntry($event)"
+        />
+      } @else {
+        <eu-observation-session-entries
+          [entries]="currentObservationSessionStore.comparisonStudentObservationEntries()"
+          (deleteObservationEntry)="deleteObservationEntry($event)"
+        />
+      }
+    </div>
+
+    <div class="notes observation-section">
+      <h3 class="observation-section-header">Session Notes</h3>
+      <mat-form-field class="note-control" subscriptSizing="dynamic">
+        <textarea
+          matInput
+          [formControl]="notesFormControl"
+          [id]="`observation-session-notes-${isPrimaryStudent() ? 'primary-student' : 'comparison-student'}`"
+          [attr.aria-label]="sessionNotesLabelPlaceholder()"
+          [placeholder]="sessionNotesLabelPlaceholder()"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="observation-session-actions">
+    @if (!isComparisonStudent()) {
+      <button
+        mat-button
+        (click)="endSession()"
+        class="end-session-button"
+        [disabled]="!!currentObservationSessionStore.currentObservation.endTime()"
+      >
+        End Session
+      </button>
+
+      <div
+        class="remaining-time"
+        matTooltip="Scheduled time remaining in this observation session."
+        matTooltipPosition="above"
+      >
+        @let remaining = timeRemaining();
+        @if (remaining) {
+          {{remaining}}
+        } @else {
+          {{ currentObservationSessionStore.currentObservation.definedInitialSessionLength() }}
+        }
+      </div>
+
+      @if (!currentObservationSessionStore.currentObservation.startTime()) {
+        <button
+          mat-button
+          (click)="startSession()"
+          class="start-session-button"
+        >
+          Start Session
+        </button>
+      } @else {
+        <button
+          mat-button
+          (click)="resumeSession()"
+          class="resume-session-button"
+          [disabled]="!!currentObservationSessionStore.currentObservation.startTime() && !currentObservationSessionStore.currentObservation.endTime()"
+        >
+          Resume Session
+        </button>
+      }
+    } @else {
+      <div>&nbsp;</div>
+    }
+  </mat-card-actions>
+</mat-card>

@@ -1,5 +1,7 @@
-export interface DbBase {
-  id: number;
+import { UpdateSpecWithoutPropModification } from '../../models/db-event-type.model';
+
+export interface DbBase<T = number> {
+  id: T;
 }
 
 export type InsertDbType<T extends DbBase> =
@@ -16,3 +18,9 @@ export type UpdateDbChanges<T extends DbBase> =
 //   KeyNotFound = 0,
 //   Success = 1,
 // }
+/* eslint-disable @stylistic/indent */ // TODO: Fix rules so this isn't required.
+export type toDbFn<TModel, TDbType> = (model: UpdateSpecWithoutPropModification<TModel>, id?: number) =>
+  UpdateSpecWithoutPropModification<TDbType>;
+/* eslint-enable @stylistic/indent */
+
+export type fromDbFn<TDbType, TModel> = (dbModel: TDbType) => TModel;
