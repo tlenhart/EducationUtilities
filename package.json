@@ -12,7 +12,7 @@
     "prebuild:local": "tsx --tsconfig scripts/tsconfig.json ./scripts/pre-build.ts",
     "postinstall": "tsx --tsconfig scripts/tsconfig.json ./scripts/post-install.ts",
     "postbuild": "tsx --tsconfig scripts/tsconfig.json ./scripts/build.ts",
-    "postbuild:local": "tsx --tsconfig scripts/tsconfig.json ./scripts/build.ts",
+    "postbuild:local": "tsx --tsconfig scripts/tsconfig.json ./scripts/build.ts"
   },
   "private": true,
   "dependencies": {
