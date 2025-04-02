@@ -1,0 +1,15 @@
+<div class="person-action-bar">
+  <eu-person-selector [personType]="'teacher'" [people]="teacherStore.entities()" (selectedPerson)="selectTeacher($event)"></eu-person-selector>
+  <button
+    mat-icon-button
+    (click)="addTeacher()"
+    aria-label="Add new teacher"
+    matTooltip="Add a new teacher"
+    matTooltipPosition="above">
+    <mat-icon aria-hidden="false" aria-label="Add new teacher">
+      add
+    </mat-icon>
+  </button>
+</div>
+
+<router-outlet></router-outlet>

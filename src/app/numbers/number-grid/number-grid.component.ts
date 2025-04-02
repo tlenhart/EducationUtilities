@@ -1,4 +1,4 @@
-import { NgClass, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +11,6 @@ import {
   Signal
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatTooltip } from '@angular/material/tooltip';
 import { SettingsService } from '../../core/settings/settings.service';
 import { FormattedNumberTableConfig, FormattedNumberValue } from '../../models';
 import {
@@ -26,10 +25,7 @@ import { NumberGridCellComponent } from '../number-grid-cell/number-grid-cell.co
 
 @Component({
   selector: 'app-number-grid',
-  standalone: true,
   imports: [
-    MatTooltip,
-    NgClass,
     NgStyle,
     FormsModule,
     NumberGridCellComponent,

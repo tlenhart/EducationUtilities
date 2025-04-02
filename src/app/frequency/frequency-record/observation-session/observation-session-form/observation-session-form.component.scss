@@ -1,0 +1,145 @@
+@use '@angular/material' as mat;
+@use '../../../../../styles/mixins' as mixins;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@mixin primaryComparisonOverrides($color, $variant: $color) {
+  &.observation-session-card {
+    .observation-session-card-title {
+      color: $color;
+    }
+
+    @include mat.card-overrides((
+      outlined-outline-color: $variant,
+    ));
+  }
+}
+
+.is-primary {
+  @include primaryComparisonOverrides(var(--mat-sys-primary));
+}
+
+.is-comparison {
+  @include primaryComparisonOverrides(var(--mat-sys-secondary), var(--mat-sys-outline-variant));
+}
+
+.observation-session-card {
+  //height: 100%;
+  max-height: min(950px, 100%);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.observation-session-card-header {
+  display: block;
+
+  .card-title {
+
+  }
+
+  .observation-session-card-title {
+    font: var(--mat-sys-headline-small);
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: var(--mdc-icon-button-state-layer-size, 40px);
+
+    margin-bottom: 0.25rem;
+    margin-top: -0.25rem;
+
+    .student-type-header {
+      font: var(--mat-sys-headline-small);
+      margin:0;
+    }
+
+    .show-hide-comparison-toggle {
+      color: var(--mat-sys-tertiary-container);
+
+      @include mat.icon-overrides((
+        color: var(--mat-sys-primary),
+      ));
+
+      .hidden-spacer {
+        height: var(--mdc-icon-button-state-layer-size, 40px);
+      }
+    }
+  }
+
+  .observation-session-card-subtitle {
+    font: var(--mat-sys-title-medium);
+  }
+}
+
+.session-card-content {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+}
+
+.observation-section {
+  max-height: min-content;
+  flex: 1 1 auto;
+
+  .observation-section-header {
+    margin: 0;
+    font: var(--mat-sys-headline-small);
+  }
+}
+
+.notes.observation-section {
+  height: 100%;
+
+  .note-control {
+    width: 100%;
+
+    textarea {
+      height: 100%;
+      min-height: 6rem;
+      max-height: 7.5rem;
+    }
+
+    textarea:focus-visible {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.behavior-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 0;
+  flex-grow: 1;
+  gap: 1rem;
+}
+
+.behavior-counter-button {
+  @include mixins.dynamic-color-contrast(--btn-background-color, --font-color);
+}
+
+.observation-session-actions {
+  display: flex;
+  justify-content: space-between;
+
+  .end-session-button {
+    @include mat.button-overrides((
+      text-label-text-color: var(--mat-sys-error),
+    ));
+  }
+
+  .remaining-time {
+    color: var(--mat-sys-secondary);
+    cursor: help;
+  }
+}

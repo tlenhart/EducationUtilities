@@ -1,0 +1,65 @@
+@use '@angular/material' as mat;
+
+@mixin split-pane-border() {
+  border: 2px solid var(--synth-purple);
+}
+
+@mixin half-rounded-border($flatSide: right) {
+  @include split-pane-border();
+
+  // Remove the $flatSide border.
+  border-#{$flatSide}: none;
+
+  @if ($flatSide == right) {
+    border-radius: 8px 0 0 8px;
+  }
+
+  @if ($flatSide == left) {
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+@mixin main-content-margin-spacing($bottom-margin: 8px, $right-margin: $bottom-margin) {
+  margin-bottom: $bottom-margin;
+  margin-right: $right-margin;
+}
+
+@mixin dynamic-color-contrast($backgroundVariableName: --background-color, $colorVariableName: --font-color) {
+  // The initial background color. This will be updated as the user changes the value in the ui.
+  #{$backgroundVariableName}: var(--mat-sys-primary);
+
+  // Algorithm for determining the font-color from the background color comes from:
+  //   https://lea.verou.me/blog/2024/contrast-color/#using-rcs-to-automatically-compute-a-contrasting-text-color.
+  // If needed, it may make sense to use the alternate approach for flipping between black and white text:
+  //   https://lea.verou.me/blog/2024/contrast-color/#using-luminance-instead-of-lightness.
+  // The color value will be automatically updated as the user changes the background color.
+  --lightness-threshold: 0.7;
+  --lightness: clamp(0, (l / var(--lightness-threshold) - 1) * -infinity, 1);
+  #{$colorVariableName}: oklch(from var(#{$backgroundVariableName}) var(--lightness) 0 h);
+
+  // Background formula originally obtained from what @angular/material is doing. (There may however be differences.)
+  --disabled-background-color: color-mix(in srgb, var(#{$backgroundVariableName}) 20%, gray);
+  --disabled-text-color: oklch(from var(--disabled-background-color) var(--lightness) 0 h);
+
+  @include mat.button-overrides((
+    filled-container-color: var(#{$backgroundVariableName}),
+    filled-label-text-color: var(#{$colorVariableName}),
+    text-label-text-color: var(#{$backgroundVariableName}),
+
+    //filled-disabled-container-color: var(--disabled-background-color),
+    //filled-disabled-label-text-color: var(--disabled-text-color),
+    //text-disabled-state-layer-color: var(--disabled-background-color),
+  ));
+
+  // TODO: Enable this if this mixin is used on non mat-buttons.
+  //background-color: var(#{$backgroundVariableName});
+  //color: var(#{$colorVariableName});
+}
+
+@mixin button-reset() {
+  all: unset;
+
+  &:focus {
+    outline: revert;
+  }
+}

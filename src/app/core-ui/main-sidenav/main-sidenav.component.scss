@@ -1,0 +1,42 @@
+.side-nav-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.navigation-link-contents {
+  display: flex;
+  align-content: center;
+  gap: var(--eu-icon-content-gap);
+}
+
+.sidebar-lower-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.feedback-container {
+  .feedback-button:has(.feedback-text) {
+    width: 100%;
+  }
+}
+
+.version-info, .feedback-container {
+  &:has(.version-icon, .feedback-icon) {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.unstyled-button {
+  all: unset;
+  user-select: text;
+  cursor: pointer;
+}
+
+.small-version-info {
+  font-size: 0.75em;
+}

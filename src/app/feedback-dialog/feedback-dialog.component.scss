@@ -1,0 +1,58 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.dialog-overrides((
+    subhead-color: var(--mat-sys-primary),
+  ));
+}
+
+.dialog-content .feedback-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+.feedback-type-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+
+  .feedback-type-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .feedback-radio-text {
+    cursor: pointer;
+  }
+}
+
+.feedback-message {
+  margin-bottom: 0.5em;
+}
+
+.assert-no-private-checkbox {
+  margin-bottom: 0.25em;
+
+  .no-assert-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75em;
+
+    .error {
+      color: var(--mat-sys-error);
+    }
+  }
+}
+
+.submit-button {
+  .submit-button-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+  }
+}

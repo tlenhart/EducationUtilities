@@ -1,9 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSidenav } from '@angular/material/sidenav';
-import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatToolbar } from '@angular/material/toolbar';
 import { Observable } from 'rxjs';
 import { DeviceTypeService } from '../../core/device-type/device-type.service';
@@ -12,13 +12,10 @@ export type ThemeType = 'default-theme' | 'wave-theme' | 'pink-wave-theme';
 
 @Component({
   selector: 'app-main-toolbar',
-  standalone: true,
   imports: [
     AsyncPipe,
     MatIcon,
-    MatButton,
     MatIconButton,
-    MatSlideToggle,
     MatToolbar,
   ],
   templateUrl: './main-toolbar.component.html',

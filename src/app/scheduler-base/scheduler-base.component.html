@@ -1,0 +1,120 @@
+<div id="splitter-container">
+  <mat-toolbar class="schedule-toolbar">
+
+    <button mat-button [matMenuTriggerFor]="editorsMenu">Builders</button>
+    <mat-menu #editorsMenu="matMenu">
+      <ng-template matMenuContent>
+        <a
+          mat-menu-item
+          [routerLink]="['./editors', 'schedule-builder']">
+          Schedule builder
+        </a>
+        <a
+          mat-menu-item
+          [routerLink]="['./reports', '1']">
+          Reports
+        </a>
+        <a
+          mat-menu-item
+          [routerLink]="['../', 1]">
+          Schedule 1
+        </a>
+        <a
+          mat-menu-item
+          [routerLink]="['../', 2]">
+          Schedule 2
+        </a>
+      </ng-template>
+    </mat-menu>
+
+    <button (click)="export()">Current Schedule Id: {{currentSchedule()}}</button>
+
+    <button mat-button [matMenuTriggerFor]="configurationNavigationMenu">Configuration</button>
+    <mat-menu #configurationNavigationMenu="matMenu">
+      <ng-template matMenuContent>
+        <button
+          mat-menu-item
+          [matMenuTriggerFor]="scheduleConfigurationMenu">
+          Schedule Configuration
+        </button>
+      </ng-template>
+    </mat-menu>
+
+    <button mat-button (click)="resizeHandle.classList.toggle('slim-resize-handle')">Slim Resizer</button>
+  </mat-toolbar>
+
+  <div class="panels-container">
+    <!-- Left Panel. -->
+    <section id="scheduler-left-panel" class="panel position-left" #leftPanel>
+      <router-outlet></router-outlet>
+    </section>
+
+    <!-- Panel Resizer. -->
+    <div id="scheduler-split-resize-handle" #resizeHandle class="resize-handle xs-small-icon-button"
+         euResizer
+         [panelOne]="leftPanel" [panelTwo]="rightPanel"
+         [(panelOneState)]="panelOneState" [(panelTwoState)]="panelTwoState"
+         (splitLocationPercentChange)="splitChange($event)"
+         [splitLocationPercent]="splitPercent()"
+    >
+      @if (!resizeHandle.classList.contains('slim-resize-handle')) {
+        @if (panelOneState === 'open') {
+          <button mat-icon-button aria-label="Hide the left editors pane."
+            class="offset-handle-left"
+            (click)="panelOneState = 'closed'"
+            disableRipple="true">
+            <mat-icon>left_panel_close</mat-icon>
+          </button>
+        } @else {
+          <button mat-icon-button aria-label="Show the left editors pane."
+            class="offset-handle-left"
+            (click)="panelOneState = 'open'"
+            disableRipple="true">
+            <mat-icon>left_panel_open</mat-icon>
+          </button>
+        }
+        <mat-icon aria-hidden="false" aria-label="Click and drag to resize the two panels." class="handle-icon">
+          drag_handle
+        </mat-icon>
+        @if (panelTwoState === 'open') {
+          <button mat-icon-button aria-label="Hide the right configuration pane."
+            class="offset-handle-right"
+            (click)="panelTwoState = 'closed'"
+            disableRipple="true">
+            <mat-icon>left_panel_open</mat-icon>
+          </button>
+        } @else {
+          <button mat-icon-button aria-label="Show the right configuration pane."
+            class="offset-handle-right"
+            (click)="panelTwoState = 'open'"
+            disableRipple="true">
+            <mat-icon>left_panel_close</mat-icon>
+          </button>
+        }
+      }
+    </div>
+
+    <!-- Right Panel. -->
+    <section id="scheduler-right-panel" class="panel position-right" #rightPanel>
+      <router-outlet name="configuration"></router-outlet>
+    </section>
+  </div>
+</div>
+
+<!-- Hidden, sub mat-menus. -->
+<mat-menu #scheduleConfigurationMenu>
+  <ng-template matMenuContent>
+    <a
+      mat-menu-item
+      [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration'] } }]">
+      Schedule Configuration
+    </a>
+    @for (route of configurationRoutes; track route.path) {
+      <a
+        mat-menu-item
+        [routerLink]="['./', { outlets: { configuration: ['config', 'schedule-configuration', route.path] } }]">
+        {{route.name}}
+      </a>
+    }
+  </ng-template>
+</mat-menu>

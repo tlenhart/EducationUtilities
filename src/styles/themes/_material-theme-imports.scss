@@ -1,21 +1,24 @@
 @use '@angular/material' as mat;
 
 @mixin material-theme-imports($theme) {
-  @include mat.core-theme($theme); // ? Should this be used for the light theme as well?
-
   @include mat.sidenav-theme($theme);
   @include mat.toolbar-theme($theme);
   @include mat.list-theme($theme);
+  @include mat.menu-theme($theme);
+  @include mat.dialog-theme($theme);
 
   @include mat.slide-toggle-theme($theme);
   @include mat.button-theme($theme);
   @include mat.form-field-theme($theme);
   @include mat.checkbox-theme($theme);
+  @include mat.autocomplete-theme($theme);
 
   @include mat.tooltip-theme($theme);
   @include mat.select-theme($theme);
 
   @include mat.expansion-theme($theme);
+  @include mat.tabs-theme($theme);
+  @include mat.divider-theme($theme);
 
   @include additional-colors($theme);
 

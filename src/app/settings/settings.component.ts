@@ -8,14 +8,14 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { AgentType } from 'clippy.modern';
 import { SettingsService } from '../core/settings/settings.service';
 import { ClippySettings, GlobalSettingFormGroup, GlobalSettings, TooltipSettings, Versioned } from '../models';
-import { buildFormControlDefaults, buildIndividualFormControlData } from '../utils/form-utils';
+import { buildFormControlDefaults, buildIndividualFormControlData } from '../utils/form.utils';
+import { DateTimeFormatSettingsComponent } from './date-time-format-settings/date-time-format-settings.component';
 
 type ClippySettingsFormValues = { [J in keyof GlobalSettingFormGroup<ClippySettings>]: ClippySettings[J]['value'] };
 type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSettings>]: TooltipSettings[J]['value'] };
 
 @Component({
   selector: 'app-settings',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatCheckbox,
@@ -25,6 +25,7 @@ type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSet
     MatOption,
     MatButton,
     MatSlideToggle,
+    DateTimeFormatSettingsComponent,
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
@@ -33,6 +34,7 @@ type TooltipSettingsFormValues = { [J in keyof GlobalSettingFormGroup<TooltipSet
 export class SettingsComponent {
   public readonly settings: Signal<Versioned<GlobalSettings>>;
   public readonly settingsForm: Signal<FormGroup<{ [K in keyof GlobalSettings]: FormGroup }>>;
+
   private readonly settingsService: SettingsService = inject(SettingsService);
   private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
 
@@ -74,7 +76,7 @@ export class SettingsComponent {
         },
         selectedAgent: {
           ...this.settings().clippy.selectedAgent,
-          value: clippyRawValue.selectedAgent
+          value: clippyRawValue.selectedAgent,
         },
         playSounds: {
           ...this.settings().clippy.playSounds,
@@ -94,7 +96,7 @@ export class SettingsComponent {
         showHideTableCell: {
           ...this.settings().tooltips.showHideTableCell,
           value: tooltipsRawValue.showHideTableCell,
-        }
+        },
       } as TooltipSettings,
     });
   }

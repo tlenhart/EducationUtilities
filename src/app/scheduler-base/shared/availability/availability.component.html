@@ -1,0 +1,21 @@
+<form [formGroup]="availabilityFormGroup">
+  <button mat-icon-button (click)="addAvailability()">
+    <mat-icon aria-label="Add new availability entry.">add</mat-icon>
+  </button>
+  <!-- TODO: Pass entry form data to the availability entry? -->
+  <ng-container formArrayName="availabilityEntries">
+    <!--@for (entry of availabilityFormGroup().controls.availabilityEntries.controls; track entry.value; let i = $index) {-->
+    @for (entry of availabilityFormGroup.controls.availabilityEntries.controls; track i; let i = $index) {
+      <div class="availability-entry-container">
+      <eu-availability-entry [formControl]="entry" />
+      <button mat-icon-button (click)="removeAvailability(i)">
+        <!-- TODO: Update days in aria label. -->
+        <mat-icon
+          [attr.aria-label]="'Remove availability entry for ' + entry.value.startTime.toString() + ' to ' + entry.value.endTime.toString() + 'on ' + entry.value.days + '.'">
+          delete
+        </mat-icon>
+      </button>
+      </div>
+    }
+  </ng-container>
+</form>

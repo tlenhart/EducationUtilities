@@ -34,8 +34,8 @@ import { NUMBER_TABLE_DEFAULT_CONFIGS } from '../../defaults/number-table-defaul
 import { FormattedNumberTableConfig, FormattedNumberValue } from '../../models';
 import { NumberFormConfig, NumberFormForm } from '../../models/forms.types';
 import { DocumentActionsComponent } from '../../shared/document-actions/document-actions.component';
-import { buildColorsArray } from '../../utils/color.utils';
-import { arrayToArrayOfFormControls } from '../../utils/form-utils';
+import { buildColorsArray, ColorValues } from '../../utils/color.utils';
+import { arrayToArrayOfFormControls } from '../../utils/form.utils';
 import { formattedSequentialNumberGenerator } from '../../utils/number-utils';
 import { isNotValueValidator, numberTableConfigValidator, VALIDATION_ERROR_KEYS } from '../../validators';
 import { NumberGridComponent } from '../number-grid/number-grid.component';
@@ -45,7 +45,6 @@ import {
 
 @Component({
   selector: 'app-numbers-table',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatInputModule,
@@ -174,7 +173,7 @@ export class NumbersTableComponent implements OnDestroy {
       return currentValue;
     });
 
-    const currentColorControls: FormArray<FormControl<string>> = this.numberTableConfigForm.controls.colors;
+    const currentColorControls: FormArray<FormControl<ColorValues>> = this.numberTableConfigForm.controls.colors;
     const columnCount: number = this.currentConfig().columns;
     if (currentColorControls.length > columnCount) {
       // Count backwards so the removals and the array index can remain consistent.

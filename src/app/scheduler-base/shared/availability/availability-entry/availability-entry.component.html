@@ -1,0 +1,12 @@
+<form
+  class="availability-entry-form"
+  [formGroup]="availabilityEntryFormGroup">
+  <eu-temporal-time-input label="Start Time" showLabel="false" formControlName="startTime" />
+  <eu-temporal-time-input label="End Time" showLabel="false" formControlName="endTime" />
+  <eu-day-picker [ariaLabel]="dayPickerAriaLabel()" formControlName="days" />
+</form>
+
+<div>
+  Entry:
+  {{availabilityEntry() | json}}
+</div>

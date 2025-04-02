@@ -1,0 +1,17 @@
+.example-date-time {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: var(--mat-sys-tertiary);
+  color: var(--mat-sys-on-tertiary);
+}
+
+.date-time-format-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.date-time-format-settings-control {
+  width: 200px;
+}

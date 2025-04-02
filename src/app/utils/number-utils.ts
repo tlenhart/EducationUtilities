@@ -144,3 +144,13 @@ function getBackgroundColor(config: FormattedNumberTableConfig, row: number, col
     }
   }
 }
+
+export function* getIncrementor(): Generator<string, never, string> {
+  let current: number = 0;
+
+  while (current < Number.MAX_SAFE_INTEGER) {
+    yield `${++current}`;
+  }
+
+  throw new Error('Generating too many values.');
+}

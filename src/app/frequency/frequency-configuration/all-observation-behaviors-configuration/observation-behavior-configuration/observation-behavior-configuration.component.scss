@@ -1,0 +1,28 @@
+@use '../../../../../styles/mixins' as mixins;
+
+.observation-behavior-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > mat-form-field {
+    width: clamp(100px, 600px, 100%);
+  }
+}
+
+.color-button-container {
+  width: clamp(100px, 600px, 100%);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 1.5rem;
+}
+
+.behavior-counter-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .behavior-counter-button {
+    @include mixins.dynamic-color-contrast(--btn-background-color, --font-color);
+  }
+}

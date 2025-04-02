@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: var(--eu-content-section-gap);
+}
+
+.person-selector-control {
+  display: block;
+  justify-items: center;
+}

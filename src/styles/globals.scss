@@ -9,8 +9,13 @@
 
 // Instead of using :root, use .light and .dark selectors, so the .light and .dark --sys variables apply correctly.
 // If :root is used here, the following variables are set before the --sys variables are set, and any variable referencing a --sys variable will not be changed.
-.light, .dark {
-  --eu-sidebar-width: 200px;
+.light, .dark, :root {
+  /* Sizing for primary UI elements/containers. */
+  // Default sidebar width.
+  --eu-sidebar-width: 225px;
+
+  // Sidebar width when showing only icons. (For example on the scheduler page.)
+  --eu-sidebar-slim-width: 56px;
 
   // Main content-grid width.
   --eu-content-width: calc(100vw - var(--eu-sidebar-width));
@@ -22,15 +27,22 @@
   --eu-content-section-gap: 1em;
 
   // When displaying items in a grid, the border configuration for items in the grid.
+  --eu-grid-border-color: var(--mat-sys-primary);
   --eu-grid-border-width: 1px;
   --eu-grid-border-style: solid;
 
   --eu-icon-content-gap: 0.5em;
+
+  // Calendar variables.
+  // TODO: Provide settings options to dynamically override these.
+  --eu-calendar-day-gap: 0.5em;
+  --eu-calendar-title-separation-height: 0.75em; // TODO: Test with different scaling.
+  --eu-calendar-time-interval-gap: 2em;
 }
 
 // For theme-specific colors, add the variable to each of the rules below.
 
-.light {
+.light, :root {
   &.default-theme {
     --eu-grid-border-color: #{colors.get-theme-color(m3-theme.$light-theme, tertiary)};
   }

@@ -1,0 +1,7 @@
+<div class="calendar-container">
+  <div class="days">
+    @for (day of days(); track day) {
+      <eu-schedule-calendar-day [dayOfWeek]="day"/>
+    }
+  </div>
+</div>

@@ -1,0 +1,39 @@
+@use '../../../../../styles/functions' as _functions;
+
+.day-bounding-box {
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  height: 100%;
+
+  border: _functions.grid-border(2px);
+  border-radius: 8px;
+  padding: 12px 4px;
+
+  min-width: 250px;
+}
+
+.day-of-week-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: var(--eu-calendar-title-separation-height, 12px);
+}
+
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eu-calendar-time-interval-gap, 24px);
+
+  //display: grid;
+  //grid-template-columns: 100%;
+  //grid-template-rows: auto;
+}
+
+.time-range-entry {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 4px;
+
+  align-items: center;
+}

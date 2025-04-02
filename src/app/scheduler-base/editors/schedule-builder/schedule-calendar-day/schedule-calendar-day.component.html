@@ -1,0 +1,12 @@
+<div class="day-bounding-box">
+  <div class="day-of-week-name">{{dayOfWeek() | dayOfWeekEnum:false}}</div>
+  <div class="calendar-day">
+    @for (time of defaultTimeIntervals(); track time) {
+      <!--TODO: Make this whole thing a single grid or flex?-->
+      <div class="time-range-entry">
+        <div class="time">{{time | plainTime:true}}</div>
+        <mat-divider></mat-divider>
+      </div>
+    }
+  </div>
+</div>

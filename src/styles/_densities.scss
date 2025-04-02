@@ -1,0 +1,17 @@
+@use '@angular/material' as mat;
+
+.xs-small {
+  $density: -5;
+
+  &-icon-button {
+    @include mat.icon-button-density($density);
+  }
+}
+
+.small {
+  $density: -4;
+
+  &-icon-button {
+    @include mat.icon-button-density($density);
+  }
+}

@@ -1,11 +1,56 @@
 @use '@angular/material' as mat;
 @use './styles/globals'; // Import global css variables.
+@use './styles/densities'; // Custom densities for specific components in specific cases.
+@use './styles/themes/purple-surf-process_theme-colors.scss' as purple-surf-process-theme-colors;
+@use './styles/global-definitions';
 
-@include mat.core();
+// ! https://developer.mozilla.org/en-US/docs/Web/CSS/@page
 
 html {
   // TODO: Decide what to do about this and consider loading it in the individual themes themselves.
-  //@include mat.list-theme(m3-theme.$light-theme);
+
+  // TODO: Include these when using the older styles.
+  // @include mat.elevation-classes();
+  // @include mat.app-background();
+
+  color-scheme: light;
+  //color-scheme: light dark;
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      //theme-type: color-scheme,
+      primary: purple-surf-process-theme-colors.$primary-palette,
+      tertiary: purple-surf-process-theme-colors.$tertiary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  @media (prefers-contrast: more) {
+    @include purple-surf-process-theme-colors.high-contrast-overrides(color-scheme);
+  }
+}
+
+:root {
+  interpolate-size: allow-keywords;
+
+  @include mat.dialog-overrides((
+    subhead-color: var(--mat-sys-primary),
+  ));
+}
+
+.light-dark-backdrop {
+  background: rgba(0,0,0,.32);
+}
+
+.no-outlet-backdrop {
+  opacity: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .light-dark-backdrop {
+    background: rgba(0,0,0,.81);
+  }
 }
 
 html, body { height: 100%; }
@@ -19,11 +64,58 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     'opsz' 24;
 }
 
-.mdc-list-item {
-}
-
 .active {
   //@include mat.button-color(m3-theme.$dark-theme, $color-variant: tertiary);
+}
+
+.text {
+  &--right-align {
+    text-align: right;
+  }
+}
+
+.multi-line-tooltip {
+  white-space: pre-line;
+
+  &.skip-line-wrap {
+    white-space: pre;
+
+    // Increase the size of the tooltip to fit the content.
+    .mat-mdc-tooltip-surface {
+      max-width: fit-content;
+    }
+  }
+}
+
+button.observation-behavior-button {
+  $solid-button-border: light-dark(rgba(0,0,0,1), rgba(255,255,255,1));
+
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-medium),
+  ));
+
+  & {
+    text-align: start;
+    white-space: pre-line;
+
+    padding: 2rem 1.25rem;
+    max-width: 8rem;
+    width: 8rem;
+    min-height: 5rem;
+
+    &:focus {
+      border-color: $solid-button-border;
+      outline: 2px solid $solid-button-border;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.showTableOnHover {
+  pointer-events: none;
 }
 
 // Print Settings.

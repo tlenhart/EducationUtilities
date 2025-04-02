@@ -1,0 +1,44 @@
+:host {
+  container-name: entity-selector-host-container;
+  container-type: inline-size;
+  display: flex;
+  width: 100%;
+}
+
+$separatorWidth: 21.25rem; // 340px;
+
+.entity-selector-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  @container entity-selector-host-container (width <= 271px) {
+    flex-direction: column;
+  }
+
+  @container entity-selector-host-container (width <= #{$separatorWidth}) {
+    justify-content: end;
+  }
+}
+
+.entity-selector-control {
+  // TODO: Find the right values.
+  width: min(17rem, 80%);
+  anchor-name: --entity-selector-anchor;
+
+  container-name: entity-selector-control-container;
+  container-type: inline-size;
+}
+
+.entity-action-button {
+  // Keep the entity selector centered, but place the add button to the right.
+  @container entity-selector-host-container (width >= #{$separatorWidth}) {
+    @supports (anchor-name: --entity-selector-anchor) {
+      position: absolute;
+      position-anchor: --entity-selector-anchor;
+      position-area: x-end;
+    }
+  }
+}

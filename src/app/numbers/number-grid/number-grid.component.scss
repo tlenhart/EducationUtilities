@@ -3,17 +3,18 @@
   justify-content: center;
   gap: 0;
 
+  // These should be overridden in the component code using ngStyle based on the number of columns provided.
+  grid-template-columns: [header-column-start] auto [header-column-end] repeat(10, 1fr);
+  grid-template-rows: [header-row-start] auto [header-row-end] auto;
+
   app-number-grid-cell {
     &.header-column.header-row {
-      background-color: var(--sys-background);
+      // background-color: var(--sys-background);
+      // background-color: var(--mat-sys-background);
 
       @media print {
         background-color: rgba(255, 255, 255, 0);
       }
     }
   }
-
-  // These should be overridden in the component code using ngStyle based on the number of columns provided.
-  grid-template-columns: [header-column-start] auto [header-column-end] repeat(10, 1fr);
-  grid-template-rows: [header-row-start] auto [header-row-end] auto;
 }
