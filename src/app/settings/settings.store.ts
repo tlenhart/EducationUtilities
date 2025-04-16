@@ -68,6 +68,9 @@ export const globalUserSettingsDefaults: Readonly<NewGlobalSettings> = {
       format: {},
     },
   },
+  frequencyDataSettings: {
+    enableHapticFeedback: false,
+  },
 };
 
 // export type NewGlobalSettings_Defaults = NewGlobalSettings;
@@ -160,6 +163,14 @@ export const SettingsStore = signalStore(
             ...state.displaySettings.dateTimeFormat,
             ...dateTimeFormatOptions,
           },
+        },
+      }));
+    },
+    toggleFrequencyDataHapticFeedback(): void {
+      patchState(store, (state) => ({
+        frequencyDataSettings: {
+          ...state.frequencyDataSettings,
+          enableHapticFeedback: !state.frequencyDataSettings.enableHapticFeedback,
         },
       }));
     },
