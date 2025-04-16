@@ -20,6 +20,9 @@ import { MainToolbarComponent } from './core-ui/main-toolbar/main-toolbar.compon
 import { AppLocationService } from './core/app-location/app-location.service';
 import { GlobalUIService } from './core/app-sidenav-service/global-ui.service';
 import { DeviceTypeService } from './core/device-type/device-type.service';
+import {
+  GlobalNotificationService
+} from './core/global-notification-service/global-notification.service';
 import { GlobalSettingEnabledPipe } from './core/settings/setting-enabled/global-setting-enabled.pipe';
 import { SettingsService } from './core/settings/settings.service';
 import { AppRoute, GlobalSettings, Versioned } from './models';
@@ -47,6 +50,9 @@ export class AppComponent implements OnInit {
   private readonly globalUIService: GlobalUIService = inject(GlobalUIService);
   private readonly settingsService: SettingsService = inject(SettingsService);
   private readonly settingsStore = inject(SettingsStore);
+
+  // Even though the service is unused here, it is injected to ensure the service is registered and initialized.
+  private readonly globalNotificationService: GlobalNotificationService = inject(GlobalNotificationService);
 
   public settings: Signal<Versioned<GlobalSettings>> = computed(() => {
     return this.settingsService.settings();
