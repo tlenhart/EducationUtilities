@@ -17,6 +17,27 @@
       <span class="show-hide-comparison-toggle">
 
         @if (isPrimaryStudent()) {
+          <!-- Toggle haptic feedback button -->
+          @if (hapticFeedbackAvailable()) {
+            <button mat-icon-button
+                    (click)="toggleHapticFeedback()"
+                    [matTooltip]="settingsStore.frequencyDataSettings.enableHapticFeedback() ? 'Disable haptic feedback' : 'Enable haptic feedback (this may not work on all devices)'"
+                    matTooltipPosition="above"
+                    type="button"
+            >
+              <mat-icon>
+                @if (settingsStore.frequencyDataSettings.enableHapticFeedback()) {
+                  vibration
+                } @else {
+                  <!-- As of 2025-04-14, the material icons do not include an icon for disabling vibration. This is a custom version of the vibration icon adapted from existing material icons. -->
+                  <svg width="100%" height="100%" viewBox="0 0 24 24">
+                    <path d="M16.245,20.986c-0.08,0.009 -0.162,0.014 -0.245,0.014l-8,0c-0.55,0 -1.021,-0.196 -1.413,-0.587c-0.391,-0.392 -0.587,-0.863 -0.587,-1.413l-0,-13.186l-2.498,-3.701l1.534,-1.036l14.663,21.667l-1.542,1.074l-1.912,-2.832Zm-8.245,-12.21l0,10.224l6.904,0l-6.904,-10.224Zm0.573,-5.776l7.427,0c0.55,0 1.021,0.196 1.412,0.588c0.392,0.391 0.588,0.862 0.588,1.412l0,11.93l-2,-2.956l-0,-8.974l-6.073,0l-1.354,-2Zm-8.573,12l0,-6l2,0l0,6l-2,0Zm3,2l0,-10l2,0l0,10l-2,0Zm19,-2l0,-6l2,0l-0,6l-2,0Zm-3,2l0,-10l2,0l0,10l-2,0Z"/>
+                  </svg>
+                }
+              </mat-icon>
+            </button>
+          }
+
           <!-- Edit Student Button -->
           <a mat-icon-button
              [routerLink]="editStudentRoute()"

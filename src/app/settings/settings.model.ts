@@ -7,6 +7,7 @@ export interface NewGlobalSettings {
   schedulerSettings: SchedulerSettings;
   feedbackSettings: FeedbackSettings;
   displaySettings: DisplaySettings;
+  frequencyDataSettings: FrequencyDataSettings;
 }
 
 export interface Setting_New<T> {
@@ -63,3 +64,7 @@ export interface DateTimeDisplaySettings {
 export type OptionalDateTimeDisplaySettings = DateTimeDisplaySettings & {
   enabled: boolean;
 };
+
+export interface FrequencyDataSettings {
+  enableHapticFeedback: boolean;
+}

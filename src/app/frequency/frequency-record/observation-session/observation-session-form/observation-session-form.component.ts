@@ -8,6 +8,7 @@ import {
   input,
   InputSignal,
   OnDestroy,
+  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -95,6 +96,15 @@ export class ObservationSessionFormComponent implements OnDestroy {
 
   public readonly isComparisonStudent: InputSignal<boolean> = input.required<boolean>();
   public readonly isPrimaryStudent: InputSignal<boolean> = input.required<boolean>();
+
+  public readonly hapticFeedbackAvailable: Signal<boolean> = signal(!!navigator.vibrate);
+
+  private readonly useHapticFeedback: Signal<boolean> = computed(() => {
+    const hapticFeedbackAvailable = this.hapticFeedbackAvailable();
+    const enableHapticFeedback = this.settingsStore.frequencyDataSettings.enableHapticFeedback();
+
+    return hapticFeedbackAvailable && enableHapticFeedback;
+  });
 
   /* Form Controls */
   public readonly notesFormControl: FormControl<string>;
@@ -226,6 +236,10 @@ export class ObservationSessionFormComponent implements OnDestroy {
   }
 
   public async addObservationEntry(behaviorId: BehaviorId): Promise<void> {
+    if (this.useHapticFeedback()) {
+      navigator.vibrate([30]);
+    }
+
     const success = await this.currentObservationSessionStore.addBehaviorEntry({
       observationSessionId: this.currentObservationSessionStore.currentObservation.id(),
       behaviorId: behaviorId,
@@ -249,6 +263,10 @@ export class ObservationSessionFormComponent implements OnDestroy {
 
   public async showHideComparisonStudent(showHide: boolean): Promise<void> {
     await this.currentObservationSessionStore.showHideComparisonStudent(showHide);
+  }
+
+  public toggleHapticFeedback(): void {
+    this.settingsStore.toggleFrequencyDataHapticFeedback();
   }
 
   private countQueryBuilder(behaviorId: BehaviorId) {
