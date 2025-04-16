@@ -37,9 +37,13 @@ export class AppLocationService {
         }
       }).filter((value: AppRoute | null) => value !== null)
         .sort((a: AppRoute, b: AppRoute) => {
-          // Always place Settings as the last entry before feedback and version.
-          if (a.name === 'Settings' || b.name === 'Settings') {
+          // Always place 'Settings' as the last entry before feedback and version.
+          if (a.name === 'Settings') {
             return 1;
+          }
+
+          if (b.name === 'Settings') {
+            return -1;
           }
 
           return a.name > b.name ? 1 : -1;
