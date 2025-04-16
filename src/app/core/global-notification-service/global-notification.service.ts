@@ -58,7 +58,7 @@ export class GlobalNotificationService implements OnDestroy {
           this.versionDetectedMessageShown.set(true);
           break;
         case 'VERSION_INSTALLATION_FAILED':
-          console.warn('VERSION_INSTALLATION_FAILED');
+          console.warn('VERSION_INSTALLATION_FAILED', versionEvent.error);
           break;
         case 'VERSION_READY':
           this.newVersionReady.set(true);
